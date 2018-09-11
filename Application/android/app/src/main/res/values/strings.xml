@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">paytel</string>
+    <string name="title_activity_authenticate_user">authenticate_user</string>
+</resources>

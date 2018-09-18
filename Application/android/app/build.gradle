@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'paytelKey'
             keyPassword 'paytel'
-            storeFile file('C:/Project_files/CSI-4999/Application/android/keystore/signedKey.jks')
+            storeFile file('signedKey.jks')
             storePassword 'paytel'
         }
     }

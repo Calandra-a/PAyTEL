@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'paytelKey'
             keyPassword 'paytel'
-            storeFile file('C:/Project_files/CSI-4999/Application/android/keystore/signedKey.jks')
+            storeFile file('signedKey.jks')
             storePassword 'paytel'
         }
     }
@@ -17,12 +17,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
     }
 }
 

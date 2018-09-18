@@ -24,7 +24,7 @@ public class authenticatoractivity extends AppCompatActivity {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
                 SignInUI signin = (SignInUI) AWSMobileClient.getInstance().getClient(authenticatoractivity.this, SignInUI.class);
-                signin.login(authenticatoractivity.this, AppCompatActivity.class).execute();
+                signin.login(authenticatoractivity.this, home.class).execute();
             }
         }).execute();
     }

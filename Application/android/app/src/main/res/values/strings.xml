@@ -2,4 +2,8 @@
     <string name="app_name">paytel</string>
     <string name="title_activity_authenticate_user">authenticate_user</string>
     <string name="title_activity_authenticatoractivity">authenticatoractivity</string>
+    <string name="title_activity_home">home</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

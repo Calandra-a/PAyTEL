@@ -5,6 +5,7 @@
     <!-- user permissions for AWS SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature android:name="android.hardware.camera"  android:required="true" />
 
     <application
         android:name=".global_objects"
@@ -24,10 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".home"
             android:label="@string/title_activity_home" />
-        <activity android:name=".authentication_signup"></activity>
+
+        <activity android:name=".sign_up.authentication_signup_userinfo" />
+        <activity android:name=".sign_up.authentication_signup_bankinfo" />
+        <activity android:name=".sign_up.authentication_signup_facial" />
+        <activity android:name=".sign_up.authentication_signup_fingerprint_complete" />
     </application>
 
 </manifest>

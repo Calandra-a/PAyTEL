@@ -1,5 +1,6 @@
 package com.paytel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,6 +16,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.google.gson.Gson;
+import com.paytel.sign_up.authentication_signup_userinfo;
 import com.paytel.util.userData;
 
 import java.util.concurrent.locks.Condition;
@@ -50,12 +52,13 @@ public class home extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         System.out.print("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
+
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
-        //userData userObject = ((global_objects)getApplication()).getDynamoDBMapper().load(userData.class, userID);
-        //System.out.print(userObject);
+
     }
 
     public void queryUser(){
@@ -92,7 +95,12 @@ public class home extends AppCompatActivity {
                     // There were no items matching your query.
                     Log.d("Query results: ", "none");
                     //go to sign up activity
-
+                    try {
+                        Intent k = new Intent(home.this, authentication_signup_userinfo.class);
+                        startActivity(k);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();

@@ -12,6 +12,12 @@
   "IdentityManager": {
     "Default": {}
   },
+  "S3TransferUtility": {
+    "Default": {
+      "Bucket": "csi-userfiles-mobilehub-447478737",
+      "Region": "us-east-1"
+    }
+  },
   "DynamoDBObjectMapper": {
     "Default": {
       "Region": "us-east-1"
@@ -32,6 +38,12 @@
   },
   "PinpointTargeting": {
     "Default": {
+      "Region": "us-east-1"
+    }
+  },
+  "UserFileManager": {
+    "Default": {
+      "Bucket": "csi-userfiles-mobilehub-447478737",
       "Region": "us-east-1"
     }
   },

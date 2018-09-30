@@ -7,6 +7,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -16,7 +18,11 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.google.gson.Gson;
+import com.paytel.sign_up.authentication_signup_bankinfo;
+import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_userinfo;
+import com.paytel.util.accountsettings;
+
 import com.paytel.util.userData;
 
 import java.util.concurrent.locks.Condition;
@@ -59,6 +65,19 @@ public class home extends AppCompatActivity {
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
 
+        Button btn_settingspage = findViewById(R.id.btn_settingspage);
+        btn_settingspage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                try {
+                    Intent k = new Intent(home.this, accountsettings.class);
+                    startActivity(k);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void queryUser(){

@@ -38,6 +38,7 @@
         <activity android:name=".sign_up.authentication_signup_bankinfo" />
         <activity android:name=".sign_up.authentication_signup_facial" />
         <activity android:name=".sign_up.authentication_signup_fingerprint_complete" />
+        <activity android:name=".util.accountsettings" />
     </application>
 
 </manifest>

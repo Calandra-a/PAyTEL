@@ -1,0 +1,225 @@
+<!--
+    ### PAyTEL Mobile Banking Solutions ###
+
+    Fall 2018. Oakland University.
+
+    Credits:
+    App Dev: Anthony Calandra, Lauren Lingeman, Marsol Daman
+    BackEnd: Axel Von Hoyweghen
+    Documentation Management: Lauren Lingeman
+    UI/UX: Alex Dapoz, Noah McGivern
+-->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- IMPORTS DONE HERE -->
+    <style>
+        .sidebar {
+            height: 100%;
+        }
+
+        .redacted {
+            background-color: black;
+            border-radius: 0.25em;
+            transition: background-color 0.5s ease;
+        }
+
+        .redacted:hover {
+            background-color: transparent;
+        }
+    </style>
+    <!-- IMPORTS END -->
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+    <title>Payments. Pure and Simple. - PAyTEL</title>
+    <!-- FAVICON GOES HERE -->
+    <!--link rel="icon" href="" type="image/x-icon"-->
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 1;">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo_paytel.png" height="30" width="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Buyer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Seller</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Transactions
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Buying History</a>
+                            <a class="dropdown-item" href="#">Selling History</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">All Transactions</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Body -->
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 col-sm-0 d-none d-lg-block bg-light h-100">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Buyer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Seller</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Transactions
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Buying History</a>
+                                <a class="dropdown-item" href="#">Selling History</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">All Transactions</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="col-md-10 col-sm-12 p-5">
+                    <div class="border-bottom">
+                        <h1>Welcome, User.</h1>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Current Balance:</h2>
+                            <h3 class="card-text">$
+                                <span class="redacted">573.54</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Recent Transactions:</h2>
+                            <div class="card-text">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>User</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>July 15 2018</td>
+                                                <td>Outgoing</td>
+                                                <td>5768</td>
+                                                <td>$
+                                                    <span class="redacted">125.27</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>July 7 2018</td>
+                                                <td>Incoming</td>
+                                                <td>5768</td>
+                                                <td>$
+                                                    <span class="redacted">10.00</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>July 1 2018</td>
+                                                <td>Incoming</td>
+                                                <td>2445</td>
+                                                <td>$
+                                                    <span class="redacted">16.75</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>June 28 2018</td>
+                                                <td>Outgoing</td>
+                                                <td>3672</td>
+                                                <td>$
+                                                    <span class="redacted">9.45</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary">View More Recent Transactions</a>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Spend Trend:</h2>
+                            <div class="card-text">
+                                <img src="images/graph.png" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary">View More Statistics</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer pb-3">
+        <div class="footer-copyright text-center">© 2018 Copyright
+            <a href="#"> PAyTEL Mobile Banking Solutions</a>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Scripts -->
+    <!-- jQuery.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!-- popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap Scripts End-->
+</body>
+
+</html>

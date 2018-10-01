@@ -62,6 +62,7 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
         new_user.setZipCode(zip.getText().toString());
         new_user.setPhoneNumber(phone_number.getText().toString());
     }
+
     void check_username(final String username){
         new Thread(new Runnable() {
             @Override

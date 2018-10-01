@@ -1,0 +1,160 @@
+<!--
+    ### PAyTEL Mobile Banking Solutions ###
+
+    Fall 2018. Oakland University.
+
+    Credits:
+    App Dev: Anthony Calandra, Lauren Lingeman, Marsol Daman
+    BackEnd: Axel Von Hoyweghen
+    Documentation Management: Lauren Lingeman
+    UI/UX: Alex Dapoz, Noah McGivern
+-->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- IMPORTS DONE HERE -->
+    <style>
+        .form-signin-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            height: auto;
+            padding: 10px;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 1;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .form-signin button[type="submit"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+            width: 100%;
+        }
+
+        .form-signin a[id="signInGoogle"] {
+            border-top: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            width: 100%;
+        }
+    </style>
+    <!-- IMPORTS END -->
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+    <title>Payments. Pure and Simple. - PAyTEL</title>
+    <!-- FAVICON GOES HERE -->
+    <!--link rel="icon" href="" type="image/x-icon"-->
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 1;">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo_paytel.png" height="30" width="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Buyer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Seller</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Transactions
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Buying History</a>
+                            <a class="dropdown-item" href="#">Selling History</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">All Transactions</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Body -->
+    <main class="form-signin-container">
+        <form class="form-signin text-center">
+            <img src="images/logo_pt.png" width="125" height="auto">
+            <h1 class="h3 mb-4">Please Sign In.</h1>
+            <div class="form-group">
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
+                <!--label class="form-control-placeholder" for="inputEmail">Email Address</label-->
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <!--label class="form-control-placeholder" for="inputPassword">Password</label-->
+                <button class="btn btn-lg btn-outline-primary mt-3" type="submit">Sign In</button>
+                <a id="signInGoogle" href="#" class="btn btn-lg btn-outline-danger">Sign In with Google</a>
+                <div class="my-2">or</div>
+                <a href="#" class="btn btn-lg btn-outline-success btn-block">Sign Up</a>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer fixed-bottom pb-3">
+        <div class="footer-copyright text-center">© 2018 Copyright
+            <a href="#"> PAyTEL Mobile Banking Solutions</a>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Scripts -->
+    <!-- jQuery.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!-- popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap Scripts End-->
+</body>
+
+</html>

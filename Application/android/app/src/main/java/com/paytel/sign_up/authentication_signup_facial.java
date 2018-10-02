@@ -20,6 +20,11 @@ public class authentication_signup_facial  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.authentication_activity_signup_facial);
+        if (null == savedInstanceState) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, authentication_signup_facial_fragment.newInstance())
+                    .commit();
+        }
 
         new_user = ((global_objects) getApplication()).getNew_user();
 

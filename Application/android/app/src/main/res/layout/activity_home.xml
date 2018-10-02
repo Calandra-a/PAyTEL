@@ -21,7 +21,7 @@
 
     <Button
         android:id="@+id/btn_settingspage"
-        android:background="@drawable/baseline_settings_applications_black_24dp"
+        android:background="@drawable/baseline_settings_applications_blue_48dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"

@@ -35,7 +35,8 @@
             android:label="@string/title_activity_home" />
 
         <activity android:name=".sign_up.authentication_signup_userinfo" />
-        <activity android:name=".sign_up.authentication_signup_bankinfo" />
+        <activity android:name=".sign_up.authentication_signup_bankinfo"
+            android:theme="@style/paytel_setup" />
         <activity android:name=".sign_up.authentication_signup_facial" />
         <activity android:name=".sign_up.authentication_signup_fingerprint_complete" />
         <activity android:name=".util.accountsettings" />

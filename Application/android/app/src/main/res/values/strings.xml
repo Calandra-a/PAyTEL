@@ -25,4 +25,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exp_date">Exp date</string>
+    <string name="back">BACK</string>
+    <string name="next">NEXT</string>
+    <string name="cvv">CVV</string>
+    <string name="name_on_card">Name on card</string>
+    <string name="credit_card_number">Credit card number</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,9 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_bankinfo;
 import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_userinfo;
@@ -25,11 +29,15 @@ import com.paytel.util.accountsettings;
 
 import com.paytel.util.userData;
 
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -99,8 +107,9 @@ public class home extends AppCompatActivity {
                 PaginatedList<userData> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userData.class, queryExpression);
 
                 Gson gson = new Gson();
-                StringBuilder stringBuilder = new StringBuilder();
+                JsonParser parser = new JsonParser();
 
+                StringBuilder stringBuilder = new StringBuilder();
                 // Loop through query results
                 for (int i = 0; i < result.size(); i++) {
                     String jsonFormOfItem = gson.toJson(result.get(i));
@@ -109,7 +118,6 @@ public class home extends AppCompatActivity {
 
                 // Add your code here to deal with the data result
                 Log.d("Query results: ", stringBuilder.toString());
-
                 if (result.isEmpty()) {
                     // There were no items matching your query.
                     Log.d("Query results: ", "none");
@@ -120,6 +128,10 @@ public class home extends AppCompatActivity {
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
+                }
+                else{
+                        userData current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userData.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects) getApplication()).setCurrent_user(current_user);
                 }
             }
         }).start();

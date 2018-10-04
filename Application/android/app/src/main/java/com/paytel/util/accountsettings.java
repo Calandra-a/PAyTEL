@@ -3,6 +3,7 @@ package com.paytel.util;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,24 +25,21 @@ public class accountsettings extends AppCompatActivity {
 
         setContentView(R.layout.activity_accountsettings);
 
-        current_user = ((global_objects) getApplication()).getNew_user();
-
+        current_user = ((global_objects) getApplication()).getCurrent_user();
         Button btn_SAVE_userinfo = findViewById(R.id.btn_save_userinfo);
         Button btn_BACK_homepage = findViewById(R.id.btn_back_homepage);
 
         btn_SAVE_userinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(current_user !=null) {
-                    edit_userinfo();
+                edit_userinfo();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             ((global_objects) getApplication()).getDynamoDBMapper().save(current_user);
-                            // Item saved
+                            // Item updated
                         }
                     }).start();
-                }
                 try {
                         Intent k = new Intent(accountsettings.this, home.class);
                         startActivity(k);
@@ -53,6 +51,7 @@ public class accountsettings extends AppCompatActivity {
     }
 
     void edit_userinfo(){
+
         TextView f_name = findViewById(R.id.txt_first_name);
         TextView l_name = findViewById(R.id.txt_last_name);
         TextView street = findViewById(R.id.txt_street);

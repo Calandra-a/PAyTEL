@@ -7,56 +7,41 @@
     tools:context=".util.accountsettings">
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <TextView
-        android:id="@+id/txt_street"
+        android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="200dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Street and house number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_phone_number" />
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Settings"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textSize="@dimen/fab_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txt_phone_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="200dp"
-        android:ems="10"
-        android:inputType="phone"
-        android:hint="Phone number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_username" />
-
-    <TextView
+    <EditText
         android:id="@+id/txt_first_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="textPersonName"
         android:hint="First name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/message" />
 
-    <TextView
+    <EditText
         android:id="@+id/txt_last_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="textPersonName"
         android:hint="Last name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,13 +49,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_first_name" />
 
-    <TextView
+    <EditText
+        android:id="@+id/txt_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="200dp"
+        android:ems="9"
+        android:inputType="phone"
+        android:hint="Phone number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_last_name" />
+
+    <EditText
+        android:id="@+id/txt_street"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="200dp"
+        android:ems="9"
+        android:inputType="textPersonName"
+        android:hint="Street and house number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_phone_number" />
+
+    <EditText
         android:id="@+id/txt_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="textPersonName"
         android:hint="City"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,27 +91,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_street" />
 
-    <TextView
-        android:id="@+id/txt_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="200dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="User name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_last_name" />
-
-    <TextView
+    <EditText
         android:id="@+id/txt_zipcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="number"
         android:hint="Zipcode"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,13 +105,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_city" />
 
-    <TextView
+    <EditText
         android:id="@+id/txt_card_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -120,13 +119,13 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_zipcode"
         android:hint="Credit card number" />
 
-    <TextView
+    <EditText
         android:id="@+id/txt_name_on_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="textPersonName"
         android:hint="Name on card"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,27 +133,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_card_number" />
 
-    <TextView
-        android:id="@+id/txt_cvc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="200dp"
-        android:ems="10"
-        android:hint="cvc"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_exp_date" />
-
-    <TextView
+    <EditText
         android:id="@+id/txt_exp_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="200dp"
-        android:ems="10"
+        android:ems="9"
         android:inputType="date"
         android:hint="Exp date"
         app:layout_constraintEnd_toEndOf="parent"
@@ -162,13 +147,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_name_on_card" />
 
+    <EditText
+        android:id="@+id/txt_cvc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="200dp"
+        android:ems="9"
+        android:hint="CVC"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_exp_date" />
+
     <Button
         android:id="@+id/btn_back_homepage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="28dp"
         android:text="BACK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
@@ -177,12 +176,12 @@
     <Button
         android:id="@+id/btn_save_userinfo"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/colorAccent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="28dp"
         android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

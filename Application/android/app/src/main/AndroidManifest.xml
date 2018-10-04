@@ -5,10 +5,14 @@
     <!-- user permissions for AWS SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.hardware.camera"  android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <!-- user permissions for camera -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -29,17 +33,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".home"
             android:label="@string/title_activity_home" />
-
         <activity android:name=".sign_up.authentication_signup_userinfo" />
-        <activity android:name=".sign_up.authentication_signup_bankinfo"
+        <activity
+            android:name=".sign_up.authentication_signup_bankinfo"
             android:theme="@style/paytel_setup" />
         <activity android:name=".sign_up.authentication_signup_facial" />
         <activity android:name=".sign_up.authentication_signup_fingerprint_complete" />
         <activity android:name=".util.accountsettings" />
+        <activity
+            android:name=".sign_up.authentication_activity_signup_identity"
+            android:theme="@style/paytel_setup" />
+        <activity
+            android:name=".sign_up.activity_authentication_signup_address"
+            android:theme="@style/paytel_setup"></activity>
     </application>
 
 </manifest>

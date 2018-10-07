@@ -4,7 +4,7 @@
     <string name="title_activity_authenticatoractivity">authenticatoractivity</string>
     <string name="title_activity_home">home</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Transactions</string>
     <string name="title_notifications">Notifications</string>
 
     <string name="picture">Picture</string>
@@ -14,8 +14,6 @@
 
     <string name="intro_message">
         <![CDATA[
-
-
             This sample demonstrates the basic use of Camera2 API. Check the source code to see how
             you can display camera preview and take pictures.
 

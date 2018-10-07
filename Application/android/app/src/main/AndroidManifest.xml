@@ -33,7 +33,8 @@
 
         <activity
             android:name=".home"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".sign_up.authentication_signup_userinfo" />
         <activity android:name=".sign_up.authentication_signup_bankinfo" />

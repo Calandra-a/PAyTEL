@@ -27,7 +27,6 @@ public class accountsettings extends AppCompatActivity {
         current_user = ((global_objects) getApplication()).getNew_user();
 
         Button btn_SAVE_userinfo = findViewById(R.id.btn_save_userinfo);
-        Button btn_BACK_homepage = findViewById(R.id.btn_back_homepage);
 
         btn_SAVE_userinfo.setOnClickListener(new View.OnClickListener() {
             @Override

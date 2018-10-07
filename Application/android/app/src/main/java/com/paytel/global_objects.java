@@ -10,6 +10,7 @@ public class global_objects extends Application {
     DynamoDBMapper dynamoDBMapper;
     userData new_user;
     userData current_user;
+
     public userData getNew_user() {
         return new_user;
     }

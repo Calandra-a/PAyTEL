@@ -10,15 +10,18 @@ import HomeIcon from "@material-ui/icons/Home";
 import ClearIcon from "@material-ui/icons/Clear";
 import FlagIcon from "@material-ui/icons/Flag";
 import ListIcon from "@material-ui/icons/List";
+import { Link } from "react-router-dom";
 
 export const navigationListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" />
-    </ListItem>
+    <Link to="/">
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItem>
+    </Link>
   </div>
 );
 
@@ -48,12 +51,14 @@ export const adminListItems = (
       </ListItemIcon>
       <ListItemText primary="Flag Transaction" />
     </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ListIcon />
-      </ListItemIcon>
-      <ListItemText primary="Database Lookup" />
-    </ListItem>
+    <Link to="/results">
+      <ListItem button>
+        <ListItemIcon>
+          <ListIcon />
+        </ListItemIcon>
+        <ListItemText primary="Database Lookup" />
+      </ListItem>
+    </Link>
   </div>
 );
 

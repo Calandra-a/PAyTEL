@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -6,7 +6,6 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -17,7 +16,17 @@ import {
   adminListItems,
   accountListItems
 } from "./Menus/Admin";
+import DatabaseTable from "./Pages/DatabaseTable";
 import TestPage from "./Pages/TestPage";
+import logo_paytel from "../Resources/Images/logo_paytel.png";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter,
+  Switch
+} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -86,7 +95,7 @@ const styles = theme => ({
   }
 });
 
-class MiniDrawer extends React.Component {
+class Dashboard extends React.Component {
   state = {
     open: false
   };
@@ -123,9 +132,7 @@ class MiniDrawer extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
-              PAyTEL
-            </Typography>
+            <img src={logo_paytel} alt="PAyTEL" height="65" width="auto" />
           </Toolbar>
         </AppBar>
         <Drawer
@@ -156,16 +163,21 @@ class MiniDrawer extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <TestPage />
+          <Router>
+            <Switch>
+              <Route path="/r" component={TestPage} />
+              <Route path="/" component={DatabaseTable} />
+            </Switch>
+          </Router>
         </main>
       </div>
     );
   }
 }
 
-MiniDrawer.propTypes = {
+Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer);
+export default withStyles(styles, { withTheme: true })(Dashboard);

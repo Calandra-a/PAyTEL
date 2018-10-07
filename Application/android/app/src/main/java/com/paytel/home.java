@@ -32,8 +32,6 @@ public class home extends AppCompatActivity {
     private Toolbar mTopToolbar;
 
 
-public class home extends AppCompatActivity {
-    private TextView mTextMessage;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_bankinfo;
 import com.paytel.sign_up.authentication_signup_facial;
+import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.sign_up.authentication_signup_userinfo;
 import com.paytel.util.accountsettings;
 
@@ -133,7 +134,7 @@ public class home extends AppCompatActivity {
                     Log.d("Query results: ", "none");
                     //go to sign up activity
                     try {
-                        Intent k = new Intent(home.this, authentication_signup_userinfo.class);
+                        Intent k = new Intent(home.this, authentication_signup_identity.class);
                         startActivity(k);
                     } catch(Exception e) {
                         e.printStackTrace();

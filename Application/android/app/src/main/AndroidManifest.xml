@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.paytel">
 
     <!-- user permissions for AWS SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-feature android:name="android.hardware.camera"  android:required="true" />
 
+
     <!-- user permissions for camera -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -19,7 +23,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".authenticatoractivity"
             android:label="@string/title_activity_authenticatoractivity"
@@ -30,17 +35,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".sign_up.authentication_signup_userinfo" />
-        <activity android:name=".sign_up.authentication_signup_bankinfo" />
+        <activity
+            android:name=".sign_up.authentication_signup_bankinfo"
+            android:theme="@style/paytel_setup" />
         <activity android:name=".sign_up.authentication_signup_facial" />
         <activity android:name=".sign_up.authentication_signup_complete" />
         <activity android:name=".util.accountsettings" />
+        <activity
+            android:name=".sign_up.authentication_signup_identity"
+            android:theme="@style/paytel_setup" />
+        <activity
+            android:name=".sign_up.authentication_signup_address"
+            android:theme="@style/paytel_setup"/>
     </application>
 
 </manifest>

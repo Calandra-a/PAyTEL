@@ -67,13 +67,13 @@ public class accountsettings extends AppCompatActivity {
         cc.put("card_number", card_number.getText().toString());
         cc.put("cvc", CVC.getText().toString());
         cc.put("expiration_date", exp_date.getText().toString());
+        if(f_name != null)current_user.setFirstName(f_name.getText().toString());
+        if(l_name != null)current_user.setLastName(l_name.getText().toString());
+        if(street != null)current_user.setStreet(street.getText().toString());
+        if(city != null)current_user.setCity(city.getText().toString());
+        if(zip != null)current_user.setZipCode(zip.getText().toString());
+        if(phone_number != null)current_user.setPhoneNumber(phone_number.getText().toString());
+        if(cc != null)current_user.setCreditCard(cc);
 
-        current_user.setFirstName(f_name.getText().toString());
-        current_user.setLastName(l_name.getText().toString());
-        current_user.setStreet(street.getText().toString());
-        current_user.setCity(city.getText().toString());
-        current_user.setZipCode(zip.getText().toString());
-        current_user.setPhoneNumber(phone_number.getText().toString());
-        current_user.setCreditCard(cc);
     }
 }

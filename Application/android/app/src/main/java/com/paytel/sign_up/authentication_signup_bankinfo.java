@@ -10,8 +10,11 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userData;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class authentication_signup_bankinfo  extends AppCompatActivity {
     userData new_user;
@@ -59,5 +62,6 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
         cc.put("expiration_date", exp_date.getEditText().getText().toString());
 
         new_user.setCreditCard(cc);
+        new_user.setRekognitionIds(null);
     }
 }

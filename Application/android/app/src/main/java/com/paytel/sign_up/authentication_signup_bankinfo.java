@@ -31,8 +31,6 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
         Button btn_NEXT_bankinfo = findViewById(R.id.btn_next_bankinfo);
         Button btn_BACK_bankinfo = findViewById(R.id.btn_back_bankinfo);
 
-
-
         btn_NEXT_bankinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

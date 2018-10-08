@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".home">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:elevation="4dp"
+        android:background="?attr/colorPrimary"
+        />
+
     <TextView
         android:id="@+id/message"
         android:layout_width="wrap_content"
@@ -17,18 +27,6 @@
         android:text="@string/title_home"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/btn_settingspage"
-        android:background="@drawable/baseline_settings_applications_blue_48dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="360dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

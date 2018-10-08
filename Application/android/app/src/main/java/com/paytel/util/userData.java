@@ -26,6 +26,7 @@ public class userData {
     private String _street;
     private String _username;
     private String _zipCode;
+    private String _jsonString;
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
@@ -125,4 +126,6 @@ public class userData {
         this._zipCode = _zipCode;
     }
 
+    public String getJsonString() {return _jsonString;}
+    public void setJsonString(final String jsonString){this._jsonString = jsonString;}
 }

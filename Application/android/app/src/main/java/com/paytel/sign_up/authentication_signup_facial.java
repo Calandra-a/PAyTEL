@@ -1,9 +1,7 @@
 package com.paytel.sign_up;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +33,7 @@ public class authentication_signup_facial  extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                 try {
-                    Intent k = new Intent(authentication_signup_facial.this, authentication_signup_fingerprint_complete.class);
+                    Intent k = new Intent(authentication_signup_facial.this, authentication_signup_complete.class);
                     startActivity(k);
                 } catch(Exception e) {
                     e.printStackTrace();

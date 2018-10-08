@@ -5,19 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.JsonReader;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.google.gson.Gson;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_bankinfo;
 import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
@@ -26,10 +28,9 @@ import com.paytel.util.accountsettings;
 
 import com.paytel.util.userData;
 
-import java.util.concurrent.locks.Condition;
-
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,6 +57,10 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //set top toolbar
+        Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
+
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -66,19 +71,32 @@ public class home extends AppCompatActivity {
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
 
-        Button btn_settingspage = findViewById(R.id.btn_settingspage);
-        btn_settingspage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //move to next frame
-                try {
-                    Intent k = new Intent(home.this, accountsettings.class);
-                    startActivity(k);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.topbar_home, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.btn_settingspage) {
+            try {
+                Intent k = new Intent(home.this, accountsettings.class);
+                startActivity(k);
+            } catch(Exception e) {
+                e.printStackTrace();
             }
-        });
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void queryUser(){
@@ -100,8 +118,9 @@ public class home extends AppCompatActivity {
                 PaginatedList<userData> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userData.class, queryExpression);
 
                 Gson gson = new Gson();
-                StringBuilder stringBuilder = new StringBuilder();
+                JsonParser parser = new JsonParser();
 
+                StringBuilder stringBuilder = new StringBuilder();
                 // Loop through query results
                 for (int i = 0; i < result.size(); i++) {
                     String jsonFormOfItem = gson.toJson(result.get(i));
@@ -110,7 +129,6 @@ public class home extends AppCompatActivity {
 
                 // Add your code here to deal with the data result
                 Log.d("Query results: ", stringBuilder.toString());
-
                 if (result.isEmpty()) {
                     // There were no items matching your query.
                     Log.d("Query results: ", "none");
@@ -121,6 +139,10 @@ public class home extends AppCompatActivity {
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
+                }
+                else{
+                        userData current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userData.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects) getApplication()).setCurrent_user(current_user);
                 }
             }
         }).start();

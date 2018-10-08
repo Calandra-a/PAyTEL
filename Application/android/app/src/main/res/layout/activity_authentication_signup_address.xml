@@ -29,8 +29,8 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="92dp"
         android:layout_marginEnd="40dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="5"
+        app:counterEnabled="false"
+        app:counterMaxLength="50"
         app:counterOverflowTextAppearance="@style/CounterOverFlow"
         app:counterTextAppearance="@style/CounterText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,8 +52,8 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="40dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="5"
+        app:counterEnabled="false"
+        app:counterMaxLength="50"
         app:counterOverflowTextAppearance="@style/CounterOverFlow"
         app:counterTextAppearance="@style/CounterText"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +66,8 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="City" />
+            android:hint="City"
+            android:inputType="textShortMessage" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -91,7 +92,8 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Zip Code" />
+                android:hint="Zip Code"
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -100,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             app:counterEnabled="true"
-            app:counterMaxLength="3"
+            app:counterMaxLength="2"
             app:counterOverflowTextAppearance="@style/CounterOverFlow"
             app:counterTextAppearance="@style/CounterText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +111,8 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="State" />
+                android:hint="State"
+                android:inputType="textCapCharacters" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>

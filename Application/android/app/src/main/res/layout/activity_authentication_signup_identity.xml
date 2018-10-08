@@ -54,7 +54,8 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username" />
+            android:hint="Username"
+            android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -65,7 +66,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="8dp"
-        app:counterEnabled="true"
+        app:counterEnabled="false"
         app:counterMaxLength="5"
         app:counterOverflowTextAppearance="@style/CounterOverFlow"
         app:counterTextAppearance="@style/CounterText"
@@ -78,7 +79,8 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First Name" />
+            android:hint="First Name"
+            android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -89,7 +91,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="8dp"
-        app:counterEnabled="true"
+        app:counterEnabled="false"
         app:counterMaxLength="5"
         app:counterOverflowTextAppearance="@style/CounterOverFlow"
         app:counterTextAppearance="@style/CounterText"
@@ -102,7 +104,8 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last Name" />
+            android:hint="Last Name"
+            android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -114,7 +117,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="8dp"
         app:counterEnabled="true"
-        app:counterMaxLength="5"
+        app:counterMaxLength="10"
         app:counterOverflowTextAppearance="@style/CounterOverFlow"
         app:counterTextAppearance="@style/CounterText"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -126,7 +129,8 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number" />
+            android:hint="Phone Number"
+            android:inputType="phone" />
     </android.support.design.widget.TextInputLayout>
 
 

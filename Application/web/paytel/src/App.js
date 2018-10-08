@@ -1,58 +1,66 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import SignUpForm from "./pages/SignUpForm";
-import SignInForm from "./pages/SignInForm";
-import "./App.css";
+import React, { Component, Fragment } from "react";
+import { Auth } from "aws-amplify";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter,
+  Switch
+} from "react-router-dom";
+import Dashboard from "./Components/Dashboard";
+import Login from "./Components/Login";
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+
+const Authentication = {
+  isAuthenticated: true,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100);
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+const DashboardRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      Authentication.isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/login" />
+      )
+    }
+  />
+);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  handleLogout = async event => {
+    await Auth.signOut();
+
+    this.userHasAuthenticated(false);
+    this.props.history.push("/login");
+  };
+
   render() {
     return (
-      <Router>
-        <div className="App">
-          <div className="App__Aside" />
-          <div className="App__Form">
-            <div className="PageSwitcher">
-              <NavLink
-                to="/sign-in"
-                activeClassName="PageSwitcher__Item--Active"
-                className="PageSwitcher__Item"
-              >
-                Sign In
-              </NavLink>
-              <NavLink
-                exact
-                to="/"
-                activeClassName="PageSwitcher__Item--Active"
-                className="PageSwitcher__Item"
-              >
-                Sign Up
-              </NavLink>
-            </div>
-
-            <div className="FormTitle">
-              <NavLink
-                to="/sign-in"
-                activeClassName="FormTitle__Link--Active"
-                className="FormTitle__Link"
-              >
-                Sign In
-              </NavLink>{" "}
-              or{" "}
-              <NavLink
-                exact
-                to="/"
-                activeClassName="FormTitle__Link--Active"
-                className="FormTitle__Link"
-              >
-                Sign Up
-              </NavLink>
-            </div>
-
-            <Route exact path="/" component={SignUpForm} />
-            <Route path="/sign-in" component={SignInForm} />
-          </div>
-        </div>
-      </Router>
+      <MuiThemeProvider>
+        <Router>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <DashboardRoute path="/" component={Dashboard} />
+          </Switch>
+        </Router>
+      </MuiThemeProvider>
     );
   }
 }

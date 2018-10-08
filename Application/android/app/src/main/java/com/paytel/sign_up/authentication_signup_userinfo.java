@@ -1,11 +1,17 @@
 package com.paytel.sign_up;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
@@ -13,6 +19,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userData;
+
+import static android.app.PendingIntent.getActivity;
 
 public class authentication_signup_userinfo  extends AppCompatActivity {
     userData new_user;
@@ -32,19 +40,26 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
         btn_NEXT_userdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                add_userinfo();
+                //bool controls if the button transitions, controlled by user data entry
+                boolean next = add_userinfo();
                 //move to next frame
-                try {
-                    Intent k = new Intent(authentication_signup_userinfo.this, authentication_signup_bankinfo.class);
-                    startActivity(k);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
+                if (next == true){
+                    try {
+                        Intent k = new Intent(authentication_signup_userinfo.this, authentication_signup_bankinfo.class);
+                        startActivity(k);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
+        }
         });
     }
 
-    void add_userinfo(){
+        boolean add_userinfo(){
+        Context context = getApplicationContext();
+        int dShort = Toast.LENGTH_SHORT;
+        int dLong = Toast.LENGTH_SHORT;
+
         TextView f_name = findViewById(R.id.txt_first_name);
         TextView l_name = findViewById(R.id.txt_last_name);
         TextView user_name = findViewById(R.id.txt_username);
@@ -53,14 +68,59 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
         TextView phone_number = findViewById(R.id.txt_phone_number);
         TextView city = findViewById(R.id.txt_city);
 
-        new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        new_user.setUsername(user_name.getText().toString());
-        new_user.setFirstName(f_name.getText().toString());
-        new_user.setLastName(l_name.getText().toString());
-        new_user.setStreet(street.getText().toString());
-        new_user.setCity(city.getText().toString());
-        new_user.setZipCode(zip.getText().toString());
-        new_user.setPhoneNumber(phone_number.getText().toString());
+        //Using Toasts for incorrect data feedback --> replace with better dialog(or better solution)
+        if(f_name.getText().length() == 0 || l_name.getText().length() == 0 || user_name.getText().length() == 0 || street.getText().length() == 0 ||
+                city.getText().length() == 0 || zip.getText().length() == 0 || phone_number.getText().length() == 0){
+            CharSequence fail = "No field can be left blank";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(f_name.getText().toString().length() >= 20) {
+            CharSequence fail = "First name cant be over 20 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(l_name.getText().toString().length() >= 20) {
+            CharSequence fail = "Last name cant be over 20 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(user_name.getText().toString().length() >= 15){
+            CharSequence fail = "Username cant be over 15 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+            }
+        //check if phone number is 12 digits (including 2 dashes)
+        else if (phone_number.getText().toString().length() != 12){
+            CharSequence fail = "Phone number must be 12 characters long in xxx-xxx-xxxx format";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(zip.getText().toString().length() != 5) {
+            CharSequence fail = "Zip code is not 5 digits long";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else {
+           CharSequence succ = "success";
+           Toast success = Toast.makeText(context, succ, dShort);
+           success.show();
+           new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+           new_user.setUsername(user_name.getText().toString());
+           new_user.setFirstName(f_name.getText().toString());
+           new_user.setLastName(l_name.getText().toString());
+           new_user.setStreet(street.getText().toString());
+           new_user.setCity(city.getText().toString());
+           new_user.setZipCode(zip.getText().toString());
+           new_user.setPhoneNumber(phone_number.getText().toString());
+           return true;
+       }
     }
 
     void check_username(final String username){
@@ -91,3 +151,5 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
         }).start();
     }
 }
+
+

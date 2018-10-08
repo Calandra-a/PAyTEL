@@ -6,10 +6,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.text.Editable;
-import android.text.TextWatcher;
-
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userData;
@@ -40,7 +36,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
                 add_creditcard();
                 //move to next frame
                 try {
-                    Intent k = new Intent(authentication_signup_bankinfo.this, authentication_signup_facial.class);
+                    Intent k = new Intent(authentication_signup_bankinfo.this, authentication_signup_address.class);
                     startActivity(k);
                 } catch(Exception e) {
                     e.printStackTrace();

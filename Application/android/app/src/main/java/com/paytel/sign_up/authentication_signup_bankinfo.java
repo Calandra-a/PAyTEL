@@ -54,10 +54,10 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
         TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
 
         Map<String, String> cc = new HashMap<String, String>();
-        cc.put("name_on_card",name_on_card.getEditText().getText().toString());
-        cc.put("card_number", card_number.getEditText().getText().toString());
-        cc.put("cvc", CVC.getEditText().getText().toString());
-        cc.put("expiration_date", exp_date.getEditText().getText().toString());
+        cc.put("name_on_card",name_on_card.getEditText().getText().toString().trim());
+        cc.put("card_number", card_number.getEditText().getText().toString().trim());
+        cc.put("cvc", CVC.getEditText().getText().toString().trim());
+        cc.put("expiration_date", exp_date.getEditText().getText().toString().trim());
 
         new_user.setCreditCard(cc);
         new_user.setRekognitionIds(null);

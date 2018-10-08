@@ -56,9 +56,9 @@ public class authentication_signup_address extends AppCompatActivity {
 
         TextInputLayout city = findViewById(R.id.txt_city);
 
-        new_user.setStreet(street.getEditText().toString());
-        new_user.setCity(city.getEditText().toString());
-        new_user.setZipCode(zip.getEditText().toString());
+        new_user.setStreet(street.getEditText().getText().toString().trim());
+        new_user.setCity(city.getEditText().getText().toString().trim());
+        new_user.setZipCode(zip.getEditText().getText().toString().trim());
 
 
         //need to add setState() on the backend

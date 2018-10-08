@@ -58,10 +58,10 @@ public class authentication_signup_identity extends AppCompatActivity {
         TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
 
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        new_user.setUsername(user_name.getEditText().toString());
-        new_user.setFirstName(f_name.getEditText().toString());
-        new_user.setLastName(l_name.getEditText().toString());
-        new_user.setPhoneNumber(phone_number.getEditText().toString());
+        new_user.setUsername(user_name.getEditText().getText().toString().trim());
+        new_user.setFirstName(f_name.getEditText().getText().toString().trim());
+        new_user.setLastName(l_name.getEditText().getText().toString().trim());
+        new_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
     }
 
     void check_username(final String username){

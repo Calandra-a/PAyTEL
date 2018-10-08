@@ -2,6 +2,7 @@ package com.paytel.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -50,14 +51,14 @@ public class authentication_signup_address extends AppCompatActivity {
     }
 
     void add_address(){
-        TextView street = findViewById(R.id.txt_street);
-        TextView zip = findViewById(R.id.txt_zipcode);
+        TextInputLayout street = findViewById(R.id.txt_street);
+        TextInputLayout zip = findViewById(R.id.txt_zipcode);
 
-        TextView city = findViewById(R.id.txt_city);
+        TextInputLayout city = findViewById(R.id.txt_city);
 
-        new_user.setStreet(street.getText().toString());
-        new_user.setCity(city.getText().toString());
-        new_user.setZipCode(zip.getText().toString());
+        new_user.setStreet(street.getEditText().toString());
+        new_user.setCity(city.getEditText().toString());
+        new_user.setZipCode(zip.getEditText().toString());
 
 
         //need to add setState() on the backend

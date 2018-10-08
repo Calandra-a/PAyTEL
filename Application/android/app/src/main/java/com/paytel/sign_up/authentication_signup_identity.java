@@ -2,9 +2,11 @@ package com.paytel.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -50,16 +52,16 @@ public class authentication_signup_identity extends AppCompatActivity {
     }
 
     void add_userinfo(){
-        TextView f_name = findViewById(R.id.txt_first_name);
-        TextView l_name = findViewById(R.id.txt_last_name);
-        TextView user_name = findViewById(R.id.txt_username);
-        TextView phone_number = findViewById(R.id.txt_phone_number);
+        TextInputLayout f_name = findViewById(R.id.txt_first_name);
+        TextInputLayout l_name = findViewById(R.id.txt_last_name);
+        TextInputLayout user_name = findViewById(R.id.txt_username);
+        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
 
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        new_user.setUsername(user_name.getText().toString());
-        new_user.setFirstName(f_name.getText().toString());
-        new_user.setLastName(l_name.getText().toString());
-        new_user.setPhoneNumber(phone_number.getText().toString());
+        new_user.setUsername(user_name.getEditText().toString());
+        new_user.setFirstName(f_name.getEditText().toString());
+        new_user.setLastName(l_name.getEditText().toString());
+        new_user.setPhoneNumber(phone_number.getEditText().toString());
     }
 
     void check_username(final String username){

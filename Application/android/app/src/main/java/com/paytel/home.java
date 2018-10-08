@@ -58,7 +58,7 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         //set top toolbar
-        Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar mTopToolbar =  findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
 
         mTextMessage = (TextView) findViewById(R.id.message);

@@ -22,7 +22,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-<<<<<<< HEAD
+
     <style name="Theme.AppTheme.Light.NoActionBar" parent="android:Theme.Material.Light.NoActionBar" >
         <item name="android:windowBackground">@color/setup_background</item>
     </style>
@@ -47,7 +47,6 @@
         <item name="android:textColor">@color/counter_color</item>
     </style>
 
-=======
     <style name="HeaderBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -56,5 +55,5 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
->>>>>>> master
+
 </resources>

@@ -10,26 +10,45 @@ import {
 } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import Login from "./Components/Login";
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import NotFound from "./Components/NotFound";
 
 const Authentication = {
-  isAuthenticated: true,
-  authenticate(cb) {
+  isAuthenticated: false,
+  authenticate() {
     this.isAuthenticated = true;
-    setTimeout(cb, 100);
   },
-  signout(cb) {
+  signout() {
     this.isAuthenticated = false;
-    setTimeout(cb, 100);
   }
 };
 
-const DashboardRoute = ({ component: Component, ...rest }) => (
+const LoginRoute = ({
+  component: Component,
+  authenticator: Authenticator,
+  ...rest
+}) => (
+  <Route
+    {...rest}
+    render={props =>
+      !Authentication.isAuthenticated ? (
+        <Component {...props} authenticator={Authenticator} />
+      ) : (
+        <Redirect to="/" />
+      )
+    }
+  />
+);
+
+const DashboardRoute = ({
+  component: Component,
+  authenticator: Authenticator,
+  ...rest
+}) => (
   <Route
     {...rest}
     render={props =>
       Authentication.isAuthenticated ? (
-        <Component {...props} />
+        <Component {...props} authenticator={Authenticator} />
       ) : (
         <Redirect to="/login" />
       )
@@ -38,29 +57,23 @@ const DashboardRoute = ({ component: Component, ...rest }) => (
 );
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
-  handleLogout = async event => {
-    await Auth.signOut();
-
-    this.userHasAuthenticated(false);
-    this.props.history.push("/login");
-  };
-
   render() {
     return (
-      <MuiThemeProvider>
-        <Router>
-          <Switch>
-            <Route path="/login" component={Login} />
-            <DashboardRoute path="/" component={Dashboard} />
-          </Switch>
-        </Router>
-      </MuiThemeProvider>
+      <Router>
+        <Switch>
+          <LoginRoute
+            path="/login"
+            component={Login}
+            authenticator={Authentication}
+          />
+          <DashboardRoute
+            path="/"
+            component={Dashboard}
+            authenticator={Authentication}
+          />
+          <Route path="" component={NotFound} />
+        </Switch>
+      </Router>
     );
   }
 }

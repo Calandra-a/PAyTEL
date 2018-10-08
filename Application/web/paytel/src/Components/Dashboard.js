@@ -96,6 +96,12 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    console.log(props);
+  }
+
   state = {
     open: false
   };

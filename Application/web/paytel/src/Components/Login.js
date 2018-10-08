@@ -48,6 +48,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props);
+
     this.state = {
       loading: false,
       email: "",
@@ -55,20 +57,29 @@ class Login extends Component {
     };
   }
 
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  };
+
   submit = async event => {
     event.preventDefault();
 
-    this.setState({ loading: true });
+    this.state.isLoading = true;
 
     try {
-      await Auth.signIn(this.state.email, this.state.password);
-
-      //Need to indicate authentication and redirect after sign in here.
-      //this.props.authenticated(true);
-      //this.props.history.push("/");
+      console.log(this.state.email);
+      if (
+        this.state.email === "root@paytel.com" &&
+        this.state.password === "paytel"
+      ) {
+        this.props.authenticator.authenticate();
+        this.props.history.push("/");
+      }
     } catch (e) {
       alert(e.message);
-      this.setState({ isLoading: false });
+      this.state.isLoading = false;
     }
   };
 
@@ -93,8 +104,14 @@ class Login extends Component {
                 className={classes.img}
               />
               <Typography variant="headline">Please Log In.</Typography>
-              <form className={classes.form}>
-                <FormControl margin="normal" required fullWidth>
+              <form className={classes.form} onSubmit={this.submit}>
+                <FormControl
+                  margin="normal"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  required
+                  fullWidth
+                >
                   <InputLabel htmlFor="email">Email Address</InputLabel>
                   <Input
                     id="email"
@@ -103,7 +120,13 @@ class Login extends Component {
                     autoFocus
                   />
                 </FormControl>
-                <FormControl margin="normal" required fullWidth>
+                <FormControl
+                  margin="normal"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  required
+                  fullWidth
+                >
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     name="password"
@@ -131,8 +154,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Login);

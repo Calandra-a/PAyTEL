@@ -67,11 +67,14 @@ class Login extends Component {
     this.state.isLoading = true;
 
     try {
-      if (
-        this.state.email === "root@paytel.com" &&
-        this.state.password === "paytel"
-      ) {
-        this.props.signin();
+      if (this.state.email === "root@paytel.com") {
+        if (this.state.password === "paytel") {
+          this.props.signin();
+        } else {
+          alert("Error Signing In: Invalid password.");
+        }
+      } else {
+        alert("Error Signing In: Username not found.");
       }
     } catch (e) {
       alert(e.message);

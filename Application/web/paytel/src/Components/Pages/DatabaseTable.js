@@ -124,19 +124,19 @@ const styles = theme => ({
 class DatabaseTable extends React.Component {
   state = {
     rows: [
-      createData("Cupcake", 305, 3.7),
-      createData("Donut", 452, 25.0),
-      createData("Eclair", 262, 16.0),
-      createData("Frozen yoghurt", 159, 6.0),
-      createData("Gingerbread", 356, 16.0),
-      createData("Honeycomb", 408, 3.2),
-      createData("Ice cream sandwich", 237, 9.0),
-      createData("Jelly Bean", 375, 0.0),
-      createData("KitKat", 518, 26.0),
-      createData("Lollipop", 392, 0.2),
-      createData("Marshmallow", 318, 0),
-      createData("Nougat", 360, 19.0),
-      createData("Oreo", 437, 18.0)
+      createData("Oct-6-2018", 7823, 8097),
+      createData("Oct-3-2018", 3972, 6818),
+      createData("Oct-2-2018", 6786, 4811),
+      createData("Oct-2-2018", 7919, 8465),
+      createData("Aug-29-2018", 4827, 8090),
+      createData("Aug-27-2018", 9727, 9632),
+      createData("Aug-25-2018", 9438, 5414),
+      createData("Aug-23-2018", 8216, 5514),
+      createData("Aug-23-2018", 5823, 5021),
+      createData("Aug-22-2018", 5397, 9837),
+      createData("Aug-19-2018", 6300, 5356),
+      createData("Aug-17-2018", 9848, 6290),
+      createData("Aug-16-2018", 9481, 7906)
     ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
     page: 0,
     rowsPerPage: 5

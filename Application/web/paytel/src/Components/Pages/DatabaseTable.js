@@ -162,9 +162,9 @@ class DatabaseTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell numeric>Calories</TableCell>
-                <TableCell numeric>Fat (g)</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell numeric>Buyer</TableCell>
+                <TableCell numeric>Seller</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

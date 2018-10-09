@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
+import logo_paytel from "../Resources/Images/logo_paytel.png";
 import logo_pt from "../Resources/Images/logo_pt.png";
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
@@ -15,7 +16,7 @@ import Hidden from "@material-ui/core/Hidden";
 const styles = theme => ({
   gridStyling: {
     height: "100vh",
-    backgroundColor: "red",
+    backgroundColor: "#002984",
     display: "flex",
     flexGrow: 1,
     justifyContent: "center",
@@ -23,7 +24,6 @@ const styles = theme => ({
   },
   gridStyling2: {
     height: "100vh",
-    backgroundColor: "cyan",
     display: "flex",
     flexGrow: 1,
     justifyContent: "center",
@@ -48,8 +48,6 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props);
-
     this.state = {
       loading: false,
       email: "",
@@ -69,13 +67,11 @@ class Login extends Component {
     this.state.isLoading = true;
 
     try {
-      console.log(this.state.email);
       if (
         this.state.email === "root@paytel.com" &&
         this.state.password === "paytel"
       ) {
-        this.props.authenticator.authenticate();
-        this.props.history.push("/");
+        this.props.signin();
       }
     } catch (e) {
       alert(e.message);
@@ -91,7 +87,7 @@ class Login extends Component {
         <Grid container>
           <Hidden xsDown>
             <Grid item sm={7} className={classes.gridStyling2}>
-              <Paper>sm=6</Paper>
+              <img src={logo_paytel} alt="PAyTEL" height="100" width="auto" />
             </Grid>
           </Hidden>
           <Grid item sm={5} className={classes.gridStyling}>

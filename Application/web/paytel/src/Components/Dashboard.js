@@ -27,6 +27,11 @@ import {
   withRouter,
   Switch
 } from "react-router-dom";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ClearIcon from "@material-ui/icons/Clear";
 
 const drawerWidth = 240;
 
@@ -98,8 +103,6 @@ const styles = theme => ({
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log(props);
   }
 
   state = {
@@ -165,7 +168,20 @@ class Dashboard extends React.Component {
           <Divider />
           <List>{adminListItems}</List>
           <Divider />
-          <List>{accountListItems}</List>
+          <List>
+            <ListItem button>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+            <ListItem button onClick={this.props.signout}>
+              <ListItemIcon>
+                <ClearIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+          </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />

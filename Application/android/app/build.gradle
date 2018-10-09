@@ -50,4 +50,14 @@ dependencies {
     implementation('com.amazonaws:aws-android-sdk-auth-ui:2.6.+@aar') { transitive = true }
     // AmazonDynamoDB dependencies for NoSQL Database
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
+    // Overrides an auth dependency to ensure correct behavior
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.0'
+
+    implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.7.+'
+    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
+
 }
+apply plugin: 'com.google.gms.google-services'

@@ -1,5 +1,6 @@
 package com.paytel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +14,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonElement;
@@ -31,6 +40,7 @@ import com.paytel.util.userData;
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
 
+    private static PinpointManager pinpointManager;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -141,10 +151,43 @@ public class home extends AppCompatActivity {
                     }
                 }
                 else{
-                        userData current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userData.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                    //add current device token to db
+                    userData uu = new userData();
+                    uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
+                    uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                    ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+
+                    userData current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userData.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
                         ((global_objects) getApplication()).setCurrent_user(current_user);
+
                 }
             }
         }).start();
     }
+
+    public static PinpointManager getPinpointManager(final Context applicationContext) {
+        if (pinpointManager == null) {
+            PinpointConfiguration pinpointConfig = new PinpointConfiguration(
+                    applicationContext,
+                    AWSMobileClient.getInstance().getCredentialsProvider(),
+                    AWSMobileClient.getInstance().getConfiguration());
+
+            pinpointManager = new PinpointManager(pinpointConfig);
+
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            final String token = task.getResult().getToken();
+                            Log.d("HOME", "Registering push notifications token: " + token);
+                            pinpointManager.getNotificationClient().registerDeviceToken(token);
+                        }
+                    });
+        }
+        Log.d("AXELWAS",pinpointManager.getNotificationClient().getDeviceToken());
+
+        return pinpointManager;
+    }
+
+
 }

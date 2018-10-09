@@ -53,6 +53,12 @@
         <activity
             android:name=".sign_up.authentication_signup_address"
             android:theme="@style/paytel_setup"/>
+        <service
+            android:name=".util.PushListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

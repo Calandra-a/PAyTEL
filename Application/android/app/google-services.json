@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "366399277580",
+    "firebase_url": "https://paytel-216020.firebaseio.com",
+    "project_id": "paytel-216020",
+    "storage_bucket": "paytel-216020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366399277580:android:45235ca887ad0b7c",
+        "android_client_info": {
+          "package_name": "com.paytel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366399277580-tq5m8batgueguo8j1vvi2as320cro6ro.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paytel",
+            "certificate_hash": "904d4ebbb84a0e3469093c3b9cf8d91b6278b521"
+          }
+        },
+        {
+          "client_id": "366399277580-t4t2vv5f4sh976jlkba84jj3pjgtlnba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT0-Jd9tccrNhwvyiDZdlLLjnJtNmFyBE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366399277580-t4t2vv5f4sh976jlkba84jj3pjgtlnba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

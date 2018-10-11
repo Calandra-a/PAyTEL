@@ -1,7 +1,13 @@
 package com.paytel.sign_up;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.biometrics.BiometricPrompt;
+import android.net.sip.SipSession;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +16,8 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 import com.paytel.util.userData;
+
+import java.util.concurrent.Executor;
 
 public class authentication_signup_complete extends AppCompatActivity {
     userData new_user;
@@ -25,7 +33,9 @@ public class authentication_signup_complete extends AppCompatActivity {
         //user data
 
         //fingerprint
-        Button btn_COMPLETE = findViewById(R.id.btn_complete);
+        useFingerprint();
+
+        final Button btn_COMPLETE = findViewById(R.id.btn_complete);
 
         btn_COMPLETE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +57,41 @@ public class authentication_signup_complete extends AppCompatActivity {
                 }
             }
         });
-
     }
-}
+    void useFingerprint() {
+        BiometricPrompt prompt = new BiometricPrompt.Builder(this)
+                .setTitle("Verify")
+                .setSubtitle("...")
+                .setNegativeButton("Cancel", getMainExecutor(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .build();
+        BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
+                super.onAuthenticationHelp(helpCode, helpString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        };
+        prompt.authenticate(new CancellationSignal(), getMainExecutor(), callback);
+
+        }
+    }
+

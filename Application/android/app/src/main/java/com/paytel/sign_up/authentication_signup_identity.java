@@ -6,15 +6,13 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.paytel.R;
 import com.paytel.global_objects;
-import com.paytel.util.userData;
+import com.paytel.util.userDataObject;
 
 //Alex Dapoz
 //I created this screen to make the signup process cleaner
@@ -22,7 +20,7 @@ import com.paytel.util.userData;
 
 
 public class authentication_signup_identity extends AppCompatActivity {
-    userData new_user;
+    userDataObject new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +28,7 @@ public class authentication_signup_identity extends AppCompatActivity {
 
         setContentView(R.layout.activity_authentication_signup_identity);
 
-        ((global_objects) getApplication()).setNew_user(new userData());
+        ((global_objects) getApplication()).setNew_user(new userDataObject());
         new_user = ((global_objects) getApplication()).getNew_user();
 
         //user data
@@ -73,14 +71,14 @@ public class authentication_signup_identity extends AppCompatActivity {
 
             @Override
             public void run() {
-                userData user = new userData();
+                userDataObject user = new userDataObject();
                 user.setUsername(username);//partition key
 
                 DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
                         .withHashKeyValues(user)
                         .withConsistentRead(false);
 
-                PaginatedList<userData> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userData.class, queryExpression);
+                PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
 
 
                 if(result.isEmpty()) {

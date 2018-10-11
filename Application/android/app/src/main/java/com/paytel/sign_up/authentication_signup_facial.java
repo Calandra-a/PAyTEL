@@ -8,10 +8,10 @@ import android.widget.Button;
 
 import com.paytel.R;
 import com.paytel.global_objects;
-import com.paytel.util.userData;
+import com.paytel.util.userDataObject;
 
 public class authentication_signup_facial  extends AppCompatActivity {
-    userData new_user;
+    userDataObject new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

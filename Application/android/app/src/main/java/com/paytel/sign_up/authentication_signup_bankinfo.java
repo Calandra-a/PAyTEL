@@ -8,16 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import com.paytel.R;
 import com.paytel.global_objects;
-import com.paytel.util.userData;
+import com.paytel.util.userDataObject;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class authentication_signup_bankinfo  extends AppCompatActivity {
-    userData new_user;
+    userDataObject new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

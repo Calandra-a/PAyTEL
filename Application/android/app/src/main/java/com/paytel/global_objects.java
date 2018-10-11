@@ -3,19 +3,19 @@ package com.paytel;
 import android.app.Application;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.paytel.util.userData;
+import com.paytel.util.userDataObject;
 
 public class global_objects extends Application {
 
     DynamoDBMapper dynamoDBMapper;
-    userData new_user;
-    userData current_user;
+    userDataObject new_user;
+    userDataObject current_user;
 
-    public userData getNew_user() {
+    public userDataObject getNew_user() {
         return new_user;
     }
 
-    public void setNew_user(userData new_user) {
+    public void setNew_user(userDataObject new_user) {
         this.new_user = new_user;
     }
 
@@ -27,8 +27,8 @@ public class global_objects extends Application {
         this.dynamoDBMapper = dynamoDBMapper;
     }
 
-    public userData getCurrent_user() { return current_user;}
-    public void setCurrent_user(userData current_user) { this.current_user = current_user;}
+    public userDataObject getCurrent_user() { return current_user;}
+    public void setCurrent_user(userDataObject current_user) { this.current_user = current_user;}
 
 
 }

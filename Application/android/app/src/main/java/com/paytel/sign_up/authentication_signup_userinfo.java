@@ -12,10 +12,10 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExp
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.paytel.R;
 import com.paytel.global_objects;
-import com.paytel.util.userData;
+import com.paytel.util.userDataObject;
 
 public class authentication_signup_userinfo  extends AppCompatActivity {
-    userData new_user;
+    userDataObject new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
 
         setContentView(R.layout.authentication_activity_signup_userinfo);
 
-        ((global_objects) getApplication()).setNew_user(new userData());
+        ((global_objects) getApplication()).setNew_user(new userDataObject());
         new_user = ((global_objects) getApplication()).getNew_user();
 
         //user data
@@ -72,14 +72,14 @@ public class authentication_signup_userinfo  extends AppCompatActivity {
 
             @Override
             public void run() {
-                userData user = new userData();
+                userDataObject user = new userDataObject();
                 user.setUsername(username);//partition key
 
                 DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
                         .withHashKeyValues(user)
                         .withConsistentRead(false);
 
-                PaginatedList<userData> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userData.class, queryExpression);
+                PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
 
 
                 if(result.isEmpty()) {

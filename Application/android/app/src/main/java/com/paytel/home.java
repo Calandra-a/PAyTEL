@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,13 +25,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.paytel.sign_up.authentication_signup_bankinfo;
-import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
-import com.paytel.sign_up.authentication_signup_userinfo;
 import com.paytel.util.accountsettings;
 
 import com.paytel.util.userData;

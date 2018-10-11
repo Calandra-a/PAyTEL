@@ -29,13 +29,13 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
 
         //credit card
         Button btn_NEXT_bankinfo = findViewById(R.id.btn_next_bankinfo);
-        Button btn_BACK_bankinfo = findViewById(R.id.btn_back_bankinfo);
 
         btn_NEXT_bankinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 add_creditcard();
                 //move to next frame
+
                 try {
                     Intent k = new Intent(authentication_signup_bankinfo.this, authentication_signup_address.class);
                     startActivity(k);

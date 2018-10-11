@@ -17,6 +17,7 @@ public class authentication_signup_facial  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.authentication_activity_signup_facial);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
@@ -26,6 +27,13 @@ public class authentication_signup_facial  extends AppCompatActivity {
 
         new_user = ((global_objects) getApplication()).getNew_user();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ((global_objects) getApplication()).getDynamoDBMapper().save(new_user);
+                // Item saved
+            }
+        }).start();
         //facial rekognition
         Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
         btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {

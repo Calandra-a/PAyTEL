@@ -126,13 +126,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_back_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:hint="@string/back" />
-
-        <Button
             android:id="@+id/btn_next_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

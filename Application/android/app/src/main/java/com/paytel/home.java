@@ -1,5 +1,6 @@
 package com.paytel;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.paytel.sign_up.authentication_signup_bankinfo;
 import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.sign_up.authentication_signup_userinfo;
+import com.paytel.util.AbstractApplicationLifeCycleHelper;
 import com.paytel.util.accountsettings;
 
 import com.paytel.util.userData;
@@ -41,6 +43,7 @@ public class home extends AppCompatActivity {
     private TextView mTextMessage;
 
     private static PinpointManager pinpointManager;
+    private AbstractApplicationLifeCycleHelper applicationLifeCycleHelper;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,6 +84,24 @@ public class home extends AppCompatActivity {
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
 
+        // The Helper registers itself to receive application lifecycle events when it is constructed.
+                // A reference is kept here in order to pass through the onTrimMemory() call from
+                // the Application class to properly track when the application enters the background.
+        applicationLifeCycleHelper = new AbstractApplicationLifeCycleHelper(this) {
+            @Override
+            protected void applicationEnteredForeground() {
+                pinpointManager.getSessionClient().startSession();
+                // handle any events that should occur when your app has come to the foreground...
+            }
+
+            @Override
+            protected void applicationEnteredBackground() {
+                Log.d("home", "Detected application has entered the background.");
+                pinpointManager.getSessionClient().stopSession();
+                pinpointManager.getAnalyticsClient().submitEvents();
+                // handle any events that should occur when your app has gone into the background...
+            }
+        };
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

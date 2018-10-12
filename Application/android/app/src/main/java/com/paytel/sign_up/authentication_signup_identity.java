@@ -6,6 +6,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import android.content.Context;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
@@ -37,29 +39,60 @@ public class authentication_signup_identity extends AppCompatActivity {
         btn_NEXT_userdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                add_userinfo();
                 //move to next frame
-                try {
-                    Intent k = new Intent(authentication_signup_identity.this, authentication_signup_bankinfo.class);
-                    startActivity(k);
-                } catch(Exception e) {
-                    e.printStackTrace();
+                boolean next = add_userinfo();
+                if (next == true) {
+
+                    try {
+                        Intent k = new Intent(authentication_signup_identity.this, authentication_signup_bankinfo.class);
+                        startActivity(k);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
 
-    void add_userinfo(){
+    boolean add_userinfo() {
+
+        Context context = getApplicationContext();
+        int dShort = Toast.LENGTH_SHORT;
+        int dLong = Toast.LENGTH_SHORT;
+
         TextInputLayout f_name = findViewById(R.id.txt_first_name);
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         TextInputLayout user_name = findViewById(R.id.txt_username);
         TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
 
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        new_user.setUsername(user_name.getEditText().getText().toString().trim());
-        new_user.setFirstName(f_name.getEditText().getText().toString().trim());
-        new_user.setLastName(l_name.getEditText().getText().toString().trim());
-        new_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
+        if (user_name.getEditText().getText().toString().length() == 0 || f_name.getEditText().getText().toString().length() == 0 ||
+                l_name.getEditText().getText().toString().length() == 0 || phone_number.getEditText().getText().toString().length() == 0) {
+            CharSequence fail = "No field can be left blank";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        } else if (user_name.getEditText().getText().toString().length() >= 20) {
+            CharSequence fail = "Username cant be over 20 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        } else if (phone_number.getEditText().getText().toString().length() != 10) {
+            CharSequence fail = "Phone number must be 10 digits";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        } else {
+            CharSequence succ = "Success";
+            Toast toast = Toast.makeText(context, succ, dShort);
+            toast.show();
+
+            new_user.setUsername(user_name.getEditText().getText().toString().trim());
+            new_user.setFirstName(f_name.getEditText().getText().toString().trim());
+            new_user.setLastName(l_name.getEditText().getText().toString().trim());
+            new_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
+            return true;
+        }
     }
 
     void check_username(final String username){

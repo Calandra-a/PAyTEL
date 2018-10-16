@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -80,6 +81,8 @@ public class authentication_signup_facial_fragment extends Fragment
      * Tag for the {@link Log}.
      */
     private static final String TAG = "authentication_signup_facial_fragment";
+
+    static String pose;
 
     /**
      * Camera state: Showing camera preview.
@@ -1018,6 +1021,31 @@ public class authentication_signup_facial_fragment extends Fragment
                                     }
                                 }
                             })
+                    .create();
+        }
+    }
+
+    public String getPose() {
+        String[] poses = getResources().getStringArray(R.array.poses);
+        int randomIndex = new Random().nextInt(poses.length);
+        String randomPose = poses[randomIndex];
+
+        return randomPose;
+    }
+
+    public static class PoseDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Fragment parent = getParentFragment();
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage("Pose: " + pose)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
                     .create();
         }
     }

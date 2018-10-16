@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.paytel.R;
 import com.paytel.global_objects;
+import com.paytel.home;
 import com.paytel.util.TransactionDataObject;
 public class initial_transaction extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class initial_transaction extends AppCompatActivity {
                 add_transactioninfo();
 
                 try {
-                    Intent k = new Intent(initial_transaction.this, authentication_transaction_facial.class);
+                    Intent k = new Intent(initial_transaction.this, home.class);
                     startActivity(k);
 
                 } catch (Exception e) {

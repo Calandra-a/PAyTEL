@@ -41,6 +41,7 @@ public class authentication_signup_identity extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                 boolean next = add_userinfo();
+                check_username(new_user.getUsername());
                 if (next == true) {
 
                     try {
@@ -116,7 +117,8 @@ public class authentication_signup_identity extends AppCompatActivity {
 
                 if(result.isEmpty()) {
 
-                }else{
+                }
+                else{
 
                 }
             }

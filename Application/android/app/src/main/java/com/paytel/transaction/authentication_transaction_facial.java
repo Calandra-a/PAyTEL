@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.paytel.R;
-import com.paytel.global_objects;
 import com.paytel.home;
-import com.paytel.sign_up.authentication_signup_facial_fragment;
 import com.paytel.util.TransactionDataObject;
 
 public class authentication_transaction_facial extends AppCompatActivity {
@@ -27,16 +25,6 @@ public class authentication_transaction_facial extends AppCompatActivity {
                     .commit();
         }
 
-        new_transaction = ((global_objects) getApplication()).getNew_transaction();
-
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ((global_objects) getApplication()).getDynamoDBMapper().save(new_transaction);
-                // Item saved
-            }
-        }).start();
-        */
         //facial rekognition
         Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
         btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {

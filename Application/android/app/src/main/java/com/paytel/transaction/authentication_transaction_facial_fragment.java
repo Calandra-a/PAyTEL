@@ -79,7 +79,7 @@ public class authentication_transaction_facial_fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "authentication_signup_facial_fragment";
+    private static final String TAG = "authentication_transaction_facial_fragment";
 
     /**
      * Camera state: Showing camera preview.
@@ -409,7 +409,7 @@ public class authentication_transaction_facial_fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_authentication_signup_facial, container, false);
+        return inflater.inflate(R.layout.fragment_authentication_transaction_facial, container, false);
     }
 
     @Override

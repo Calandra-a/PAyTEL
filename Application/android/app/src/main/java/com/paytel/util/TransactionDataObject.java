@@ -20,8 +20,8 @@ public class TransactionDataObject {
     private String _buyerId;
     private String _note;
     private String _sellerId;
-    private String _status;
     private String _time;
+    private String _transactionStatus;
 
     @DynamoDBHashKey(attributeName = "transaction_id")
     @DynamoDBAttribute(attributeName = "transaction_id")
@@ -72,14 +72,6 @@ public class TransactionDataObject {
     public void setSellerId(final String _sellerId) {
         this._sellerId = _sellerId;
     }
-    @DynamoDBAttribute(attributeName = "status")
-    public String getStatus() {
-        return _status;
-    }
-
-    public void setStatus(final String _status) {
-        this._status = _status;
-    }
     @DynamoDBAttribute(attributeName = "time")
     public String getTime() {
         return _time;
@@ -87,6 +79,14 @@ public class TransactionDataObject {
 
     public void setTime(final String _time) {
         this._time = _time;
+    }
+    @DynamoDBAttribute(attributeName = "transaction_status")
+    public String getTransactionStatus() {
+        return _transactionStatus;
+    }
+
+    public void setTransactionStatus(final String _transactionStatus) {
+        this._transactionStatus = _transactionStatus;
     }
 
 }

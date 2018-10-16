@@ -58,6 +58,8 @@ dependencies {
 
     implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.7.+'
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
+    //Amazon API gateway dependendices
+    implementation 'com.amazonaws:aws-android-sdk-apigateway-core:2.7.+'
 
 }
 apply plugin: 'com.google.gms.google-services'

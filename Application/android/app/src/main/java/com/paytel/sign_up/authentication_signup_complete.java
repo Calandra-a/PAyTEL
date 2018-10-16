@@ -1,11 +1,8 @@
 package com.paytel.sign_up;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.biometrics.BiometricPrompt;
-import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +12,10 @@ import android.widget.Button;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
-import com.paytel.util.userData;
-
-import java.util.concurrent.Executor;
+import com.paytel.util.userDataObject;
 
 public class authentication_signup_complete extends AppCompatActivity {
-    userData new_user;
+    userDataObject new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +36,6 @@ public class authentication_signup_complete extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //move to next frame
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((global_objects) getApplication()).getDynamoDBMapper().save(new_user);
-                        // Item saved
-                    }
-                }).start();
                 try {
                     Intent k = new Intent(authentication_signup_complete.this, home.class);
                     startActivity(k);

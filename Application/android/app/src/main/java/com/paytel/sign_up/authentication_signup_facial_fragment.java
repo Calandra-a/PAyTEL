@@ -418,8 +418,8 @@ public class authentication_signup_facial_fragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
+        pose = getPose();
     }
 
     // CHANGE THIS
@@ -878,22 +878,7 @@ public class authentication_signup_facial_fragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
-        }
+        takePicture();
     }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
@@ -1033,17 +1018,27 @@ public class authentication_signup_facial_fragment extends Fragment
         return randomPose;
     }
 
+    private static Handler handler = new Handler();
+
+    private static Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "timeout");
+        }
+    };
+
     public static class PoseDialog extends DialogFragment {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Fragment parent = getParentFragment();
+            // final Fragment parent = getParentFragment();
             return new AlertDialog.Builder(getActivity())
                     .setMessage("Pose: " + pose)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
+                            handler.postDelayed(runnable, 100000);
                         }
                     })
                     .create();

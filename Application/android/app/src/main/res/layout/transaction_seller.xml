@@ -5,37 +5,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditText
+        android:id="@+id/txt_sellerID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:hint="Seller Username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
         android:id="@+id/txt_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="8"
-        android:hint="CVC"
-        android:inputType="number"
+        android:hint="Amount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_sellerID" />
+
     <EditText
         android:id="@+id/txt_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="8"
-        android:hint="CVC"
-        android:inputType="number"
+        android:hint="Note"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_amount" />
-    <EditText
-        android:id="@+id/txt_username"
+
+    <Button
+        android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="8"
-        android:hint="CVC"
-        android:inputType="number"
+        android:layout_marginBottom="68dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_note" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.paytel;
 import android.app.Application;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
 public class global_objects extends Application {
@@ -10,6 +11,8 @@ public class global_objects extends Application {
     DynamoDBMapper dynamoDBMapper;
     userDataObject new_user;
     userDataObject current_user;
+
+    TransactionDataObject new_transaction;
 
     public userDataObject getNew_user() {
         return new_user;
@@ -19,9 +22,13 @@ public class global_objects extends Application {
         this.new_user = new_user;
     }
 
-    public DynamoDBMapper getDynamoDBMapper() {
-        return dynamoDBMapper;
+    public TransactionDataObject getNew_transaction() {
+        return new_transaction;
     }
+
+    public void setNew_transaction(TransactionDataObject new_transaction) { this.new_transaction = new_transaction;}
+
+    public DynamoDBMapper getDynamoDBMapper() {return dynamoDBMapper;}
 
     public void setDynamoDBMapper(DynamoDBMapper dynamoDBMapper) {
         this.dynamoDBMapper = dynamoDBMapper;

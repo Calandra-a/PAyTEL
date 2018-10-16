@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -26,8 +29,11 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonParser;
+import com.paytel.sign_up.authentication_signup_address;
+import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.accountsettings;
+import com.paytel.transaction.initial_transaction;
 
 import com.paytel.util.userDataObject;
 
@@ -74,7 +80,22 @@ public class home extends AppCompatActivity {
 
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
+
+        FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
+        btn_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                    try {
+                        Intent k = new Intent(home.this, initial_transaction.class);
+                        startActivity(k);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
+        });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,7 +119,6 @@ public class home extends AppCompatActivity {
             }
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

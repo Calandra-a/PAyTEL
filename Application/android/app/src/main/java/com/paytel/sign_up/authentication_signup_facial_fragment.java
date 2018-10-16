@@ -597,6 +597,7 @@ public class authentication_signup_facial_fragment extends Fragment
             requestCameraPermission();
             return;
         }
+        new PoseDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         Activity activity = getActivity();

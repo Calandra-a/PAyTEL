@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorPrimaryDark">#FF000000</color>
+    <color name="colorAccent">#ff4081</color>
     <color name="setup_background">#fcfae3</color>
     <color name="primary_material_dark">#383934</color>
     <color name="foreground_material_dark">#f7b271</color>
@@ -11,4 +11,10 @@
     //textbbox stuff
     <color name="counter_overflow">#dc4c4c</color>
     <color name="counter_color">#303F9F</color>
+    <color name="background_material_dark">#8f0c0c</color>
+    //navbar
+    <color name="navbar_selected">#f7b271</color>
+    <color name="navbar_unselected">#b2ffffff</color>
+    <color name="navbar_material_dark">#383934</color>
+    <color name="primary_dark_material_dark">#000000</color>
 </resources>

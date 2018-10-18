@@ -70,6 +70,8 @@ public class authentication_signup_facial_fragment extends Fragment
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
+    Boolean mAutoFocusSupported;
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -500,6 +502,15 @@ public class authentication_signup_facial_fragment extends Fragment
                     continue;
                 }
 
+                int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+
+                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
+                    mAutoFocusSupported = false;
+                } else {
+                    mAutoFocusSupported = true;
+                }
+
                 // For still image captures, we use the largest available size.
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
@@ -759,7 +770,11 @@ public class authentication_signup_facial_fragment extends Fragment
      * Initiate a still image capture.
      */
     private void takePicture() {
-        lockFocus();
+        if (mAutoFocusSupported) {
+            lockFocus();
+        } else {
+            captureStillPicture();
+        }
     }
 
     /**
@@ -1019,14 +1034,15 @@ public class authentication_signup_facial_fragment extends Fragment
         return randomPose;
     }
 
-    private static Handler handler = new Handler();
+   // private static Handler handler = new Handler();
 
-    private static Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            Log.d(TAG, "timeout");
-        }
-    };
+     //private Runnable runnable = new Runnable() {
+       //  @Override
+        // public void run() {
+           //  Log.d(TAG, "timeout");
+            //closeCamera();
+        //}
+    //};
 
     public static class PoseDialog extends DialogFragment {
         @NonNull
@@ -1039,7 +1055,7 @@ public class authentication_signup_facial_fragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            handler.postDelayed(runnable, 100000);
+                            //handler.postDelayed(runnable, 10000);
                         }
                     })
                     .create();

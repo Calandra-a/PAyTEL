@@ -7,13 +7,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.TransactionDataObject;
+import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class buyer_transaction extends AppCompatActivity {
 
     TransactionDataObject new_transaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,8 @@ public class buyer_transaction extends AppCompatActivity {
                 }
             }
         });
+
+
     }
     void load_transactioninfo(){
         TextView sellerID = findViewById(R.id.txt_sellerID);

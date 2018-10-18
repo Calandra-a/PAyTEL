@@ -4,17 +4,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditText
-        android:id="@+id/txt_buyerID"
+    <TextView
+        android:id="@+id/txt_sellerID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="8"
-        android:hint="Buyer Username"
+        android:hint="Seller Username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/txt_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_sellerID" />
 
-    <EditText
+    <TextView
         android:id="@+id/txt_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

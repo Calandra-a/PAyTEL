@@ -13,6 +13,7 @@ public class global_objects extends Application {
     userDataObject current_user;
 
     TransactionDataObject new_transaction;
+    TransactionDataObject current_transaction;
 
     public userDataObject getNew_user() {
         return new_user;
@@ -27,6 +28,12 @@ public class global_objects extends Application {
     }
 
     public void setNew_transaction(TransactionDataObject new_transaction) { this.new_transaction = new_transaction;}
+
+    public TransactionDataObject getCurrent_transaction() {
+        return current_transaction;
+    }
+
+    public void setCurrent_transaction(TransactionDataObject current_transaction) { this.current_transaction = current_transaction;}
 
     public DynamoDBMapper getDynamoDBMapper() {return dynamoDBMapper;}
 

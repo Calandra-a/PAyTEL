@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +70,8 @@ public class authentication_signup_facial_fragment extends Fragment
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
+    Boolean mAutoFocusSupported;
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -80,6 +83,8 @@ public class authentication_signup_facial_fragment extends Fragment
      * Tag for the {@link Log}.
      */
     private static final String TAG = "authentication_signup_facial_fragment";
+
+    static String pose;
 
     /**
      * Camera state: Showing camera preview.
@@ -415,8 +420,8 @@ public class authentication_signup_facial_fragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
+        pose = getPose();
     }
 
     // CHANGE THIS
@@ -495,6 +500,15 @@ public class authentication_signup_facial_fragment extends Fragment
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 if (map == null) {
                     continue;
+                }
+
+                int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+
+                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
+                    mAutoFocusSupported = false;
+                } else {
+                    mAutoFocusSupported = true;
                 }
 
                 // For still image captures, we use the largest available size.
@@ -594,6 +608,7 @@ public class authentication_signup_facial_fragment extends Fragment
             requestCameraPermission();
             return;
         }
+        new PoseDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         Activity activity = getActivity();
@@ -755,7 +770,11 @@ public class authentication_signup_facial_fragment extends Fragment
      * Initiate a still image capture.
      */
     private void takePicture() {
-        lockFocus();
+        if (mAutoFocusSupported) {
+            lockFocus();
+        } else {
+            captureStillPicture();
+        }
     }
 
     /**
@@ -875,22 +894,7 @@ public class authentication_signup_facial_fragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
-        }
+        takePicture();
     }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
@@ -1018,6 +1022,42 @@ public class authentication_signup_facial_fragment extends Fragment
                                     }
                                 }
                             })
+                    .create();
+        }
+    }
+
+    public String getPose() {
+        String[] poses = getResources().getStringArray(R.array.poses);
+        int randomIndex = new Random().nextInt(poses.length);
+        String randomPose = poses[randomIndex];
+
+        return randomPose;
+    }
+
+   // private static Handler handler = new Handler();
+
+     //private Runnable runnable = new Runnable() {
+       //  @Override
+        // public void run() {
+           //  Log.d(TAG, "timeout");
+            //closeCamera();
+        //}
+    //};
+
+    public static class PoseDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // final Fragment parent = getParentFragment();
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage("Pose: " + pose)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            //handler.postDelayed(runnable, 10000);
+                        }
+                    })
                     .create();
         }
     }

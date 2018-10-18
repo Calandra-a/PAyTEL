@@ -12,14 +12,15 @@
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
 
-    <string name="intro_message">
-        <![CDATA[
-            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-            you can display camera preview and take pictures.
+    <string name="intro_message"></string>
 
 
-        ]]>
-    </string>
+    <!-- DetectFaces API -->
+    <string-array name="poses">
+        <item>frown</item> <!-- emotion = sad -->
+        <item>close eyes</item> <!-- eyesOpen = no -->
+        <item>mouth open</item> <!-- mouthOpen = yes -->
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

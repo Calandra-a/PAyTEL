@@ -31,8 +31,15 @@ public class authentication_transaction_facial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //move to next frame
+
+                //API CALL
+                //FINGERPRINT
+
+
+
+                
                 try {
-                    Intent k = new Intent(authentication_transaction_facial.this, home.class);
+                    Intent k = new Intent(authentication_transaction_facial.this, approvedeny_transaction.class);
                     startActivity(k);
                 } catch(Exception e) {
                     e.printStackTrace();

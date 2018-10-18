@@ -71,7 +71,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (card_number.getEditText().getText().toString().length() >= 20){
+        else if (card_number.getEditText().getText().toString().length() > 20){
             CharSequence fail = "Card number can't be over 20 digits";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();

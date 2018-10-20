@@ -27,6 +27,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -66,6 +67,7 @@ public class authentication_signup_facial_fragment extends Fragment
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
@@ -235,7 +237,7 @@ public class authentication_signup_facial_fragment extends Fragment
             = new ImageReader.OnImageAvailableListener() {
 
         @Override
-        public void onImageAvailable(ImageReader reader) {
+        public void onImageAvailable(ImageReader reader)  {
             mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
         }
 
@@ -422,6 +424,15 @@ public class authentication_signup_facial_fragment extends Fragment
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
         pose = getPose();
+        FileObserver observer = new FileObserver(getActivity().getExternalFilesDir(null).toString()) {
+            @Override
+            public void onEvent(int event, String file) {
+                if (event == FileObserver.CREATE && !file.equals(".probe")) {
+                    Log.d("observer", "File saved");
+                }
+            }
+        };
+        observer.startWatching();
     }
 
     // CHANGE THIS
@@ -846,6 +857,8 @@ public class authentication_signup_facial_fragment extends Fragment
                     showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
+                    closeCamera();
+                    System.out.println(((authentication_signup_facial)getActivity()).test());
                 }
             };
 

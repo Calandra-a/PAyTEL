@@ -2,7 +2,9 @@ package com.paytel.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,8 +12,12 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
 
-public class authentication_signup_facial  extends AppCompatActivity {
+public class authentication_signup_facial extends AppCompatActivity {
     userDataObject new_user;
+
+    public String test() {
+        return ("Back in the activity");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class authentication_signup_facial  extends AppCompatActivity {
                 // Item saved
             }
         }).start();
+
         //facial rekognition
         Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
         btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +55,7 @@ public class authentication_signup_facial  extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 }

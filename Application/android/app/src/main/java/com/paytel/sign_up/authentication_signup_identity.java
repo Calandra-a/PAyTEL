@@ -49,6 +49,9 @@ public class authentication_signup_identity extends AppCompatActivity {
                 }
             }
         });
+
+        //call username function
+        check_username("axel");
     }
 
     boolean add_userinfo() {
@@ -105,6 +108,7 @@ public class authentication_signup_identity extends AppCompatActivity {
                 user.setUsername(username);//partition key
 
                 DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                        .withIndexName("username1")
                         .withHashKeyValues(user)
                         .withConsistentRead(false);
 
@@ -112,10 +116,12 @@ public class authentication_signup_identity extends AppCompatActivity {
 
 
                 if(result.isEmpty()) {
-
+                    System.out.println("username does not exist");
                 }
                 else{
-
+                    System.out.println("username exists");
+                    //turn username field red
+                    //do not allow to proceed
                 }
             }
         }).start();

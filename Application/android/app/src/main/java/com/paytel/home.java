@@ -75,7 +75,7 @@ public class home extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        System.out.print("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
+        System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
 
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
@@ -94,6 +94,8 @@ public class home extends AppCompatActivity {
                     }
             }
         });
+
+
     }
 
     @Override
@@ -201,4 +203,6 @@ public class home extends AppCompatActivity {
 
         return pinpointManager;
     }
+
+
 }

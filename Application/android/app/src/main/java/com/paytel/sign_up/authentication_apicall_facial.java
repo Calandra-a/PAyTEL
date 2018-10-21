@@ -48,11 +48,13 @@ public class authentication_apicall_facial extends Activity{
         JSONObject json = new JSONObject();
         try {
             json.put("userID", userID);
-            json.put("image", Image);
             json.put("pose", pose);
+            json.put("image", Image);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println();
+        System.out.println(Image.toString());
 
         final String body = json.toString();
 
@@ -72,19 +74,20 @@ public class authentication_apicall_facial extends Activity{
 
         // Only set body if it has content.
 
-        if (body.length() > 0) {
+        //if (body.length() > 0) {
             System.out.println(body.length());
             localRequest = localRequest
                     .addHeader("Content-Length", String.valueOf(body.length()))
                     .withBody(body);
-        }
+       // }
 
         final ApiRequest request = localRequest;
 
         // Make network call on background thread
-        new Thread(new Runnable() {
+       new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
                     Log.d(LOG_TAG,
                             "Invoking API w/ Request : " +
@@ -104,9 +107,8 @@ public class authentication_apicall_facial extends Activity{
 
                     if (response.getStatusCode() == 200) {
                         responseVal = true;
-                    }
 
-                    else {
+                    }else {
                         responseVal = false;
                     }
 

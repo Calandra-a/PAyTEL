@@ -15,10 +15,6 @@ import com.paytel.util.userDataObject;
 public class authentication_signup_facial extends AppCompatActivity {
     userDataObject new_user;
 
-    public String test() {
-        return ("Back in the activity");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,22 +36,24 @@ public class authentication_signup_facial extends AppCompatActivity {
                 // Item saved
             }
         }).start();
+    }
 
-        //facial rekognition
-        Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
-        btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //move to next frame
-                try {
-                    Intent k = new Intent(authentication_signup_facial.this, authentication_signup_complete.class);
-                    startActivity(k);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void pictureComplete() {
+        try {
+            Intent k = new Intent(authentication_signup_facial.this, authentication_signup_complete.class);
+            startActivity(k);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-
+    public void pictureIncomplete() {
+        try {
+            Intent k = new Intent(authentication_signup_facial.this, authentication_signup_facial.class);
+            startActivity(k);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
+

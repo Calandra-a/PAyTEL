@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -35,6 +38,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -48,6 +52,7 @@ import android.widget.Toast;
 import com.paytel.R;
 import com.paytel.util.autofit_textureview;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -73,6 +78,7 @@ public class authentication_signup_facial_fragment extends Fragment
     private static final String FRAGMENT_DIALOG = "dialog";
 
     Boolean mAutoFocusSupported;
+    ProgressDialog progress;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -424,18 +430,13 @@ public class authentication_signup_facial_fragment extends Fragment
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
         pose = getPose();
-        FileObserver observer = new FileObserver(getActivity().getExternalFilesDir(null).toString()) {
-            @Override
-            public void onEvent(int event, String file) {
-                if (event == FileObserver.CREATE && !file.equals(".probe")) {
-                    Log.d("observer", "File saved");
-                }
-            }
-        };
-        observer.startWatching();
+        progress = new ProgressDialog(getActivity());
+        progress.setTitle("Processing");
+        progress.setMessage("Please wait...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
     }
 
-    // CHANGE THIS
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -828,6 +829,7 @@ public class authentication_signup_facial_fragment extends Fragment
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
+        progress.show();
         try {
             final Activity activity = getActivity();
             if (null == activity || null == mCameraDevice) {
@@ -858,7 +860,20 @@ public class authentication_signup_facial_fragment extends Fragment
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                     closeCamera();
-                    System.out.println(((authentication_signup_facial)getActivity()).test());
+                    Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
+                    ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bOut);
+                    String encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
+                    authentication_apicall_facial aaf = new authentication_apicall_facial();
+                    aaf.callCloudLogic(encodedString, pose);
+                    progress.dismiss();
+                    if (aaf.getResponseVal() == true) {
+                        ((authentication_signup_facial)getActivity()).pictureComplete();
+                    }
+                    else {
+                        new BadPictureDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                    }
+
                 }
             };
 
@@ -1069,6 +1084,22 @@ public class authentication_signup_facial_fragment extends Fragment
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                             //handler.postDelayed(runnable, 10000);
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    public static class BadPictureDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage("Picture did not go through")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((authentication_signup_facial)getActivity()).pictureIncomplete();
                         }
                     })
                     .create();

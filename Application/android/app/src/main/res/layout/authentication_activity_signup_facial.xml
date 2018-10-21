@@ -8,18 +8,6 @@
     android:id="@+id/container"
     tools:context=".sign_up.authentication_signup_facial">
 
-    <Button
-        android:id="@+id/btn_next_facial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="68dp"
-        android:text="NEXT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.018"/>
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

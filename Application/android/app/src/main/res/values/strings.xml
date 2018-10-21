@@ -36,4 +36,5 @@
     <string name="complete">COMPLETE</string>
     <string name="complete_message">You\'re all setup to start making secure transactions on PAyTEL</string>
     <string name="congratulations">Congratulations!</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>

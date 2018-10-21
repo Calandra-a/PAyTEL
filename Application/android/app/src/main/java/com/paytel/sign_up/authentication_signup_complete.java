@@ -28,7 +28,7 @@ public class authentication_signup_complete extends AppCompatActivity {
         //user data
 
         //fingerprint
-        useFingerprint();
+        //useFingerprint();
 
         final Button btn_COMPLETE = findViewById(R.id.btn_complete);
 

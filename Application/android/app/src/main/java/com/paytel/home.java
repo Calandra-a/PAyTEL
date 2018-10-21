@@ -87,7 +87,7 @@ public class home extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                     try {
-                        Intent k = new Intent(home.this, com.paytel.transaction.buyer_transaction.class);
+                        Intent k = new Intent(home.this, initial_transaction.class);
                         startActivity(k);
                     } catch (Exception e) {
                         e.printStackTrace();

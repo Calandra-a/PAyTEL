@@ -24,6 +24,7 @@ import java.util.Set;
     private String _lastName;
     private String _phoneNumber;
     private Set<String> _rekognitionIds;
+    private String _state;
     private String _street;
     private Set<String> _transactions;
     private String _username;
@@ -111,6 +112,14 @@ import java.util.Set;
     public void setRekognitionIds(final Set<String> _rekognitionIds) {
         this._rekognitionIds = _rekognitionIds;
     }
+    @DynamoDBAttribute(attributeName = "state")
+    public String getState() {
+        return _state;
+    }
+
+    public void setState(final String _state) {
+        this._state = _state;
+    }
     @DynamoDBAttribute(attributeName = "street")
     public String getStreet() {
         return _street;
@@ -151,5 +160,4 @@ import java.util.Set;
     public void setZipCode(final String _zipCode) {
         this._zipCode = _zipCode;
     }
-
 }

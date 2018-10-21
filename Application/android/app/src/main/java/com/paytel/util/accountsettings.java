@@ -15,6 +15,10 @@ import com.paytel.R;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
+import android.support.design.widget.TextInputLayout;
+import android.support.design.widget.TextInputEditText;
+
 public class accountsettings extends AppCompatActivity {
     userDataObject current_user;
 
@@ -50,54 +54,54 @@ public class accountsettings extends AppCompatActivity {
     }
 
     void edit_userinfo(){
-        TextView f_name = findViewById(R.id.txt_first_name);
-        TextView l_name = findViewById(R.id.txt_last_name);
-        TextView street = findViewById(R.id.txt_street);
-        TextView zip = findViewById(R.id.txt_zipcode);
-        TextView phone_number = findViewById(R.id.txt_phone_number);
-        TextView city = findViewById(R.id.txt_city);
-        TextView name_on_card = findViewById(R.id.txt_name_on_card);
-        TextView card_number = findViewById(R.id.txt_card_number);
-        TextView CVC = findViewById(R.id.txt_cvc);
-        TextView exp_date = findViewById(R.id.txt_exp_date);
+        TextInputLayout f_name = findViewById(R.id.txt_first_name);
+        TextInputLayout l_name = findViewById(R.id.txt_last_name);
+        TextInputLayout street = findViewById(R.id.txt_street);
+        TextInputLayout zip = findViewById(R.id.txt_zipcode);
+        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
+        TextInputLayout city = findViewById(R.id.txt_city);
+        TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
+        TextInputLayout card_number = findViewById(R.id.txt_card_number);
+        TextInputLayout CVC = findViewById(R.id.txt_cvc);
+        TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
 
         Map<String, String> cc = new HashMap<String, String>();
-        cc.put("name_on_card",name_on_card.getText().toString());
-        cc.put("card_number", card_number.getText().toString());
-        cc.put("cvc", CVC.getText().toString());
-        cc.put("expiration_date", exp_date.getText().toString());
-        if(f_name != null)current_user.setFirstName(f_name.getText().toString());
-        if(l_name != null)current_user.setLastName(l_name.getText().toString());
-        if(street != null)current_user.setStreet(street.getText().toString());
-        if(city != null)current_user.setCity(city.getText().toString());
-        if(zip != null)current_user.setZipCode(zip.getText().toString());
-        if(phone_number != null)current_user.setPhoneNumber(phone_number.getText().toString());
+        cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
+        cc.put("card_number", card_number.getEditText().getText().toString().trim());
+        cc.put("cvc", CVC.getEditText().getText().toString().trim());
+        cc.put("expiration_date", exp_date.getEditText().getText().toString().trim());
+        if(f_name != null)current_user.setFirstName(f_name.getEditText().getText().toString().trim());
+        if(l_name != null)current_user.setLastName(l_name.getEditText().getText().toString().trim());
+        if(street != null)current_user.setStreet(street.getEditText().getText().toString().trim());
+        if(city != null)current_user.setCity(city.getEditText().getText().toString().trim());
+        if(zip != null)current_user.setZipCode(zip.getEditText().getText().toString().trim());
+        if(phone_number != null)current_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
         if(cc != null)current_user.setCreditCard(cc);
 
     }
 
     void display_userinfo(){
-        TextView f_name = findViewById(R.id.txt_first_name);
-        TextView l_name = findViewById(R.id.txt_last_name);
-        TextView street = findViewById(R.id.txt_street);
-        TextView zip = findViewById(R.id.txt_zipcode);
-        TextView phone_number = findViewById(R.id.txt_phone_number);
-        TextView city = findViewById(R.id.txt_city);
-        TextView name_on_card = findViewById(R.id.txt_name_on_card);
-        TextView card_number = findViewById(R.id.txt_card_number);
-        TextView CVC = findViewById(R.id.txt_cvc);
-        TextView exp_date = findViewById(R.id.txt_exp_date);
+        TextInputLayout f_name = findViewById(R.id.txt_first_name);
+        TextInputLayout l_name = findViewById(R.id.txt_last_name);
+        TextInputLayout street = findViewById(R.id.txt_street);
+        TextInputLayout zip = findViewById(R.id.txt_zipcode);
+        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
+        TextInputLayout city = findViewById(R.id.txt_city);
+        TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
+        TextInputLayout card_number = findViewById(R.id.txt_card_number);
+        TextInputLayout CVC = findViewById(R.id.txt_cvc);
+        TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
 
-        f_name.setHint(current_user.getFirstName());
-        l_name.setHint(current_user.getLastName());
-        street.setHint(current_user.getStreet());
-        zip.setHint(current_user.getZipCode());
-        phone_number.setHint(current_user.getPhoneNumber());
-        city.setHint(current_user.getCity());
-        name_on_card.setHint(current_user.getCreditCard().get("name_on_card"));
-        card_number.setHint(current_user.getCreditCard().get("card_number"));
-        CVC.setHint(current_user.getCreditCard().get("cvc"));
-        exp_date.setHint(current_user.getCreditCard().get("expiration_date"));
+        f_name.getEditText().setText(current_user.getFirstName());
+        l_name.getEditText().setText(current_user.getLastName());
+        street.getEditText().setText(current_user.getStreet());
+        zip.getEditText().setText(current_user.getZipCode());
+        phone_number.getEditText().setText(current_user.getPhoneNumber());
+        city.getEditText().setText(current_user.getCity());
+        name_on_card.getEditText().setText(current_user.getCreditCard().get("name_on_card"));
+        card_number.getEditText().setText(current_user.getCreditCard().get("card_number"));
+        CVC.getEditText().setText(current_user.getCreditCard().get("cvc"));
+        exp_date.getEditText().setText(current_user.getCreditCard().get("expiration_date"));
 
     }
 }

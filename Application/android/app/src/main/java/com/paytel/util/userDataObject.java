@@ -13,7 +13,7 @@ import java.util.Set;
 
 @DynamoDBTable(tableName = "csi-mobilehub-447478737-user-data")
 
-    public class userDataObject {
+public class userDataObject {
     private String _userId;
     private String _city;
     private String _country;

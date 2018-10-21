@@ -19,6 +19,8 @@ import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.support.design.widget.TextInputEditText;
 
+import android.widget.Toast;
+
 public class accountsettings extends AppCompatActivity {
     userDataObject current_user;
 
@@ -34,8 +36,12 @@ public class accountsettings extends AppCompatActivity {
 
         btn_SAVE_userinfo.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View v) {
-                edit_userinfo();
+                boolean next = edit_userinfo();
+                if (next == true) {
+                
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -50,10 +56,16 @@ public class accountsettings extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            });
+            }
+        });
     }
 
-    void edit_userinfo(){
+    boolean edit_userinfo(){
+
+        Context context = getApplicationContext();
+        int dShort = Toast.LENGTH_SHORT;
+        int dLong = Toast.LENGTH_LONG;
+
         TextInputLayout f_name = findViewById(R.id.txt_first_name);
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         TextInputLayout street = findViewById(R.id.txt_street);
@@ -65,6 +77,66 @@ public class accountsettings extends AppCompatActivity {
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
         TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
 
+        if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 || 
+            street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 || 
+            phone_number.getEditText().getText().toString().length() == 0 || city.getEditText().getText().toString().length() == 0 || 
+            name_on_card.getEditText().getText().toString().length() == 0 || card_number. getEditText().getText().toString().length() == 0 || 
+            CVC.getEditText().getText().toString().length() == 0 || exp_date.getEditText().getText().toString().length() == 0){
+
+            CharSequence fail = "No field can be left blank";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        if(street.getEditText().getText().toString().length() >=50){
+            CharSequence fail = "Street address must be under 50 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(zip.getEditText().getText().toString().length() != 5){
+            CharSequence fail = "Zip code must be 5 digits";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if (phone_number.getEditText().getText().toString().length() != 10) {
+            CharSequence fail = "Phone number must be 10 digits";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(city.getEditText().getText().toString().length() >=50){
+            CharSequence fail = "City must be under 50 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(name_on_card.getEditText().getText().toString().length() >= 50){
+            CharSequence fail = "Name on card must be less than 50 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if (card_number.getEditText().getText().toString().length() != 16){ 
+            CharSequence fail = "Card number must be 16 digits"; 
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(CVC.getEditText().getText().toString().length() != 3){
+            CharSequence fail = "CVC must be 3 digits";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if (exp_date.getEditText().getText().toString().length() != 5){
+            CharSequence fail = "Expiration date must be mm/yy format";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else{
         Map<String, String> cc = new HashMap<String, String>();
         cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
         cc.put("card_number", card_number.getEditText().getText().toString().trim());
@@ -77,7 +149,8 @@ public class accountsettings extends AppCompatActivity {
         if(zip != null)current_user.setZipCode(zip.getEditText().getText().toString().trim());
         if(phone_number != null)current_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
         if(cc != null)current_user.setCreditCard(cc);
-
+        return true;
+        }
     }
 
     void display_userinfo(){

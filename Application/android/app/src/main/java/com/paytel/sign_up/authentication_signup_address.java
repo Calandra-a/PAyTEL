@@ -54,11 +54,13 @@ public class authentication_signup_address extends AppCompatActivity {
 
         Context context = getApplicationContext();
         int dShort = Toast.LENGTH_SHORT;
-        int dLong = Toast.LENGTH_SHORT;
+        int dLong = Toast.LENGTH_LONG;
 
         TextInputLayout street = findViewById(R.id.txt_street);
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
         TextInputLayout city = findViewById(R.id.txt_city);
+        TextInputLayout state = findViewById(R.id.txt_state);
+
         if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() ==0 ||
                 city.getEditText().getText().toString().length() == 0 /*|| state.getEditText().getText().toString().length() == 0*/){
 
@@ -86,6 +88,12 @@ public class authentication_signup_address extends AppCompatActivity {
             toast.show();
             return false;
         }
+        else if(state.getEditText().getText().toString().length() != 2){
+            CharSequence fail = "State must be 2 characters";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
         else {
             CharSequence succ = "Success";
             Toast toast = Toast.makeText(context, succ, dShort);
@@ -93,11 +101,8 @@ public class authentication_signup_address extends AppCompatActivity {
             new_user.setStreet(street.getEditText().getText().toString());
             new_user.setCity(city.getEditText().getText().toString());
             new_user.setZipCode(zip.getEditText().getText().toString());
+            new_user.setState(state.getEditText().getText().toString()); 
             return true;
         }
-
-        //need to add setState() on the backend
-        //TextView state = findViewById(R.id.txt_state);
-        //new_user.setState(state.getText().toString());
     }
 }

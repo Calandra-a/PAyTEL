@@ -862,8 +862,8 @@ public class authentication_signup_facial_fragment extends Fragment
                     closeCamera();
                     Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
                     ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 60, bOut);
-
+                    bm.compress(Bitmap.CompressFormat.JPEG, 70, bOut);
+                    System.out.println("Quality " + 50);
                     String encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
                     authentication_apicall_facial aaf = new authentication_apicall_facial();
 

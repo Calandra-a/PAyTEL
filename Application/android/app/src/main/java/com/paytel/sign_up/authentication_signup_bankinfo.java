@@ -101,6 +101,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             cc.put("expiration_date", exp_date.getEditText().getText().toString().trim());
             new_user.setCreditCard(cc);
             new_user.setRekognitionIds(null);
+            new_user.setWallet(100.00);
             return true;
         }
 

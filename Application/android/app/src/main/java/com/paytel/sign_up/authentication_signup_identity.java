@@ -16,10 +16,6 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
 
-//Alex Dapoz
-//I created this screen to make the signup process cleaner
-//TODO: logic
-
 
 public class authentication_signup_identity extends AppCompatActivity {
     userDataObject new_user;
@@ -53,6 +49,9 @@ public class authentication_signup_identity extends AppCompatActivity {
                 }
             }
         });
+
+        //call username function
+        check_username("axel");
     }
 
     boolean add_userinfo() {
@@ -109,6 +108,7 @@ public class authentication_signup_identity extends AppCompatActivity {
                 user.setUsername(username);//partition key
 
                 DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                        .withIndexName("username1")
                         .withHashKeyValues(user)
                         .withConsistentRead(false);
 
@@ -116,10 +116,12 @@ public class authentication_signup_identity extends AppCompatActivity {
 
 
                 if(result.isEmpty()) {
-
+                    System.out.println("username does not exist");
                 }
                 else{
-
+                    System.out.println("username exists");
+                    //turn username field red
+                    //do not allow to proceed
                 }
             }
         }).start();

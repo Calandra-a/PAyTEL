@@ -55,8 +55,6 @@ public class authentication_apicall_facial extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println();
-        System.out.println(Image.toString());
 
         final String body = json.toString();
 

@@ -20,6 +20,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.design.widget.TextInputEditText;
 
 import android.widget.Toast;
+import java.lang.String;
 
 public class accountsettings extends AppCompatActivity {
     userDataObject current_user;
@@ -130,7 +131,7 @@ public class accountsettings extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (exp_date.getEditText().getText().toString().length() != 5){
+        else if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
             CharSequence fail = "Expiration date must be mm/yy format";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();

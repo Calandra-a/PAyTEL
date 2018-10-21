@@ -29,6 +29,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.FileObserver;
 import android.os.Handler;
@@ -79,6 +80,10 @@ public class authentication_signup_facial_fragment extends Fragment
 
     Boolean mAutoFocusSupported;
     ProgressDialog progress;
+    authentication_apicall_facial aaf;
+    String encodedString;
+    String responseVal;
+    WaitTask myTask;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -430,10 +435,10 @@ public class authentication_signup_facial_fragment extends Fragment
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
         pose = getPose();
-        progress = new ProgressDialog(getActivity());
-        progress.setTitle("Processing");
-        progress.setMessage("Please wait...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        //progress = new ProgressDialog(getActivity());
+        //progress.setTitle("Processing");
+        //progress.setMessage("Please wait...");
+        //progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
     }
 
 
@@ -829,7 +834,7 @@ public class authentication_signup_facial_fragment extends Fragment
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
-        progress.show();
+        //progress.show();
         try {
             final Activity activity = getActivity();
             if (null == activity || null == mCameraDevice) {
@@ -860,21 +865,18 @@ public class authentication_signup_facial_fragment extends Fragment
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                     closeCamera();
-                    Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
-                    ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 60, bOut);
+                    myTask = new WaitTask();
+                    myTask.execute();
+                    //authentication_apicall_facial aaf = new authentication_apicall_facial();
 
-                    String encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
-                    authentication_apicall_facial aaf = new authentication_apicall_facial();
+                    //aaf.callCloudLogic(encodedString, pose);
+                    //progress.dismiss();
 
-                    aaf.callCloudLogic(encodedString, pose);
-                    progress.dismiss();
-                    if (aaf.getResponseVal() == true) {
-                        ((authentication_signup_facial)getActivity()).pictureComplete();
-                    }
-                    else {
-                        new BadPictureDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-                    }
+                      //  if (aaf.getResponseVal() == "true") {
+                        //    ((authentication_signup_facial) getActivity()).pictureComplete();
+                        //} else {
+                         //   new BadPictureDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                        //}
 
                 }
             };
@@ -1101,10 +1103,57 @@ public class authentication_signup_facial_fragment extends Fragment
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
                             ((authentication_signup_facial)getActivity()).pictureIncomplete();
                         }
                     })
                     .create();
+        }
+    }
+
+    class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(getActivity());
+            progress.setTitle("Processing");
+            progress.setMessage("Please wait...");
+            progress.setCancelable(false);
+            progress.setCanceledOnTouchOutside(false);
+            progress.show();
+            aaf = new authentication_apicall_facial();
+
+        }
+
+        protected Boolean doInBackground(Void... params) {
+            Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
+            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 60, bOut);
+
+            encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
+
+            if ((aaf.callCloudLogic(encodedString, pose)) == "true") {
+                responseVal = "true";
+            }
+
+            else {
+                responseVal = "false";
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean bool) {
+            super.onPostExecute(bool);
+            progress.dismiss();
+            if (responseVal == "true") {
+                ((authentication_signup_facial) getActivity()).pictureComplete();
+            } else {
+                BadPictureDialog bad = new BadPictureDialog();
+                bad.setCancelable(false);
+                bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            }
+
         }
     }
 

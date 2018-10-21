@@ -3,6 +3,7 @@ package com.paytel.sign_up;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.FileObserver;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -49,8 +50,10 @@ public class authentication_signup_facial extends AppCompatActivity {
 
     public void pictureIncomplete() {
         try {
-            Intent k = new Intent(authentication_signup_facial.this, authentication_signup_facial.class);
-            startActivity(k);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, authentication_signup_facial_fragment.newInstance())
+                        .commit();
+
         } catch(Exception e) {
             e.printStackTrace();
         }

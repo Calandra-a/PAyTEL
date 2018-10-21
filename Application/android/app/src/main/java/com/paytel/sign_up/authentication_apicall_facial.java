@@ -1,7 +1,10 @@
 package com.paytel.sign_up;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,14 +28,13 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class authentication_apicall_facial extends Activity{
+public class authentication_apicall_facial extends Activity {
     private static final String LOG_TAG = authentication_signup_facial.class.getSimpleName();
-    boolean responseVal;
+    String responseVal = null;
 
     private SignupfacialinitialiMobileHubClient apiClient;
-    boolean returnVal = false;
 
-    public void callCloudLogic(String Image, String pose) {
+    public String callCloudLogic(String Image, String pose) {
         //apiClient = ((global_objects) getApplication()).getSignup_facial_api_client();
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
@@ -84,9 +86,9 @@ public class authentication_apicall_facial extends Activity{
         final ApiRequest request = localRequest;
 
         // Make network call on background thread
-       new Thread(new Runnable() {
-            @Override
-            public void run() {
+       //new Thread(new Runnable() {
+         //   @Override
+           // public void run() {
 
                 try {
                     Log.d(LOG_TAG,
@@ -105,23 +107,23 @@ public class authentication_apicall_facial extends Activity{
 
                     Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
 
-                    if (response.getStatusCode() == 200) {
-                        responseVal = true;
+                    if (response.getStatusCode() != 200) {
+                        responseVal = "false";
 
                     }else {
-                        responseVal = false;
+                        responseVal = "true";
                     }
+
 
                 } catch (final Exception exception) {
                     Log.e(LOG_TAG, exception.getMessage(), exception);
                     exception.printStackTrace();
                 }
+                return responseVal;
             }
-        }).start();
+        //}).start();
 
-    }
 
-    public Boolean getResponseVal() {
-        return responseVal;
-    }
+
+
 }

@@ -46,6 +46,11 @@
         <item name="android:textColor">@color/counter_color</item>
     </style>
 
+    <style name="DarkCounterText" parent="TextAppearance.Design.Counter">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/dark_counter_color</item>
+    </style>
+
     <style name="HeaderBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>

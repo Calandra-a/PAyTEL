@@ -50,7 +50,9 @@
         <activity
             android:name=".sign_up.authentication_signup_complete"
             android:theme="@style/paytel_setup"/>
-        <activity android:name=".util.accountsettings" />
+        <activity
+            android:name=".util.accountsettings"
+            android:theme="@style/paytel_main"/>
         <activity android:name=".transaction.initial_transaction"/>
         <activity android:name=".transaction.buyer_transaction"/>
         <activity android:name=".transaction.authentication_transaction_facial"/>

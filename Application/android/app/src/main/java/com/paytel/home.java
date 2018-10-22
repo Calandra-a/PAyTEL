@@ -89,12 +89,14 @@ public class home extends AppCompatActivity {
         queryUser();
         FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
 
-        //Set<String> currtransactions = ((global_objects) getApplication()).getCurrent_user().getTransactions();
-        //System.out.print(currtransactions);
+
+
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //move to next frame
+                Set<String> currtransactions = ((global_objects) getApplication()).getCurrent_user().getTransactions();
+                System.out.print(currtransactions);
                     try {
                         Intent k = new Intent(home.this, initial_transaction.class);
                         startActivity(k);
@@ -182,7 +184,10 @@ public class home extends AppCompatActivity {
                     ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
 
                     userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                       System.out.println("this is the current user" + current_user.getFirstName());
                         ((global_objects) getApplication()).setCurrent_user(current_user);
+
+
 
                 }
             }

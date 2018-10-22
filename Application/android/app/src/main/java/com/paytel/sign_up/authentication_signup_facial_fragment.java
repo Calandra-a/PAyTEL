@@ -1116,7 +1116,7 @@ public class authentication_signup_facial_fragment extends Fragment
         protected void onPreExecute() {
             super.onPreExecute();
             progress = new ProgressDialog(getActivity());
-            progress.setTitle("Processing");
+            progress.setTitle("Analyzing face");
             progress.setMessage("Please wait...");
             progress.setCancelable(false);
             progress.setCanceledOnTouchOutside(false);
@@ -1128,7 +1128,7 @@ public class authentication_signup_facial_fragment extends Fragment
         protected Boolean doInBackground(Void... params) {
             Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
             ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 60, bOut);
+            bm.compress(Bitmap.CompressFormat.JPEG, 50, bOut);
 
             encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
 

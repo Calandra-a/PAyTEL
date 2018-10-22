@@ -51,7 +51,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/txtDistance"
+                android:id="@+id/txtTransaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="25dp"

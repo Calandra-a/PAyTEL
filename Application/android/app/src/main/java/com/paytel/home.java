@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -32,19 +31,19 @@ import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_address;
 import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
+import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
 import com.paytel.transaction.initial_transaction;
 
 import com.paytel.util.userDataObject;
-
-import java.util.Set;
 
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView cardMessage;
     private TextView currentTransactionMsg;
     private static PinpointManager pinpointManager;
-
+    userDataObject user;
+    TransactionDataObject transaction;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,19 +52,30 @@ public class home extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
-                    cardMessage.setText("");
+                    cardMessage.setText(""); currentTransactionMsg.setText("");
                     return true;
                 case R.id.navigation_dashboard:
                     cardMessage.setText(R.string.title_dashboard);
+                    user = ((global_objects) getApplication()).getCurrent_user();
+                    if(user.getTransactions() == null){
+                        return true;
+                    }
+                    else{
+                        String transactionID = String.join(",",user.getTransactions());
+                        Log.d("Transactions",transactionID);
+                        currentTransactionMsg.setText(transactionID);
+                    }
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    cardMessage.setText("");
+                    cardMessage.setText(""); currentTransactionMsg.setText("");
                     return true;
             }
             return false;
         }
     };
+
+    public void queryTransactions(String transactionID){ }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,35 +88,29 @@ public class home extends AppCompatActivity {
 
         mTextMessage = (TextView) findViewById(R.id.message);
         cardMessage = (TextView) findViewById(R.id.txtSection);
+        currentTransactionMsg = (TextView) findViewById(R.id.txtTransaction);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
-
-
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
         FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
-
-
 
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //move to next frame
-                Set<String> currtransactions = ((global_objects) getApplication()).getCurrent_user().getTransactions();
-                System.out.print(currtransactions);
-                    try {
-                        Intent k = new Intent(home.this, initial_transaction.class);
-                        startActivity(k);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Intent k = new Intent(home.this, initial_transaction.class);
+                    startActivity(k);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-
     }
 
     @Override
@@ -121,7 +125,6 @@ public class home extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.btn_settingspage) {
             try {
@@ -184,10 +187,7 @@ public class home extends AppCompatActivity {
                     ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
 
                     userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
-                       System.out.println("this is the current user" + current_user.getFirstName());
-                        ((global_objects) getApplication()).setCurrent_user(current_user);
-
-
+                    ((global_objects) getApplication()).setCurrent_user(current_user);
 
                 }
             }

@@ -18,4 +18,7 @@
     <color name="navbar_unselected">#b2ffffff</color>
     <color name="navbar_material_dark">#383934</color>
     <color name="primary_dark_material_dark">#000000</color>
+    //buttons
+    <color name="button_next">#64DD17</color>
+    <color name="button_next_txt">#000000</color>
 </resources>

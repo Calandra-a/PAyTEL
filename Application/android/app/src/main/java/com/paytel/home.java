@@ -57,9 +57,14 @@ public class home extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     cardMessage.setText(R.string.title_dashboard);
                     user = ((global_objects) getApplication()).getCurrent_user();
-                    String transactionID = String.join(",",user.getTransactions());
-                    Log.d("Transactions",transactionID);
-                    currentTransactionMsg.setText(transactionID);
+                    if(user.getTransactions() == null){
+                        return true;
+                    }
+                    else{
+                        String transactionID = String.join(",",user.getTransactions());
+                        Log.d("Transactions",transactionID);
+                        currentTransactionMsg.setText(transactionID);
+                    }
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);

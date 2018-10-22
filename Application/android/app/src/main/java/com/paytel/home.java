@@ -79,38 +79,38 @@ public class home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_home);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
 
-            //set top toolbar
-            Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-            setSupportActionBar(mTopToolbar);
+        //set top toolbar
+        Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
 
-            mTextMessage = (TextView) findViewById(R.id.message);
-            cardMessage = (TextView) findViewById(R.id.txtSection);
-            currentTransactionMsg = (TextView) findViewById(R.id.txtTransaction);
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mTextMessage = (TextView) findViewById(R.id.message);
+        cardMessage = (TextView) findViewById(R.id.txtSection);
+        currentTransactionMsg = (TextView) findViewById(R.id.txtTransaction);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-            System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
-            Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
-            String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
-            queryUser();
-            FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
+        System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
+        Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
+        String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
+        queryUser();
+        FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
 
-            btn_fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //move to next frame
-                        try {
-                            Intent k = new Intent(home.this, initial_transaction.class);
-                            startActivity(k);
+        btn_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                try {
+                    Intent k = new Intent(home.this, initial_transaction.class);
+                    startActivity(k);
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        });
     }
 
     @Override
@@ -187,7 +187,7 @@ public class home extends AppCompatActivity {
                     ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
 
                     userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
-                        ((global_objects) getApplication()).setCurrent_user(current_user);
+                    ((global_objects) getApplication()).setCurrent_user(current_user);
 
                 }
             }

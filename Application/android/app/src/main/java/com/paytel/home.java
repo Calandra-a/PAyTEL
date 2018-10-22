@@ -37,9 +37,12 @@ import com.paytel.transaction.initial_transaction;
 
 import com.paytel.util.userDataObject;
 
+import java.util.Set;
+
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
-
+    private TextView cardMessage;
+    private TextView currentTransactionMsg;
     private static PinpointManager pinpointManager;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -50,12 +53,14 @@ public class home extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
+                    cardMessage.setText("");
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    cardMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
+                    cardMessage.setText("");
                     return true;
             }
             return false;
@@ -72,16 +77,20 @@ public class home extends AppCompatActivity {
         setSupportActionBar(mTopToolbar);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        cardMessage = (TextView) findViewById(R.id.txtSection);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
 
+
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
         queryUser();
-
         FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
+
+        //Set<String> currtransactions = ((global_objects) getApplication()).getCurrent_user().getTransactions();
+        //System.out.print(currtransactions);
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

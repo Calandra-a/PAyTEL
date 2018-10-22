@@ -30,6 +30,9 @@
 
     <style name="paytel_setup" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/setup_background</item>
+        <item name="android:statusBarColor">?android:attr/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/primary_dark_material_light</item>
+        <item name="colorButtonNormal">@color/button_next</item>
     </style>
 
     <style name="paytel_main" parent="Theme.AppCompat.NoActionBar">
@@ -62,4 +65,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    //buttons
+    <style name="AppTheme.NextButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/button_next</item>
+        <item name="android:textColor">@color/button_next_txt</item>
+    </style>
 </resources>

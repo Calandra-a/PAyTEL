@@ -6,8 +6,8 @@
 
     <item
         android:id="@+id/btn_settingspage"
+        android:icon="@drawable/baseline_settings_applications_orange_48dp"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/baseline_settings_applications_blue_48dp"
         app:showAsAction="ifRoom"></item>
 </menu>

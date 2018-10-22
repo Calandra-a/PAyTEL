@@ -13,9 +13,12 @@ import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
+import static android.graphics.Color.rgb;
+
 
 public class authenticatoractivity extends AppCompatActivity {
     DynamoDBMapper dynamoDBMapper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,8 @@ public class authenticatoractivity extends AppCompatActivity {
                 AuthUIConfiguration config =
                         new AuthUIConfiguration.Builder()
                                 .signInButton(GoogleButton.class) // Show Google button
-                                .backgroundColor(Color.LTGRAY) // Change the backgroundColor
+                                .logoResId(R.drawable.pt) // Change the logo
+                                .backgroundColor(rgb(252,250,227)) // Change the backgroundColor
                                 .isBackgroundColorFullScreen(true) // Full screen backgroundColor the backgroundColor full screenff
                                 .fontFamily("sans-serif-light") // Apply sans-serif-light as the global font
                                 .canCancel(true)

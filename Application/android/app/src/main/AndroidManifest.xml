@@ -26,12 +26,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcherpt_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/paytel_setup"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".authenticatoractivity"
             android:label="@string/title_activity_authenticatoractivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/paytel_setup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,10 +53,18 @@
         <activity
             android:name=".util.accountsettings"
             android:theme="@style/paytel_main"/>
-        <activity android:name=".transaction.initial_transaction"/>
-        <activity android:name=".transaction.buyer_transaction"/>
-        <activity android:name=".transaction.authentication_transaction_facial"/>
-        <activity android:name=".transaction.approvedeny_transaction"/>
+        <activity
+            android:name=".transaction.initial_transaction"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".transaction.buyer_transaction"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".transaction.authentication_transaction_facial"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".transaction.approvedeny_transaction"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".sign_up.authentication_signup_identity"
             android:theme="@style/paytel_setup" />

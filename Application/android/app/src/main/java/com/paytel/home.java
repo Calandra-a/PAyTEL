@@ -37,13 +37,17 @@ import com.paytel.transaction.initial_transaction;
 
 import com.paytel.util.userDataObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView cardMessage;
     private TextView currentTransactionMsg;
     private static PinpointManager pinpointManager;
     userDataObject user;
-    TransactionDataObject transaction;
+    TransactionDataObject current_transaction;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -61,9 +65,7 @@ public class home extends AppCompatActivity {
                         return true;
                     }
                     else{
-                        String transactionID = String.join(",",user.getTransactions());
-                        Log.d("Transactions",transactionID);
-                        currentTransactionMsg.setText(transactionID);
+                        queryTransactions();
                     }
                     return true;
                 case R.id.navigation_notifications:
@@ -75,7 +77,47 @@ public class home extends AppCompatActivity {
         }
     };
 
-    public void queryTransactions(String transactionID){ }
+    public void queryTransactions(){
+            new Thread(new Runnable() {
+                @Override
+                public int hashCode() {
+                    return super.hashCode();
+                }
+
+                @Override
+                public void run() {
+                    TransactionDataObject transaction = new TransactionDataObject();
+                    Set<String> transactionSet = user.getTransactions();
+                    List<String> transactionList = new ArrayList<>(transactionSet);
+                    Gson gson = new Gson();
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for(String transID : transactionList) {
+                        transaction.setTransactionId(transID);//partition key
+
+                        DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                                .withHashKeyValues(transaction)
+                                .withConsistentRead(false);
+                        PaginatedList<TransactionDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(TransactionDataObject.class, queryExpression);
+
+                        // Loop through query results
+                        for (int i = 0; i < result.size(); i++) {
+                            String jsonFormOfItem = gson.toJson(result.get(i));
+                            stringBuilder.append(jsonFormOfItem + "\n\n");
+                        }
+                        // Add your code here to deal with the data result
+                        Log.d("Query results: ", stringBuilder.toString());
+
+                        if (result.isEmpty()) {
+                            // There were no items matching your query.
+                            Log.d("Query results: ", "none");
+                        }
+                        else{
+                        }
+                    }
+                }
+            }).start();
+     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

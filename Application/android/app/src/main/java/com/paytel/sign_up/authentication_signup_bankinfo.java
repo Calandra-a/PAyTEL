@@ -52,11 +52,14 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
         int dShort = Toast.LENGTH_SHORT;
         int dLong = Toast.LENGTH_SHORT;
 
+
+
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
         TextInputLayout card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
         TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
 
+        //Handle empty field
         if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getEditText().getText().toString().length() ==0 ||
                 CVC.getEditText().getText().toString().length() == 0 || exp_date.getEditText().getText().toString().length() == 0){
 
@@ -65,7 +68,20 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if(name_on_card.getEditText().getText().toString().length() >= 50){
+        //handle bad expiration date format
+        if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
+            CharSequence fail = "Expiration date must be mm/yy format";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        //parses month and year for date check
+        String date[]= exp_date.getEditText().getText().toString().split("/");
+        int month = Integer.parseInt(date[0]);
+        int year = Integer.parseInt(date[1]);
+
+        //runs rest of checks that dont need to be independently ran
+        if(name_on_card.getEditText().getText().toString().length() >= 50){
             CharSequence fail = "Name on card must be less than 50 characters";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -83,12 +99,17 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
-            CharSequence fail = "Expiration date must be mm/yy format";
+        else if(month > 12 || month < 1){
+            CharSequence fail = "Month must be between 1 and 12";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
+        else if(year < 18 ){
+            CharSequence fail = "Year must be 18 or later ";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;}
         else {
             CharSequence succ = "Success";
             Toast toast = Toast.makeText(context, succ, dShort);

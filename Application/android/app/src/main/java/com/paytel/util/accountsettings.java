@@ -89,6 +89,21 @@ public class accountsettings extends AppCompatActivity {
             toast.show();
             return false;
         }
+
+        //handle bad expiration date format
+        if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
+            CharSequence fail = "Expiration date must be mm/yy format";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        //parses month and year for date check
+        String date[]= exp_date.getEditText().getText().toString().split("/");
+        int month = Integer.parseInt(date[0]);
+        int year = Integer.parseInt(date[1]);
+
+
+
         if(street.getEditText().getText().toString().length() >=50){
             CharSequence fail = "Street address must be under 50 characters";
             Toast toast = Toast.makeText(context, fail, dLong);
@@ -131,8 +146,14 @@ public class accountsettings extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
-            CharSequence fail = "Expiration date must be mm/yy format";
+        else if(month > 12 || month < 1){
+            CharSequence fail = "Month must be between 1 and 12";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+        }
+        else if(year < 18 ){
+            CharSequence fail = "Year must be 18 or later ";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;

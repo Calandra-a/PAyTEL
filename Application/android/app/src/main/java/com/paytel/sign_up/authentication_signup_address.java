@@ -62,7 +62,7 @@ public class authentication_signup_address extends AppCompatActivity {
         TextInputLayout state = findViewById(R.id.txt_state);
 
         if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() ==0 ||
-                city.getEditText().getText().toString().length() == 0 /*|| state.getEditText().getText().toString().length() == 0*/){
+                city.getEditText().getText().toString().length() == 0 || state.getEditText().getText().toString().length() == 0){
 
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);

@@ -1,0 +1,11 @@
+{
+  "pathParameters": {
+    "id": "rthsnrydndfhdsbrbthsrd",
+    "buyer": "0001"
+  },
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "TEST_IDENTITY"
+    }
+  }
+}

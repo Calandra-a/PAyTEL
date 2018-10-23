@@ -1,0 +1,10 @@
+{
+  "pathParameters": {
+    "id": ""
+  },
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "TEST_IDENTITY"
+    }
+  }
+}

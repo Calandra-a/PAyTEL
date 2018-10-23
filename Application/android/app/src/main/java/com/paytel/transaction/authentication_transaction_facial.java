@@ -8,6 +8,9 @@ import android.widget.Button;
 
 import com.paytel.R;
 import com.paytel.home;
+import com.paytel.sign_up.authentication_signup_complete;
+import com.paytel.sign_up.authentication_signup_facial;
+import com.paytel.sign_up.authentication_signup_facial_fragment;
 import com.paytel.util.TransactionDataObject;
 
 public class authentication_transaction_facial extends AppCompatActivity {
@@ -47,5 +50,24 @@ public class authentication_transaction_facial extends AppCompatActivity {
             }
         });
 
+    }
+    public void pictureComplete() {
+        try {
+            Intent k = new Intent(authentication_transaction_facial.this, approvedeny_transaction.class);
+            startActivity(k);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pictureIncomplete() {
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, authentication_transaction_facial_fragment.newInstance())
+                    .commit();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

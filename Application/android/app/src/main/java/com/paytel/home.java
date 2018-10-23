@@ -113,8 +113,10 @@ public class home extends AppCompatActivity {
                             Log.d("Query results: ", "none");
                         }
                         else{
+                            
                         }
                     }
+
                 }
             }).start();
      }

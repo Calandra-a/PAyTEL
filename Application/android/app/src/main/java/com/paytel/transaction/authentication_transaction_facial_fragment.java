@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -26,7 +29,9 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -34,6 +39,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -45,8 +51,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.paytel.R;
+import com.paytel.sign_up.authentication_apicall_facial;
 import com.paytel.util.autofit_textureview;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,6 +64,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -65,9 +74,17 @@ public class authentication_transaction_facial_fragment extends Fragment
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+
+    Boolean mAutoFocusSupported;
+    ProgressDialog progress;
+    authentication_apicall_facial aaf;
+    String encodedString;
+    String responseVal;
+    WaitTask myTask;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -79,7 +96,9 @@ public class authentication_transaction_facial_fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "authentication_transaction_facial_fragment";
+    private static final String TAG = "authentication_signup_facial_fragment";
+
+    static String pose;
 
     /**
      * Camera state: Showing camera preview.
@@ -230,7 +249,7 @@ public class authentication_transaction_facial_fragment extends Fragment
             = new ImageReader.OnImageAvailableListener() {
 
         @Override
-        public void onImageAvailable(ImageReader reader) {
+        public void onImageAvailable(ImageReader reader)  {
             mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
         }
 
@@ -409,17 +428,21 @@ public class authentication_transaction_facial_fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_authentication_transaction_facial, container, false);
+        return inflater.inflate(R.layout.fragment_authentication_signup_facial, container, false);
     }
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (autofit_textureview) view.findViewById(R.id.texture);
+        pose = getPose();
+        //progress = new ProgressDialog(getActivity());
+        //progress.setTitle("Processing");
+        //progress.setMessage("Please wait...");
+        //progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
     }
 
-    // CHANGE THIS
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -495,6 +518,15 @@ public class authentication_transaction_facial_fragment extends Fragment
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 if (map == null) {
                     continue;
+                }
+
+                int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+
+                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
+                    mAutoFocusSupported = false;
+                } else {
+                    mAutoFocusSupported = true;
                 }
 
                 // For still image captures, we use the largest available size.
@@ -594,6 +626,7 @@ public class authentication_transaction_facial_fragment extends Fragment
             requestCameraPermission();
             return;
         }
+        new PoseDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         Activity activity = getActivity();
@@ -755,7 +788,11 @@ public class authentication_transaction_facial_fragment extends Fragment
      * Initiate a still image capture.
      */
     private void takePicture() {
-        lockFocus();
+        if (mAutoFocusSupported) {
+            lockFocus();
+        } else {
+            captureStillPicture();
+        }
     }
 
     /**
@@ -798,6 +835,7 @@ public class authentication_transaction_facial_fragment extends Fragment
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
+        //progress.show();
         try {
             final Activity activity = getActivity();
             if (null == activity || null == mCameraDevice) {
@@ -827,6 +865,20 @@ public class authentication_transaction_facial_fragment extends Fragment
                     showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
+                    closeCamera();
+                    myTask = new WaitTask();
+                    myTask.execute();
+                    //authentication_apicall_facial aaf = new authentication_apicall_facial();
+
+                    //aaf.callCloudLogic(encodedString, pose);
+                    //progress.dismiss();
+
+                    //  if (aaf.getResponseVal() == "true") {
+                    //    ((authentication_signup_facial) getActivity()).pictureComplete();
+                    //} else {
+                    //   new BadPictureDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                    //}
+
                 }
             };
 
@@ -875,22 +927,7 @@ public class authentication_transaction_facial_fragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
-        }
+        takePicture();
     }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
@@ -1019,6 +1056,105 @@ public class authentication_transaction_facial_fragment extends Fragment
                                 }
                             })
                     .create();
+        }
+    }
+
+    public String getPose() {
+        String[] poses = getResources().getStringArray(R.array.poses);
+        int randomIndex = new Random().nextInt(poses.length);
+        String randomPose = poses[randomIndex];
+
+        return randomPose;
+    }
+
+    // private static Handler handler = new Handler();
+
+    //private Runnable runnable = new Runnable() {
+    //  @Override
+    // public void run() {
+    //  Log.d(TAG, "timeout");
+    //closeCamera();
+    //}
+    //};
+
+    public static class PoseDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // final Fragment parent = getParentFragment();
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage("Pose: " + pose)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            //handler.postDelayed(runnable, 10000);
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    public static class BadPictureDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage("Picture did not go through")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            ((authentication_transaction_facial)getActivity()).pictureIncomplete();
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(getActivity());
+            progress.setTitle("Analyzing face");
+            progress.setMessage("Please wait...");
+            progress.setCancelable(false);
+            progress.setCanceledOnTouchOutside(false);
+            progress.show();
+            aaf = new authentication_apicall_facial();
+
+        }
+
+        protected Boolean doInBackground(Void... params) {
+            Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
+            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 50, bOut);
+
+            encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
+
+            if ((aaf.callCloudLogic(encodedString, pose)) == "true") {
+                responseVal = "true";
+            }
+
+            else {
+                responseVal = "false";
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean bool) {
+            super.onPostExecute(bool);
+            progress.dismiss();
+            if (responseVal == "true") {
+                ((authentication_transaction_facial) getActivity()).pictureComplete();
+            } else {
+                BadPictureDialog bad = new BadPictureDialog();
+                bad.setCancelable(false);
+                bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            }
+
         }
     }
 

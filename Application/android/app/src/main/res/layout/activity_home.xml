@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -17,18 +18,18 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         app:titleTextColor="@android:color/white">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="64dp"
-        android:layout_marginRight="0dp">
-
-        <ImageView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/paytel_logo_128" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="0dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/paytel_logo_128" />
+        </FrameLayout>
     </android.support.v7.widget.Toolbar>
 
     <TextView
@@ -41,37 +42,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="364dp"
-        android:layout_marginTop="96dp"
-        android:text="@string/title_home"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/txtSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/txtTransaction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="25dp"
-                android:textColor="@color/colorPrimaryDark" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+    <item android:id="@+id/add_item"
+        android:title="Add"
+        android:orderInCategory="100"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

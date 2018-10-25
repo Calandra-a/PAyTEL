@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -28,8 +30,6 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonParser;
-import com.paytel.sign_up.authentication_signup_address;
-import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
@@ -38,16 +38,16 @@ import com.paytel.transaction.initial_transaction;
 import com.paytel.util.userDataObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-public class home extends AppCompatActivity {
+
+public class home extends AppCompatActivity{
     private TextView mTextMessage;
-    private TextView cardMessage;
-    private TextView currentTransactionMsg;
     private static PinpointManager pinpointManager;
+
     userDataObject user;
     TransactionDataObject current_transaction;
+    ArrayList<String> transAmounts = new ArrayList<>();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -56,70 +56,17 @@ public class home extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
-                    cardMessage.setText(""); currentTransactionMsg.setText("");
                     return true;
                 case R.id.navigation_dashboard:
-                    cardMessage.setText(R.string.title_dashboard);
-                    user = ((global_objects) getApplication()).getCurrent_user();
-                    if(user.getTransactions() == null){
-                        return true;
-                    }
-                    else{
-                        queryTransactions();
-                    }
+                    mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    cardMessage.setText(""); currentTransactionMsg.setText("");
                     return true;
             }
             return false;
         }
     };
-
-    public void queryTransactions(){
-            new Thread(new Runnable() {
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-
-                @Override
-                public void run() {
-                    TransactionDataObject transaction = new TransactionDataObject();
-                    Set<String> transactionSet = user.getTransactions();
-                    List<String> transactionList = new ArrayList<>(transactionSet);
-                    Gson gson = new Gson();
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    for(String transID : transactionList) {
-                        transaction.setTransactionId(transID);//partition key
-
-                        DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
-                                .withHashKeyValues(transaction)
-                                .withConsistentRead(false);
-                        PaginatedList<TransactionDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(TransactionDataObject.class, queryExpression);
-
-                        // Loop through query results
-                        for (int i = 0; i < result.size(); i++) {
-                            String jsonFormOfItem = gson.toJson(result.get(i));
-                            stringBuilder.append(jsonFormOfItem + "\n\n");
-                        }
-                        // Add your code here to deal with the data result
-                        Log.d("Query results: ", stringBuilder.toString());
-
-                        if (result.isEmpty()) {
-                            // There were no items matching your query.
-                            Log.d("Query results: ", "none");
-                        }
-                        else{
-                            
-                        }
-                    }
-
-                }
-            }).start();
-     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,16 +78,15 @@ public class home extends AppCompatActivity {
         setSupportActionBar(mTopToolbar);
 
         mTextMessage = (TextView) findViewById(R.id.message);
-        cardMessage = (TextView) findViewById(R.id.txtSection);
-        currentTransactionMsg = (TextView) findViewById(R.id.txtTransaction);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
+
         queryUser();
-        FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
+        FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
 
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +127,7 @@ public class home extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void queryUser(){
         new Thread(new Runnable() {
@@ -233,11 +180,52 @@ public class home extends AppCompatActivity {
                     userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
                     ((global_objects) getApplication()).setCurrent_user(current_user);
 
+                    //here
+
+                    try {
+
+
+                        Set<String> transactionSet = current_user.getTransactions();
+                        ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                        for (int i = 0; i < dataSet.size(); i++) {
+                            TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                            Log.d("Thread: ", transaction.getAmount());
+                            //Set the Info for the listview
+                            transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
+                        }
+                        initializingTranasactions();
+
+                        for (int i = 0; i < dataSet.size(); i++) {
+                            TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                            Log.d("Result: ", transresult.getAmount());
+                        }
+                        // Add your code here to deal with the data result
+                        if (result.isEmpty()) {
+                            // There were no items matching your query.
+                            Log.d("Query results: ", "none");
+                        }
+                    }
+                    catch(NullPointerException e){
+                        e.printStackTrace();
+                        Log.d("Error", "No transactions being pulled??");
+                    }
                 }
             }
         }).start();
     }
+    void initializingTranasactions(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = (ListView) findViewById(R.id.mobile_list);
+                Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
+                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, transAmounts);
+                listView.setAdapter(adapter);
 
+            }
+        });
+    }
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {
             PinpointConfiguration pinpointConfig = new PinpointConfiguration(

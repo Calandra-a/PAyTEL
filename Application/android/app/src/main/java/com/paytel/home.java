@@ -41,14 +41,14 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class home extends AppCompatActivity {
+public class home extends AppCompatActivity{
     private TextView mTextMessage;
     private TextView cardMessage;
     private static PinpointManager pinpointManager;
 
     userDataObject user;
     TransactionDataObject current_transaction;
-
+    ArrayList<String> transAmounts = new ArrayList<>();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -59,7 +59,7 @@ public class home extends AppCompatActivity {
                     mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    user = ((global_objects) getApplication()).getCurrent_user();
+                    mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -87,8 +87,7 @@ public class home extends AppCompatActivity {
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
 
         queryUser();
-
-        FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
+        FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
 
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +128,7 @@ public class home extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void queryUser(){
         new Thread(new Runnable() {
@@ -187,27 +187,40 @@ public class home extends AppCompatActivity {
                     Set<String> transactionSet = current_user.getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     ArrayList<TransactionDataObject> data = new ArrayList<>();
-
-                    ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(),R.layout.activity_listview, dataSet);
-                    ListView listView = (ListView) findViewById(R.id.mobile_list);
+                    for (int i = 0; i < dataSet.size(); i++) {
+                        TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                        Log.d("Thread: ", transaction.getAmount());
+                        //Set the Info for the listview
+                        transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
+                    }
+                    initializingTranasactions();
 
                     for (int i = 0; i < dataSet.size(); i++) {
                         TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                         Log.d("Result: ", transresult.getAmount());
-
                     }
                     // Add your code here to deal with the data result
-                    listView.setAdapter(adapter);
                     if (result.isEmpty()) {
                         // There were no items matching your query.
                         Log.d("Query results: ", "none");
                     }
-
                 }
             }
         }).start();
     }
+    void initializingTranasactions(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = (ListView) findViewById(R.id.mobile_list);
+                Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
+                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, transAmounts);
+                listView.setAdapter(adapter);
 
+            }
+        });
+    }
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {
             PinpointConfiguration pinpointConfig = new PinpointConfiguration(

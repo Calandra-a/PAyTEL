@@ -30,7 +30,6 @@ public class authentication_transaction_facial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //move to next frame
-
                 //API CALL
                 //FINGERPRINT
                 try {

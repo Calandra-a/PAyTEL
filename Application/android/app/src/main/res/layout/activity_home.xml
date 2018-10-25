@@ -32,20 +32,21 @@
         </FrameLayout>
     </android.support.v7.widget.Toolbar>
 
+
     <TextView
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_home"
+        android:layout_marginTop="56dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/mobile_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/message">
     </ListView>
 
     <android.support.design.widget.BottomNavigationView

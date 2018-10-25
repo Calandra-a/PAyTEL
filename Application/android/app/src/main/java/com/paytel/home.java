@@ -43,7 +43,6 @@ import java.util.Set;
 
 public class home extends AppCompatActivity{
     private TextView mTextMessage;
-    private TextView cardMessage;
     private static PinpointManager pinpointManager;
 
     userDataObject user;
@@ -183,26 +182,32 @@ public class home extends AppCompatActivity{
 
                     //here
 
+                    try {
 
-                    Set<String> transactionSet = current_user.getTransactions();
-                    ArrayList<String> dataSet = new ArrayList<>(transactionSet);
-                    ArrayList<TransactionDataObject> data = new ArrayList<>();
-                    for (int i = 0; i < dataSet.size(); i++) {
-                        TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                        Log.d("Thread: ", transaction.getAmount());
-                        //Set the Info for the listview
-                        transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
-                    }
-                    initializingTranasactions();
 
-                    for (int i = 0; i < dataSet.size(); i++) {
-                        TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                        Log.d("Result: ", transresult.getAmount());
+                        Set<String> transactionSet = current_user.getTransactions();
+                        ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                        for (int i = 0; i < dataSet.size(); i++) {
+                            TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                            Log.d("Thread: ", transaction.getAmount());
+                            //Set the Info for the listview
+                            transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
+                        }
+                        initializingTranasactions();
+
+                        for (int i = 0; i < dataSet.size(); i++) {
+                            TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                            Log.d("Result: ", transresult.getAmount());
+                        }
+                        // Add your code here to deal with the data result
+                        if (result.isEmpty()) {
+                            // There were no items matching your query.
+                            Log.d("Query results: ", "none");
+                        }
                     }
-                    // Add your code here to deal with the data result
-                    if (result.isEmpty()) {
-                        // There were no items matching your query.
-                        Log.d("Query results: ", "none");
+                    catch(NullPointerException e){
+                        e.printStackTrace();
+                        Log.d("Error", "No transactions being pulled??");
                     }
                 }
             }

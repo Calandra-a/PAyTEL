@@ -7,14 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -32,7 +31,6 @@ import com.google.gson.Gson;
 
 import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_identity;
-import com.paytel.util.TransactionAdapter;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
 import com.paytel.transaction.initial_transaction;
@@ -40,21 +38,13 @@ import com.paytel.transaction.initial_transaction;
 import com.paytel.util.userDataObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+
 
 public class home extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView cardMessage;
     private static PinpointManager pinpointManager;
-
-    private static RecyclerView mRecyclerView;
-    private static RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private static ArrayList<TransactionDataObject> datah;
-    private static ArrayList<String> data;
-    public static View.OnClickListener myOnClickListener;
-    private static ArrayList<Integer> removedItems;
 
     userDataObject user;
     TransactionDataObject current_transaction;
@@ -69,8 +59,8 @@ public class home extends AppCompatActivity {
                     mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    cardMessage.setText(R.string.title_dashboard);
                     user = ((global_objects) getApplication()).getCurrent_user();
+                    return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     return true;
@@ -89,16 +79,15 @@ public class home extends AppCompatActivity {
         setSupportActionBar(mTopToolbar);
 
         mTextMessage = (TextView) findViewById(R.id.message);
-        //currentTransactionMsg = (TextView) findViewById(R.id.txtTransaction);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        myOnClickListener = new MyOnClickListener(this);
 
         System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
+
         queryUser();
+
         FloatingActionButton btn_fab =findViewById(R.id.fab_transaction);
 
         btn_fab.setOnClickListener(new View.OnClickListener() {
@@ -193,49 +182,22 @@ public class home extends AppCompatActivity {
                     ((global_objects) getApplication()).setCurrent_user(current_user);
 
                     //here
-                    myOnClickListener = new MyOnClickListener(getApplicationContext());
-                    mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-                    mRecyclerView.setHasFixedSize(true);
-
-                    mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    mRecyclerView.setLayoutManager(mLayoutManager);
-                    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
 
 
                     Set<String> transactionSet = current_user.getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     ArrayList<TransactionDataObject> data = new ArrayList<>();
 
+                    ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(),R.layout.activity_listview, dataSet);
+                    ListView listView = (ListView) findViewById(R.id.mobile_list);
+
                     for (int i = 0; i < dataSet.size(); i++) {
                         TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                         Log.d("Result: ", transresult.getAmount());
-                       /* data.add(
-                                transresult.getTransactionId(),
-                                transresult.getAmount(),
-                                transresult.getBuyerId(),
-                                transresult.getNote(),
-                                transresult.getSellerId(),
-                                transresult.getTransactionStatus(),
-                                transresult.getTime(),
-                                transresult.getAuthenticationType());
-                                */
+
                     }
-                    /*
-                    for(String transID : transactionList) {
-                        transaction.setTransactionId(transID);//partition key
-                        TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, transID);
-                        Log.d("Query results: ", transID);
-
-                        try{
-                            Log.d("Query results: ", transresult.getAmount());
-                        }
-                        catch(Exception e){}
-                    }*/
                     // Add your code here to deal with the data result
-                    mAdapter = new TransactionAdapter(data);
-                    mRecyclerView.setAdapter(mAdapter);
-
+                    listView.setAdapter(adapter);
                     if (result.isEmpty()) {
                         // There were no items matching your query.
                         Log.d("Query results: ", "none");
@@ -244,38 +206,6 @@ public class home extends AppCompatActivity {
                 }
             }
         }).start();
-    }
-
-    private static class MyOnClickListener implements View.OnClickListener {
-
-        private final Context context;
-
-        private MyOnClickListener(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onClick(View v) {
-           // removeItem(v);
-        }
-
-        /*private void removeItem(View v) {
-            int selectedItemPosition = recyclerView.getChildPosition(v);
-            RecyclerView.ViewHolder viewHolder
-                    = recyclerView.findViewHolderForPosition(selectedItemPosition);
-            TextView textViewName
-                    = (TextView) viewHolder.itemView.findViewById(R.id.textViewName);
-            String selectedName = (String) textViewName.getText();
-            int selectedItemId = -1;
-            for (int i = 0; i < MyData.nameArray.length; i++) {
-                if (selectedName.equals(MyData.nameArray[i])) {
-                    selectedItemId = MyData.id_[i];
-                }
-            }
-            removedItems.add(selectedItemId);
-            data.remove(selectedItemPosition);
-            adapter.notifyItemRemoved(selectedItemPosition);
-        }*/
     }
 
     public static PinpointManager getPinpointManager(final Context applicationContext) {

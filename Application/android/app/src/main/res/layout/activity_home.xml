@@ -42,15 +42,11 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
-        android:scrollbars="vertical"
+    <ListView
+        android:id="@+id/mobile_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <item android:id="@+id/add_item"
-        android:title="Add"
-        android:orderInCategory="100"/>
+        android:layout_height="wrap_content">
+    </ListView>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -78,6 +74,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
         app:layout_constraintVertical_bias="1.0" />
-
 
 </android.support.constraint.ConstraintLayout>

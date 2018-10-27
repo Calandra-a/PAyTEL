@@ -56,12 +56,16 @@ public class home extends AppCompatActivity{
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
+                    refreshTransactions();
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
+                    refreshTransactions();
+                    queryUser();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
+                    refreshTransactions();
                     return true;
             }
             return false;
@@ -181,25 +185,16 @@ public class home extends AppCompatActivity{
                     ((global_objects) getApplication()).setCurrent_user(current_user);
 
                     //here
-
                     try {
-
-
                         Set<String> transactionSet = current_user.getTransactions();
                         ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                         for (int i = 0; i < dataSet.size(); i++) {
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                            Log.d("Thread: ", transaction.getAmount());
                             //Set the Info for the listview
                             transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
+                            Log.d("Result: ", transaction.getAmount());
                         }
                         initializingTranasactions();
-
-                        for (int i = 0; i < dataSet.size(); i++) {
-                            TransactionDataObject transresult = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                            Log.d("Result: ", transresult.getAmount());
-                        }
-                        // Add your code here to deal with the data result
                         if (result.isEmpty()) {
                             // There were no items matching your query.
                             Log.d("Query results: ", "none");
@@ -222,10 +217,20 @@ public class home extends AppCompatActivity{
                 ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, transAmounts);
                 listView.setAdapter(adapter);
-
             }
         });
     }
+    void refreshTransactions(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = (ListView) findViewById(R.id.mobile_list);
+                listView.setAdapter(null);
+                transAmounts.clear();
+            }
+        });
+    }
+
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {
             PinpointConfiguration pinpointConfig = new PinpointConfiguration(
@@ -249,6 +254,4 @@ public class home extends AppCompatActivity{
 
         return pinpointManager;
     }
-
-
 }

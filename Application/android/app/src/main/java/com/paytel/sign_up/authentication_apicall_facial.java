@@ -57,6 +57,7 @@ public class authentication_apicall_facial extends Activity {
         }
 
         final String body = json.toString();
+        System.out.println(body);
 
         final Map parameters = new HashMap<>();
         parameters.put("lang", "en_US");

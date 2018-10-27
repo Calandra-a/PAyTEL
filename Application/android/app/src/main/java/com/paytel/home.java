@@ -99,22 +99,18 @@ public class home extends AppCompatActivity{
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
-            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-            {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
                 String viewString = ((TextView) arg1).getText().toString();
                 String transactionNumber = viewString.substring(0, viewString.indexOf(")"));
-                String amount = viewString.substring(viewString.lastIndexOf("$")+1);
+                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);
 
-                if((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))){
+                if ((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))) {
                     String transID = transIDs.get(Integer.parseInt(transactionNumber));
-                    Toast.makeText(getBaseContext(),transID, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getBaseContext(),buyer_transaction.class);
-                    intent.putExtra("list_view_value", transID);
+                    Toast.makeText(getBaseContext(), transID, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(home.this, buyer_transaction.class);
+                    intent.putExtra("name", transID);
                     startActivity(intent);
-                    home.this.finish();
                 }
-                //String transID = viewString.substring(viewString.lastIndexOf(":")+1);
-
             }
         });
 
@@ -218,7 +214,6 @@ public class home extends AppCompatActivity{
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
                             transAmounts.add(transaction.getAmount());
-
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {

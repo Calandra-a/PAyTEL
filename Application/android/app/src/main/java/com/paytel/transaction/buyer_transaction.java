@@ -51,6 +51,7 @@ public class buyer_transaction extends AppCompatActivity {
 
     }
     void load_transactioninfo(){
+
         TextView sellerID = findViewById(R.id.txt_sellerID);
         TextView amount = findViewById(R.id.txt_amount);
         TextView note = findViewById(R.id.txt_note);

@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -34,7 +36,7 @@ import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
 import com.paytel.transaction.initial_transaction;
-
+import com.paytel.transaction.buyer_transaction;
 import com.paytel.util.userDataObject;
 
 import java.util.ArrayList;
@@ -46,8 +48,11 @@ public class home extends AppCompatActivity{
     private static PinpointManager pinpointManager;
 
     userDataObject user;
-    TransactionDataObject current_transaction;
     ArrayList<String> transAmounts = new ArrayList<>();
+    ArrayList<String> transIDs = new ArrayList<>();
+    ArrayList<String> transTime = new ArrayList<>();
+    ArrayList<String> eachTransaction = new ArrayList<>();
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -76,7 +81,7 @@ public class home extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        ListView listView = (ListView) findViewById(R.id.mobile_list);
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
@@ -85,12 +90,33 @@ public class home extends AppCompatActivity{
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
+        //System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
+        //Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
 
         queryUser();
         FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3)
+            {
+                String viewString = ((TextView) arg1).getText().toString();
+                String transactionNumber = viewString.substring(0, viewString.indexOf(")"));
+                String amount = viewString.substring(viewString.lastIndexOf("$")+1);
+
+                if((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))){
+                    String transID = transIDs.get(Integer.parseInt(transactionNumber));
+                    Toast.makeText(getBaseContext(),transID, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getBaseContext(),buyer_transaction.class);
+                    intent.putExtra("list_view_value", transID);
+                    startActivity(intent);
+                    home.this.finish();
+                }
+                //String transID = viewString.substring(viewString.lastIndexOf(":")+1);
+
+            }
+        });
 
         btn_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +188,7 @@ public class home extends AppCompatActivity{
                 }
 
                 // Add your code here to deal with the data result
-                Log.d("Query results: ", stringBuilder.toString());
+                //Log.d("Query results: ", stringBuilder.toString());
                 if (result.isEmpty()) {
                     // There were no items matching your query.
                     Log.d("Query results: ", "none");
@@ -190,9 +216,9 @@ public class home extends AppCompatActivity{
                         ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                         for (int i = 0; i < dataSet.size(); i++) {
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                            //Set the Info for the listview
-                            transAmounts.add("$" + transaction.getAmount() + " " + "User:" + transaction.getTransactionStatus() + " " + transaction.getNote());
-                            Log.d("Result: ", transaction.getAmount());
+                            transIDs.add(transaction.getTransactionId());
+                            transAmounts.add(transaction.getAmount());
+
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -202,23 +228,30 @@ public class home extends AppCompatActivity{
                     }
                     catch(NullPointerException e){
                         e.printStackTrace();
-                        Log.d("Error", "No transactions being pulled??");
+                        Log.d("Error", "No transactions being pulled?");
                     }
                 }
             }
         }).start();
     }
     void initializingTranasactions(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ListView listView = (ListView) findViewById(R.id.mobile_list);
-                Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
-                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
-                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, transAmounts);
-                listView.setAdapter(adapter);
-            }
-        });
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ListView listView = (ListView) findViewById(R.id.mobile_list);
+                    Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
+                    ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                    for (int i = 0; i < dataSet.size(); i++)
+                        eachTransaction.add(i + ") " + "$" + transAmounts.get(i));
+                    ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, eachTransaction);
+                    listView.setAdapter(adapter);
+                }
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
     void refreshTransactions(){
         runOnUiThread(new Runnable() {
@@ -227,6 +260,9 @@ public class home extends AppCompatActivity{
                 ListView listView = (ListView) findViewById(R.id.mobile_list);
                 listView.setAdapter(null);
                 transAmounts.clear();
+                transIDs.clear();
+                eachTransaction.clear();
+                transTime.clear();
             }
         });
     }

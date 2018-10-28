@@ -12,6 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import DatabaseTable from "./Pages/DatabaseTable";
+import NotFound from "./Pages/NotFound";
 import TestPage from "./Pages/TestPage";
 import logo_paytel from "../Resources/Images/logo_paytel.png";
 import {
@@ -196,7 +197,12 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Manage Users" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/transactions");
+              }}
+            >
               <ListItemIcon>
                 <AttachMoneyIcon />
               </ListItemIcon>
@@ -208,14 +214,12 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Flag Transaction" />
             </ListItem>
-            <Link to="/results">
-              <ListItem button>
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText primary="Database Lookup" />
-              </ListItem>
-            </Link>
+            <ListItem button>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary="Database Lookup" />
+            </ListItem>
           </List>
           <Divider />
           <List>
@@ -225,7 +229,7 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
-            <ListItem button onClick={this.props.signout}>
+            <ListItem button onClick={this.handleLogout}>
               <ListItemIcon>
                 <ClearIcon />
               </ListItemIcon>
@@ -235,12 +239,11 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Router>
-            <Switch>
-              <Route path="/r" component={TestPage} />
-              <Route path="/" component={DatabaseTable} />
-            </Switch>
-          </Router>
+          <Switch>
+            <Route exact path="/" component={TestPage} />
+            <Route path="/transactions" component={DatabaseTable} />
+            <Route component={NotFound} />
+          </Switch>
         </main>
       </div>
     );

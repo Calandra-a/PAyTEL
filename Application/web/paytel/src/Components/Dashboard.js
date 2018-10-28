@@ -11,11 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import {
-  navigationListItems,
-  adminListItems,
-  accountListItems
-} from "./Menus/Admin";
 import DatabaseTable from "./Pages/DatabaseTable";
 import TestPage from "./Pages/TestPage";
 import logo_paytel from "../Resources/Images/logo_paytel.png";
@@ -32,6 +27,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ClearIcon from "@material-ui/icons/Clear";
+import MailIcon from "@material-ui/icons/Mail";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
+import FlagIcon from "@material-ui/icons/Flag";
+import ListIcon from "@material-ui/icons/List";
+import { Auth } from "aws-amplify";
 
 const drawerWidth = 240;
 
@@ -117,6 +119,12 @@ class Dashboard extends React.Component {
     this.setState({ open: false });
   };
 
+  handleLogout = async event => {
+    await Auth.signOut();
+    this.props.userHasAuthenticated(false);
+    this.props.history.push("/login");
+  };
+
   render() {
     const { classes, theme } = this.props;
 
@@ -164,9 +172,51 @@ class Dashboard extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{navigationListItems}</List>
+          <List>
+            <Link to="/">
+              <ListItem button>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Link>
+          </List>
           <Divider />
-          <List>{adminListItems}</List>
+          <List>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText primary="View Complaints" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Manage Users" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <AttachMoneyIcon />
+              </ListItemIcon>
+              <ListItemText primary="Manage Transactions" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <FlagIcon />
+              </ListItemIcon>
+              <ListItemText primary="Flag Transaction" />
+            </ListItem>
+            <Link to="/results">
+              <ListItem button>
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Database Lookup" />
+              </ListItem>
+            </Link>
+          </List>
           <Divider />
           <List>
             <ListItem button>

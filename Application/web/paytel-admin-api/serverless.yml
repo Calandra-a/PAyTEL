@@ -40,7 +40,7 @@ functions:
     handler: tGet.main
     events:
       - http:
-          path: transactions/{transactionID}
+          path: transactions/{transaction_id}
           method: get
           cors: true
           authorizer: aws_iam
@@ -56,7 +56,7 @@ functions:
     handler: tUpdate.main
     events:
       - http:
-          path: transactions/{transactionID}
+          path: transactions/{transaction_id}
           method: put
           cors: true
           authorizer: aws_iam

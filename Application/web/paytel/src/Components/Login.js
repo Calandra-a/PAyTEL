@@ -50,7 +50,7 @@ class Login extends Component {
 
     this.state = {
       loading: false,
-      email: "",
+      username: "",
       password: ""
     };
   }
@@ -67,7 +67,7 @@ class Login extends Component {
     this.setState({ loading: true });
 
     try {
-      //await Auth.signIn(this.state.email, this.state.password);
+      await Auth.signIn(this.state.username, this.state.password);
       this.props.userHasAuthenticated(true);
       this.props.history.push("/");
     } catch (e) {
@@ -100,13 +100,13 @@ class Login extends Component {
               <form className={classes.form} onSubmit={this.handleSubmit}>
                 <FormControl
                   margin="normal"
-                  value={this.state.email}
+                  value={this.state.username}
                   onChange={this.handleChange}
                   required
                   fullWidth
                 >
-                  <InputLabel htmlFor="email">Email Address</InputLabel>
-                  <Input id="email" name="email" autoFocus />
+                  <InputLabel htmlFor="username">Username</InputLabel>
+                  <Input id="username" name="username" autoFocus />
                 </FormControl>
                 <FormControl
                   margin="normal"

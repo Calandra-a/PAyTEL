@@ -1,3 +1,3 @@
 {
-  "body": "{\"buyerID\":\"0001\",\"sellerID\":\"0002\",\"amount\":\"350.00\"}"
+  "body": "{\"buyer_id\":\"0001\",\"seller_id\":\"0002\",\"buyer_username\":\"asdf\",\"seller_username\":\"ghjk\",\"amount\":\"350.00\",\"note\":\"duh\",\"transaction_status\":\"pending\",\"status\":\"not_pending\"}"
 }

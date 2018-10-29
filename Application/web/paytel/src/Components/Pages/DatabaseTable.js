@@ -14,6 +14,7 @@ import FirstPageIcon from "@material-ui/icons/FirstPage";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
+import { API } from "aws-amplify";
 
 const actionsStyles = theme => ({
   root: {
@@ -103,9 +104,9 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, {
 })(TablePaginationActions);
 
 let counter = 0;
-function createData(name, calories, fat) {
+function createData(date, buyer, seller) {
   counter += 1;
-  return { id: counter, name, calories, fat };
+  return { id: counter, date, buyer, seller };
 }
 
 const styles = theme => ({
@@ -137,10 +138,20 @@ class DatabaseTable extends React.Component {
       createData("Aug-19-2018", 6300, 5356),
       createData("Aug-17-2018", 9848, 6290),
       createData("Aug-16-2018", 9481, 7906)
-    ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+    ],
     page: 0,
     rowsPerPage: 5
   };
+
+  async componentDidMount() {
+    try {
+      const transactions = await this.transactions();
+      console.log(transactions);
+      this.setState({ transactions });
+    } catch (e) {
+      alert(e);
+    }
+  }
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -149,6 +160,10 @@ class DatabaseTable extends React.Component {
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
   };
+
+  transactions() {
+    return API.get("transactions", "/transactions");
+  }
 
   render() {
     const { classes } = this.props;
@@ -163,6 +178,7 @@ class DatabaseTable extends React.Component {
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
+                <TableCell>ID</TableCell>
                 <TableCell numeric>Buyer</TableCell>
                 <TableCell numeric>Seller</TableCell>
               </TableRow>
@@ -173,11 +189,10 @@ class DatabaseTable extends React.Component {
                 .map(row => {
                   return (
                     <TableRow key={row.id}>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell numeric>{row.calories}</TableCell>
-                      <TableCell numeric>{row.fat}</TableCell>
+                      <TableCell>{row.date}</TableCell>
+                      <TableCell numeric>{row.id}</TableCell>
+                      <TableCell numeric>{row.buyer}</TableCell>
+                      <TableCell numeric>{row.seller}</TableCell>
                     </TableRow>
                   );
                 })}

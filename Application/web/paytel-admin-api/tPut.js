@@ -5,13 +5,18 @@ import { success, failure } from "./libs/response-lib";
 export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: "transactions",
+    TableName: "csi-mobilehub-447478737-transactions",
     Item: {
-      transactionID: uuid.v1(),
-      buyerID: data.buyerID,
-      sellerID: data.sellerID,
+      transaction_id: uuid.v1(),
+      buyer_id: data.buyer_id,
+      seller_id: data.seller_id,
+      buyer_username: data.buyer_username,
+      seller_username: data.seller_username,
+      transaction_status: data.transaction_status,
+      status: data.status,
       amount: data.amount,
-      createdAt: Date.now()
+      note: data.note,
+      time_created: Date.now()
     }
   };
 

@@ -3,9 +3,10 @@ import { success, failure } from "./libs/response-lib";
 
 export async function main(event, context, callback) {
   const params = {
-    TableName: "transactions",
+    //TableName: "transactions",
+    TableName: "csi-mobilehub-447478737-transactions",
     Key: {
-      transactionID: event.pathParameters.id
+      transaction_id: event.pathParameters.transaction_id
     }
   };
 
@@ -17,6 +18,8 @@ export async function main(event, context, callback) {
       callback(null, failure({ status: false, error: "Item not found." }));
     }
   } catch (e) {
+    console.log(e);
+
     callback(null, failure({ status: false }));
   }
 }

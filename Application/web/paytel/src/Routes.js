@@ -5,10 +5,11 @@ import Login from "./Components/Login";
 import NotFound from "./Components/NotFound";
 import AppliedRoute from "./Components/AppliedRoute";
 import PrivateRoute from "./Components/PrivateRoute";
+import LoginRoute from "./Components/LoginRoute";
 
 export default ({ childProps }) => (
   <Switch>
-    <AppliedRoute path="/login" component={Login} props={childProps} />
+    <LoginRoute path="/login" component={Login} props={childProps} />
     <PrivateRoute
       path="/transactions"
       component={Dashboard}

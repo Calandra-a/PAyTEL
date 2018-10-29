@@ -1,0 +1,62 @@
+service: paytel-admin-api
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: prod
+  region: us-east-1
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  tPut:
+    handler: tPut.main
+    events:
+      - http:
+          path: transactions
+          method: post
+          cors: true
+          authorizer: aws_iam
+  tGet:
+    handler: tGet.main
+    events:
+      - http:
+          path: transactions/{transactionID}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  tScan:
+    handler: tScan.main
+    events:
+      - http:
+          path: transactions
+          method: get
+          cors: true
+          authorizer: aws_iam
+  tUpdate:
+    handler: tUpdate.main
+    events:
+      - http:
+          path: transactions/{transactionID}
+          method: put
+          cors: true
+          authorizer: aws_iam

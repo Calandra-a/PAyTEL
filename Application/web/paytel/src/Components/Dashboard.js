@@ -11,12 +11,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import {
-  navigationListItems,
-  adminListItems,
-  accountListItems
-} from "./Menus/Admin";
 import DatabaseTable from "./Pages/DatabaseTable";
+import NotFound from "./Pages/NotFound";
 import TestPage from "./Pages/TestPage";
 import logo_paytel from "../Resources/Images/logo_paytel.png";
 import {
@@ -32,6 +28,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ClearIcon from "@material-ui/icons/Clear";
+import MailIcon from "@material-ui/icons/Mail";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
+import FlagIcon from "@material-ui/icons/Flag";
+import ListIcon from "@material-ui/icons/List";
+import { Auth } from "aws-amplify";
 
 const drawerWidth = 240;
 
@@ -117,6 +120,12 @@ class Dashboard extends React.Component {
     this.setState({ open: false });
   };
 
+  handleLogout = async event => {
+    await Auth.signOut();
+    this.props.userHasAuthenticated(false);
+    this.props.history.push("/login");
+  };
+
   render() {
     const { classes, theme } = this.props;
 
@@ -164,9 +173,54 @@ class Dashboard extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{navigationListItems}</List>
+          <List>
+            <Link to="/">
+              <ListItem button>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Link>
+          </List>
           <Divider />
-          <List>{adminListItems}</List>
+          <List>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText primary="View Complaints" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Manage Users" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/transactions");
+              }}
+            >
+              <ListItemIcon>
+                <AttachMoneyIcon />
+              </ListItemIcon>
+              <ListItemText primary="Manage Transactions" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <FlagIcon />
+              </ListItemIcon>
+              <ListItemText primary="Flag Transaction" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary="Database Lookup" />
+            </ListItem>
+          </List>
           <Divider />
           <List>
             <ListItem button>
@@ -175,7 +229,7 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
-            <ListItem button onClick={this.props.signout}>
+            <ListItem button onClick={this.handleLogout}>
               <ListItemIcon>
                 <ClearIcon />
               </ListItemIcon>
@@ -185,12 +239,11 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Router>
-            <Switch>
-              <Route path="/r" component={TestPage} />
-              <Route path="/" component={DatabaseTable} />
-            </Switch>
-          </Router>
+          <Switch>
+            <Route exact path="/" component={TestPage} />
+            <Route path="/transactions" component={DatabaseTable} />
+            <Route component={NotFound} />
+          </Switch>
         </main>
       </div>
     );

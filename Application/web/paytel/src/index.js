@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Amplify from "aws-amplify";
 import App from "./App";
 import config from "./config";
+import { BrowserRouter as Router } from "react-router-dom";
 
 Amplify.configure({
   Auth: {
@@ -15,7 +16,7 @@ Amplify.configure({
   API: {
     endpoints: [
       {
-        name: "1-800-GET-CASH",
+        name: "transactions",
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
       }
@@ -23,4 +24,9 @@ Amplify.configure({
   }
 });
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById("root")
+);

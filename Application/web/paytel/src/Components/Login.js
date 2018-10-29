@@ -61,24 +61,18 @@ class Login extends Component {
     });
   };
 
-  submit = async event => {
+  handleSubmit = async event => {
     event.preventDefault();
 
-    this.state.isLoading = true;
+    this.setState({ loading: true });
 
     try {
-      if (this.state.email === "root@paytel.com") {
-        if (this.state.password === "paytel") {
-          this.props.signin();
-        } else {
-          alert("Error Signing In: Invalid password.");
-        }
-      } else {
-        alert("Error Signing In: Username not found.");
-      }
+      //await Auth.signIn(this.state.email, this.state.password);
+      this.props.userHasAuthenticated(true);
+      this.props.history.push("/");
     } catch (e) {
       alert(e.message);
-      this.state.isLoading = false;
+      this.setState({ loading: false });
     }
   };
 
@@ -103,7 +97,7 @@ class Login extends Component {
                 className={classes.img}
               />
               <Typography variant="headline">Please Log In.</Typography>
-              <form className={classes.form} onSubmit={this.submit}>
+              <form className={classes.form} onSubmit={this.handleSubmit}>
                 <FormControl
                   margin="normal"
                   value={this.state.email}
@@ -112,27 +106,17 @@ class Login extends Component {
                   fullWidth
                 >
                   <InputLabel htmlFor="email">Email Address</InputLabel>
-                  <Input
-                    id="email"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                  />
+                  <Input id="email" name="email" autoFocus />
                 </FormControl>
                 <FormControl
                   margin="normal"
-                  value={this.state.email}
+                  value={this.state.password}
                   onChange={this.handleChange}
                   required
                   fullWidth
                 >
                   <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input
-                    name="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                  />
+                  <Input name="password" type="password" id="password" />
                 </FormControl>
                 <Button
                   type="submit"

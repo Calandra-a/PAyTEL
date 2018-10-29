@@ -2,11 +2,12 @@ package com.paytel.transaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.amazonaws.http.HttpMethodName;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -59,19 +60,34 @@ public class initial_transaction extends AppCompatActivity {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
+
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Make a payment");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //toolbar back button
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),home.class));
+                finish();
+            }
+        });
     }
 
     void add_transactioninfo(){
-        TextView buyerID = findViewById(R.id.txt_buyerID);
-        TextView amount = findViewById(R.id.txt_amount);
-        TextView note = findViewById(R.id.txt_note);
+        TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
+        TextInputLayout amount = findViewById(R.id.txt_amount);
+        TextInputLayout note = findViewById(R.id.txt_note);
 
         //if(buyerID != null)new_transaction.setSellerId();
         //if(amount != null)new_transaction.setAmount();
         //if(note != null)new_transaction.setNote();
 
         //do this call if everything checks out
-        doApiCall(buyerID.getText().toString(), amount.getText().toString(), note.getText().toString());
+        doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
     }
 
     void doApiCall(String buyerID, String amount, String note){

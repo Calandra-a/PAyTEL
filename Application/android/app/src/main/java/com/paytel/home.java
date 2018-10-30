@@ -35,8 +35,8 @@ import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
-import com.paytel.transaction.initial_transaction;
-import com.paytel.transaction.buyer_transaction;
+import com.paytel.transaction.create_new_transaction;
+import com.paytel.transaction.start_buyer_transaction;
 import com.paytel.util.userDataObject;
 
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class home extends AppCompatActivity{
                 if ((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))) {
                     String transID = transIDs.get(Integer.parseInt(transactionNumber));
                     Toast.makeText(getBaseContext(), transID, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(home.this, buyer_transaction.class);
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
                     intent.putExtra("name", transID);
                     startActivity(intent);
                 }
@@ -119,7 +119,7 @@ public class home extends AppCompatActivity{
             public void onClick(View v) {
                 //move to next frame
                 try {
-                    Intent k = new Intent(home.this, initial_transaction.class);
+                    Intent k = new Intent(home.this, create_new_transaction.class);
                     startActivity(k);
 
                 } catch (Exception e) {

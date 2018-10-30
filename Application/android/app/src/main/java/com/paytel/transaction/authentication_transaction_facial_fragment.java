@@ -51,7 +51,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.paytel.R;
-import com.paytel.sign_up.authentication_apicall_facial;
+import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.util.autofit_textureview;
 
 import java.io.ByteArrayOutputStream;
@@ -81,7 +81,7 @@ public class authentication_transaction_facial_fragment extends Fragment
 
     Boolean mAutoFocusSupported;
     ProgressDialog progress;
-    authentication_apicall_facial aaf;
+    apicall_facial aaf;
     String encodedString;
     String responseVal;
     WaitTask myTask;
@@ -1105,7 +1105,7 @@ public class authentication_transaction_facial_fragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            ((authentication_transaction_facial)getActivity()).pictureIncomplete();
+                            ((authentication_signup_facial)getActivity()).pictureIncomplete();
                         }
                     })
                     .create();
@@ -1122,7 +1122,7 @@ public class authentication_transaction_facial_fragment extends Fragment
             progress.setCancelable(false);
             progress.setCanceledOnTouchOutside(false);
             progress.show();
-            aaf = new authentication_apicall_facial();
+            aaf = new apicall_facial();
 
         }
 
@@ -1148,7 +1148,7 @@ public class authentication_transaction_facial_fragment extends Fragment
             super.onPostExecute(bool);
             progress.dismiss();
             if (responseVal == "true") {
-                ((authentication_transaction_facial) getActivity()).pictureComplete();
+                ((authentication_signup_facial) getActivity()).pictureComplete();
             } else {
                 BadPictureDialog bad = new BadPictureDialog();
                 bad.setCancelable(false);

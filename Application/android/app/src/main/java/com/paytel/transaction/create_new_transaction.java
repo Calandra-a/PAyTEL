@@ -18,7 +18,6 @@ import com.amazonaws.util.IOUtils;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
-import com.paytel.util.TransactionDataObject;
 import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
 
 import org.json.JSONException;
@@ -28,7 +27,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class initial_transaction extends AppCompatActivity {
+public class create_new_transaction extends AppCompatActivity {
 
     private UsertransactionMobileHubClient apiClient;
 
@@ -48,7 +47,7 @@ public class initial_transaction extends AppCompatActivity {
                 add_transactioninfo();
 
                 try {
-                    Intent k = new Intent(initial_transaction.this, home.class);
+                    Intent k = new Intent(create_new_transaction.this, home.class);
                     startActivity(k);
 
                 } catch (Exception e) {

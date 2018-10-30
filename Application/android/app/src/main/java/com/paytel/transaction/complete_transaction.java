@@ -1,21 +1,24 @@
 package com.paytel.transaction;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 import com.paytel.util.TransactionDataObject;
 
-public class approvedeny_transaction extends AppCompatActivity{
+public class complete_transaction extends AppCompatActivity{
 
     TransactionDataObject new_transaction;
-
+    apicall_transaction aat;
+    ApiResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,9 @@ public class approvedeny_transaction extends AppCompatActivity{
             public void onClick(View v) {
                 //ADD DENY TO DB STUFF
                 //move to next frame
+
                 try {
-                    Intent k = new Intent(approvedeny_transaction.this, home.class);
+                    Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -46,12 +50,40 @@ public class approvedeny_transaction extends AppCompatActivity{
             public void onClick(View v) {
                 //move to next frame
                 try {
-                    Intent k = new Intent(approvedeny_transaction.this, home.class);
+                    Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+        WaitTask myTask = new complete_transaction.WaitTask();
+        myTask.execute();
+
+    }
+    class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            aat = new apicall_transaction();
+        }
+
+        protected Boolean doInBackground(Void... params) {
+            String transactionID =  ((global_objects) getApplication()).getCurrent_transaction().getTransactionId();
+            response= aat.callCloudLogic(transactionID, "confirm", "facial");
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean bool) {
+            super.onPostExecute(bool);
+            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
+            try {
+                Intent k = new Intent(complete_transaction.this, home.class);
+                startActivity(k);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

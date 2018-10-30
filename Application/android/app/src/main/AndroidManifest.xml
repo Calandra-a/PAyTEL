@@ -54,16 +54,16 @@
             android:name=".util.accountsettings"
             android:theme="@style/paytel_main"/>
         <activity
-            android:name=".transaction.initial_transaction"
+            android:name=".transaction.create_new_transaction"
             android:theme="@style/paytel_main"/>
         <activity
-            android:name=".transaction.buyer_transaction"
+            android:name=".transaction.start_buyer_transaction"
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".transaction.authentication_transaction_facial"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".transaction.approvedeny_transaction"
+            android:name=".transaction.complete_transaction"
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".sign_up.authentication_signup_identity"

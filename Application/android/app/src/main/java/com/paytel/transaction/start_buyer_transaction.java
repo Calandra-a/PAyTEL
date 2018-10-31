@@ -107,7 +107,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             amount.setText("Amount: $" + current_transaction.getAmount());
                             note.setText("Description: " + current_transaction.getNote());
-                            buyerID.setText("Buyer ID: " +  current_transaction.getBuyerId());
+                            buyerID.setText("Buyer ID: " +  current_transaction.getBuyerUsername());
                         }
                     });
                 }

@@ -19,7 +19,7 @@ import java.util.*;
 
 
 
-@com.amazonaws.mobileconnectors.apigateway.annotation.Service(endpoint = "https://dd6h4gihxi.execute-api.us-east-1.amazonaws.com/Development")
+@com.amazonaws.mobileconnectors.apigateway.annotation.Service(endpoint = "https://vs7tmxoipg.execute-api.us-east-1.amazonaws.com/Development")
 public interface SignupfacialinitialiMobileHubClient {
 
 

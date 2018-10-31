@@ -4,7 +4,7 @@
   "CredentialsProvider": {
     "CognitoIdentity": {
       "Default": {
-        "PoolId": "us-east-1:5e6948f1-28b8-4e51-918e-4179b6576197",
+        "PoolId": "us-east-1:0e84ac82-c7a7-4f12-9a2a-ec0c8538e76a",
         "Region": "us-east-1"
       }
     }
@@ -14,7 +14,7 @@
   },
   "S3TransferUtility": {
     "Default": {
-      "Bucket": "csi-userfiles-mobilehub-447478737",
+      "Bucket": "paytel-userfiles-mobilehub-2098009603",
       "Region": "us-east-1"
     }
   },
@@ -25,14 +25,14 @@
   },
   "ContentManager": {
     "Default": {
-      "Bucket": "csi-hosting-mobilehub-447478737",
+      "Bucket": "paytel-hosting-mobilehub-2098009603",
       "Region": "us-east-1",
-      "CloudFrontURL": "https://d38q9jt9olw4xd.cloudfront.net"
+      "CloudFrontURL": "https://d2665enwocpvz3.cloudfront.net"
     }
   },
   "PinpointAnalytics": {
     "Default": {
-      "AppId": "bbe5159d3c2a478db3057f4da25999c5",
+      "AppId": "bc4b629c84a64aeaa8af9ab1f294942c",
       "Region": "us-east-1"
     }
   },
@@ -43,7 +43,7 @@
   },
   "UserFileManager": {
     "Default": {
-      "Bucket": "csi-userfiles-mobilehub-447478737",
+      "Bucket": "paytel-userfiles-mobilehub-2098009603",
       "Region": "us-east-1"
     }
   },

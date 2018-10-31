@@ -10,7 +10,6 @@ import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.amazonaws.mobileconnectors.apigateway.ApiRequest;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.amazonaws.util.IOUtils;
-import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
 
 import org.json.JSONException;

@@ -11,7 +11,7 @@ import com.amazonaws.mobileconnectors.apigateway.ApiRequest;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.amazonaws.util.IOUtils;
 import com.paytel.sign_up.authentication_signup_facial;
-import com.paytel.util.api.id4pxy6j7c4b.AuthenticatefacialMobileHubClient;
+import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,23 +21,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class apicall_facial{
-    private static final String LOG_TAG = authentication_signup_facial.class.getSimpleName();
+    private static final String LOG_TAG = authentication_transaction_facial.class.getSimpleName();
     String responseVal = null;
 
-    private AuthenticatefacialMobileHubClient apiClient;
+    private UsertransactionMobileHubClient apiClient;
 
     public String callCloudLogic(String Image, String pose) {
-        //apiClient = ((global_objects) getApplication()).getSignup_facial_api_client();
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
-                .build(AuthenticatefacialMobileHubClient.class);
+                .build(UsertransactionMobileHubClient.class);
 
         String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
-        //String userID = "us-east-1:2826223d-5f83-44c8-993c-b8dd105e202e";
+
         // Create components of api request
         final String method = "POST";
 
-        final String path = "/authenticate-facial";
+        final String path = "/transaction-facial";
 
         JSONObject json = new JSONObject();
         try {

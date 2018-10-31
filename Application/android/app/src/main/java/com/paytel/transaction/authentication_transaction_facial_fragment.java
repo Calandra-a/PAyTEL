@@ -1105,7 +1105,7 @@ public class authentication_transaction_facial_fragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            ((authentication_signup_facial)getActivity()).pictureIncomplete();
+                            ((authentication_transaction_facial)getActivity()).pictureIncomplete();
                         }
                     })
                     .create();
@@ -1148,7 +1148,7 @@ public class authentication_transaction_facial_fragment extends Fragment
             super.onPostExecute(bool);
             progress.dismiss();
             if (responseVal == "true") {
-                ((authentication_signup_facial) getActivity()).pictureComplete();
+                ((authentication_transaction_facial) getActivity()).pictureComplete();
             } else {
                 BadPictureDialog bad = new BadPictureDialog();
                 bad.setCancelable(false);

@@ -84,7 +84,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
             @Override
             public void run() {
-                userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                final userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
                 ((global_objects) getApplication()).setCurrent_user(current_user);
 
                 Set<String> transactionSet = current_user.getTransactions();
@@ -104,10 +104,20 @@ public class start_buyer_transaction extends AppCompatActivity {
                             TextView amount = findViewById(R.id.txt_amount);
                             TextView note = findViewById(R.id.txt_note);
                             TextView buyerID = findViewById(R.id.txt_buyerID);
+                            TextView user = findViewById(R.id.txt_username);
 
+                            Button approve = (Button) findViewById(R.id.btn_approve);
+                            Button deny = (Button) findViewById(R.id.btn_deny);
+
+                            if(current_transaction.getSellerUsername().equals(current_user.getUsername())) {
+                                approve.setVisibility(View.INVISIBLE);
+                                deny.setVisibility(View.INVISIBLE);
+                            }
+                            
                             amount.setText("Amount: $" + current_transaction.getAmount());
                             note.setText("Description: " + current_transaction.getNote());
                             buyerID.setText("Buyer ID: " +  current_transaction.getBuyerUsername());
+
                         }
                     });
                 }

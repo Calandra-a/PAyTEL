@@ -32,6 +32,8 @@ import User from "./Pages/User";
 import TableUser from "./Pages/TableUser";
 import TableTransactionFlagged from "./Pages/TableTransactionFlagged";
 import Home from "./Pages/Home";
+import EnhancedTable from "./Pages/EnhancedTable";
+import DialogSelect from "./Pages/DialogSelect";
 
 const drawerWidth = 240;
 
@@ -107,6 +109,10 @@ class Dashboard extends React.Component {
 
   state = {
     open: false
+  };
+
+  handleClickOpen = () => {
+    this.select.handleClickOpen();
   };
 
   handleDrawerOpen = () => {
@@ -224,7 +230,12 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Flagged Transactions" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                this.select.handleClickOpen();
+              }}
+            >
               <ListItemIcon>
                 <ListIcon />
               </ListItemIcon>
@@ -249,6 +260,7 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          <DialogSelect onRef={ref => (this.select = ref)} />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/transaction/:id" component={Transaction} />
@@ -260,6 +272,7 @@ class Dashboard extends React.Component {
             />
             <Route exact path="/user/:id" component={User} />
             <Route exact path="/users" component={TableUser} />
+            <Route exact path="/testing" component={EnhancedTable} />
             <Route component={NotFound} />
           </Switch>
         </main>

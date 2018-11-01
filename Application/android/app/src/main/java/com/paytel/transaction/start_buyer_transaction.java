@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +73,20 @@ public class start_buyer_transaction extends AppCompatActivity {
             }
         });
 
-
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Pending transaction");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //toolbar back button
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),home.class));
+                finish();
+            }
+        });
 
     }
     void initialize(){

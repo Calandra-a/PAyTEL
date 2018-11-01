@@ -58,7 +58,7 @@
             android:theme="@style/paytel_main"/>
         <activity
             android:name=".transaction.start_buyer_transaction"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/paytel_main"/>
         <activity
             android:name=".transaction.authentication_transaction_facial"
             android:theme="@style/AppTheme"/>

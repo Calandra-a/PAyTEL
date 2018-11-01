@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/paytel_logo_128" />
+                android:src="@drawable/paytel_incognitologo_128" />
         </FrameLayout>
     </android.support.v7.widget.Toolbar>
 

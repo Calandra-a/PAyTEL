@@ -3,10 +3,9 @@ import { success, failure } from "./libs/response-lib";
 
 export async function main(event, context, callback) {
   const params = {
-    //TableName: "transactions",
-    TableName: "csi-mobilehub-447478737-transactions",
+    TableName: "paytel-mobilehub-2098009603-user-data",
     Key: {
-      transaction_id: event.pathParameters.transaction_id
+      userId: event.pathParameters.user_id
     }
   };
 
@@ -15,11 +14,9 @@ export async function main(event, context, callback) {
     if (result.Item) {
       callback(null, success(result.Item));
     } else {
-      callback(null, failure({ status: false, error: "Item not found." }));
+      callback(null, failure({ status: false, error: "User not found." }));
     }
   } catch (e) {
-    console.log(e);
-
     callback(null, failure({ status: false }));
   }
 }

@@ -4,16 +4,18 @@ import { success, failure } from "./libs/response-lib";
 export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: "transactions",
+    TableName: "paytel-mobilehub-2098009603-transactions",
     Key: {
-      transactionID: event.pathParameters.transactionID
+      transaction_id: event.pathParameters.transaction_id
     },
-    UpdateExpression: "SET content = :content",
+    UpdateExpression: data.flag ? "SET flag = :flag" : "REMOVE flag",
     ExpressionAttributeValues: {
-      ":content": data.content ? data.content : null
+      ":flag": data.flag
     },
     ReturnValues: "ALL_NEW"
   };
+
+  if (!data.flag) delete params.ExpressionAttributeValues;
 
   try {
     const result = await dynamoDbLib.call("update", params);

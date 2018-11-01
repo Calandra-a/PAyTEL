@@ -11,18 +11,10 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import DatabaseTable from "./Pages/DatabaseTable";
+import TableTransaction from "./Pages/TableTransaction";
 import NotFound from "./Pages/NotFound";
-import TestPage from "./Pages/TestPage";
 import logo_paytel from "../Resources/Images/logo_paytel.png";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-  withRouter,
-  Switch
-} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -35,6 +27,11 @@ import HomeIcon from "@material-ui/icons/Home";
 import FlagIcon from "@material-ui/icons/Flag";
 import ListIcon from "@material-ui/icons/List";
 import { Auth } from "aws-amplify";
+import Transaction from "./Pages/Transaction";
+import User from "./Pages/User";
+import TableUser from "./Pages/TableUser";
+import TableTransactionFlagged from "./Pages/TableTransactionFlagged";
+import Home from "./Pages/Home";
 
 const drawerWidth = 240;
 
@@ -174,14 +171,17 @@ class Dashboard extends React.Component {
           </div>
           <Divider />
           <List>
-            <Link to="/">
-              <ListItem button>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary="Home" />
-              </ListItem>
-            </Link>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/");
+              }}
+            >
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
           </List>
           <Divider />
           <List>
@@ -191,7 +191,12 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="View Complaints" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/users");
+              }}
+            >
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
@@ -208,11 +213,16 @@ class Dashboard extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Manage Transactions" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/transactions/flagged");
+              }}
+            >
               <ListItemIcon>
                 <FlagIcon />
               </ListItemIcon>
-              <ListItemText primary="Flag Transaction" />
+              <ListItemText primary="Flagged Transactions" />
             </ListItem>
             <ListItem button>
               <ListItemIcon>
@@ -240,8 +250,16 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route exact path="/" component={TestPage} />
-            <Route path="/transactions" component={DatabaseTable} />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/transaction/:id" component={Transaction} />
+            <Route exact path="/transactions" component={TableTransaction} />
+            <Route
+              exact
+              path="/transactions/flagged"
+              component={TableTransactionFlagged}
+            />
+            <Route exact path="/user/:id" component={User} />
+            <Route exact path="/users" component={TableUser} />
             <Route component={NotFound} />
           </Switch>
         </main>

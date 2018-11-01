@@ -18,45 +18,80 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
-        - dynamodb:PutItem
         - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  tPut:
-    handler: tPut.main
-    events:
-      - http:
-          path: transactions
-          method: post
-          cors: true
-          authorizer: aws_iam
-  tGet:
-    handler: tGet.main
-    events:
-      - http:
-          path: transactions/{transaction_id}
-          method: get
-          cors: true
-          authorizer: aws_iam
-  tScan:
-    handler: tScan.main
-    events:
-      - http:
-          path: transactions
-          method: get
-          cors: true
-          authorizer: aws_iam
-  tUpdate:
-    handler: tUpdate.main
+  flag-transaction:
+    handler: flag-transaction.main
     events:
       - http:
           path: transactions/{transaction_id}
           method: put
           cors: true
           authorizer: aws_iam
+          request:
+            parameters:
+              paths:
+                transaction_id: true
+  get-transaction:
+    handler: get-transaction.main
+    events:
+      - http:
+          path: transactions/{transaction_id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+          request:
+            parameters:
+              paths:
+                transaction_id: true
+  get-transactions:
+    handler: get-transactions.main
+    events:
+      - http:
+          path: transactions
+          method: get
+          cors: true
+          authorizer: aws_iam
+          request:
+            parameters:
+              querystrings:
+                t: false
+                b: false
+                s: false
+                u: false
+  get-transactions-flagged:
+    handler: get-transactions-flagged.main
+    events:
+      - http:
+          path: transactions/flagged
+          method: get
+          cors: true
+          authorizer: aws_iam
+  get-user:
+    handler: get-user.main
+    events:
+      - http:
+          path: users/{user_id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+          request:
+            parameters:
+              paths:
+                user_id: true
+  get-users:
+    handler: get-users.main
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+          authorizer: aws_iam
+          request:
+            parameters:
+              querystrings:
+                u: false

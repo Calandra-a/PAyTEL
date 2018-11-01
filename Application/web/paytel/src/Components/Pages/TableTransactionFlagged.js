@@ -104,9 +104,9 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, {
 })(TablePaginationActions);
 
 let counter = 0;
-function createData(date, buyer, seller) {
+function createData(date, transaction_id, buyer, seller) {
   counter += 1;
-  return { id: counter, date, buyer, seller };
+  return { id: counter, transaction_id, date, buyer, seller };
 }
 
 const styles = theme => ({
@@ -122,35 +122,27 @@ const styles = theme => ({
   }
 });
 
-class DatabaseTable extends React.Component {
+class TableTransactionFlagged extends React.Component {
   state = {
-    rows: [
-      createData("Oct-6-2018", 7823, 8097),
-      createData("Oct-3-2018", 3972, 6818),
-      createData("Oct-2-2018", 6786, 4811),
-      createData("Oct-2-2018", 7919, 8465),
-      createData("Aug-29-2018", 4827, 8090),
-      createData("Aug-27-2018", 9727, 9632),
-      createData("Aug-25-2018", 9438, 5414),
-      createData("Aug-23-2018", 8216, 5514),
-      createData("Aug-23-2018", 5823, 5021),
-      createData("Aug-22-2018", 5397, 9837),
-      createData("Aug-19-2018", 6300, 5356),
-      createData("Aug-17-2018", 9848, 6290),
-      createData("Aug-16-2018", 9481, 7906)
-    ],
+    rows: [],
     page: 0,
-    rowsPerPage: 5
+    rowsPerPage: 5,
+    isLoading: true
   };
 
   async componentDidMount() {
     try {
       const transactions = await this.transactions();
-      console.log(transactions);
+      for (var i of transactions)
+        this.state.rows.push(
+          createData(i.time_created, i.transaction_id, i.buyer_id, i.seller_id)
+        );
       this.setState({ transactions });
     } catch (e) {
       alert(e);
     }
+
+    this.setState({ isLoading: false });
   }
 
   handleChangePage = (event, page) => {
@@ -162,7 +154,7 @@ class DatabaseTable extends React.Component {
   };
 
   transactions() {
-    return API.get("transactions", "/transactions");
+    return API.get("admin", "/transactions/flagged");
   }
 
   render() {
@@ -172,58 +164,85 @@ class DatabaseTable extends React.Component {
       rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>ID</TableCell>
-                <TableCell numeric>Buyer</TableCell>
-                <TableCell numeric>Seller</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(row => {
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell numeric>{row.id}</TableCell>
-                      <TableCell numeric>{row.buyer}</TableCell>
-                      <TableCell numeric>{row.seller}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
+      !this.state.isLoading && (
+        <Paper className={classes.root}>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell numeric>Buyer</TableCell>
+                  <TableCell numeric>Seller</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(row => {
+                    return (
+                      <TableRow key={row.id}>
+                        <TableCell>{row.date}</TableCell>
+                        <TableCell
+                          button
+                          onClick={() => {
+                            this.props.history.push(
+                              "/transaction/".concat(row.transaction_id)
+                            );
+                          }}
+                        >
+                          {row.transaction_id}
+                        </TableCell>
+                        <TableCell
+                          button
+                          onClick={() => {
+                            this.props.history.push("/user/".concat(row.buyer));
+                          }}
+                        >
+                          {row.buyer}
+                        </TableCell>
+                        <TableCell
+                          button
+                          onClick={() => {
+                            this.props.history.push(
+                              "/user/".concat(row.seller)
+                            );
+                          }}
+                        >
+                          {row.seller}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    colSpan={3}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActionsWrapped}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </div>
+        </Paper>
+      )
     );
   }
 }
 
-DatabaseTable.propTypes = {
+TableTransactionFlagged.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(DatabaseTable);
+export default withStyles(styles)(TableTransactionFlagged);

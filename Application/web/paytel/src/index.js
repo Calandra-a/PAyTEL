@@ -16,7 +16,7 @@ Amplify.configure({
   API: {
     endpoints: [
       {
-        name: "transactions",
+        name: "admin",
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
       }

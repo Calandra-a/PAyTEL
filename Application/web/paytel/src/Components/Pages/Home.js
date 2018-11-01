@@ -12,26 +12,25 @@ const styles = theme => ({
   }
 });
 
-function TestPage(props) {
+function NotFound(props) {
   const { classes } = props;
 
   return (
     <div>
       <Paper className={classes.root} elevation={1}>
         <Typography variant="headline" component="h3">
-          This is a sheet of paper.
+          This is the Home Component
         </Typography>
         <Typography component="p">
-          Paper can be used to build surface or other elements for your
-          application.
+          Use the side navigation to navigate.
         </Typography>
       </Paper>
     </div>
   );
 }
 
-TestPage.propTypes = {
+NotFound.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(TestPage);
+export default withStyles(styles)(NotFound);

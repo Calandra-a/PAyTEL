@@ -34,6 +34,7 @@ public class authentication_signup_facial extends AppCompatActivity {
             @Override
             public void run() {
                 ((global_objects) getApplication()).getDynamoDBMapper().save(new_user);
+                pictureComplete();
                 // Item saved
             }
         }).start();

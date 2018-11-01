@@ -21,11 +21,11 @@ import java.util.Map;
 
 public class apicall_facial{
     private static final String LOG_TAG = authentication_transaction_facial.class.getSimpleName();
-    String responseVal = null;
+    ApiResponse responseVal;
 
     private UsertransactionMobileHubClient apiClient;
 
-    public String callCloudLogic(String Image, String pose) {
+    public ApiResponse callCloudLogic(String Image, String pose) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
@@ -93,15 +93,8 @@ public class apicall_facial{
                         final String responseData = IOUtils.toString(responseContentStream);
                         Log.d(LOG_TAG, "Response : " + responseData);
                     }
-
+                    responseVal = response;
                     Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
-
-                    if (response.getStatusCode() != 200) {
-                        responseVal = "false";
-
-                    }else {
-                        responseVal = "true";
-                    }
 
 
                 } catch (final Exception exception) {

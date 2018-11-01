@@ -50,6 +50,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.paytel.R;
 import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.util.autofit_textureview;
@@ -83,7 +84,7 @@ public class authentication_transaction_facial_fragment extends Fragment
     ProgressDialog progress;
     apicall_facial aaf;
     String encodedString;
-    String responseVal;
+    ApiResponse responseVal;
     WaitTask myTask;
 
     static {
@@ -1113,6 +1114,7 @@ public class authentication_transaction_facial_fragment extends Fragment
     }
 
     class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        ApiResponse globalResponse;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1133,13 +1135,8 @@ public class authentication_transaction_facial_fragment extends Fragment
 
             encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
 
-            if ((aaf.callCloudLogic(encodedString, pose)) == "true") {
-                responseVal = "true";
-            }
-
-            else {
-                responseVal = "false";
-            }
+            globalResponse= aaf.callCloudLogic(encodedString, pose);
+            System.out.println(globalResponse);
             return true;
         }
 
@@ -1147,7 +1144,8 @@ public class authentication_transaction_facial_fragment extends Fragment
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
             progress.dismiss();
-            if (responseVal == "true") {
+            System.out.println(globalResponse);
+            if (globalResponse.getStatusCode() == 200) {
                 ((authentication_transaction_facial) getActivity()).pictureComplete();
             } else {
                 BadPictureDialog bad = new BadPictureDialog();

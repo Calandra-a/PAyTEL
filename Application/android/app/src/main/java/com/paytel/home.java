@@ -106,7 +106,7 @@ public class home extends AppCompatActivity{
 
                 if ((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))) {
                     String transID = transIDs.get(Integer.parseInt(transactionNumber));
-                    Toast.makeText(getBaseContext(), transID, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getBaseContext(), transID, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(home.this, start_buyer_transaction.class);
                     intent.putExtra("name", transID);
                     startActivity(intent);
@@ -229,6 +229,7 @@ public class home extends AppCompatActivity{
             }
         }).start();
     }
+
     void initializingTranasactions(){
         try {
             runOnUiThread(new Runnable() {
@@ -248,6 +249,7 @@ public class home extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
     void refreshTransactions(){
         runOnUiThread(new Runnable() {
             @Override

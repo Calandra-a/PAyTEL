@@ -191,12 +191,6 @@ class Dashboard extends React.Component {
           </List>
           <Divider />
           <List>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon />
-              </ListItemIcon>
-              <ListItemText primary="View Complaints" />
-            </ListItem>
             <ListItem
               button
               onClick={() => {
@@ -244,12 +238,6 @@ class Dashboard extends React.Component {
           </List>
           <Divider />
           <List>
-            <ListItem button>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
             <ListItem button onClick={this.handleLogout}>
               <ListItemIcon>
                 <ClearIcon />

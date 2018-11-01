@@ -67,9 +67,12 @@ class Transaction extends React.Component {
             <Typography variant="headline" component="h3">
               Transaction # {transaction.transaction_id}
             </Typography>
-            <Typography component="p">Buyer: {transaction.buyer_id}</Typography>
+            <Typography component="p">Buyer: {transaction.buyer_username}</Typography>
             <Typography component="p">
-              Seller: {transaction.seller_id}
+              Seller: {transaction.seller_username}
+            </Typography>
+			<Typography component="p">
+              Status: {transaction.transaction_status	}
             </Typography>
             <Typography component="p">
               Flag: {transaction.flag ? transaction.flag : "No flag"}

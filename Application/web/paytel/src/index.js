@@ -19,7 +19,13 @@ Amplify.configure({
         name: "admin",
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
+      },
+	  {
+        name: "api_pull",
+        endpoint: "https://eoa9urrjyl.execute-api.us-east-1.amazonaws.com/Development/",
+        region: config.apiGateway.REGION
       }
+
     ]
   }
 });

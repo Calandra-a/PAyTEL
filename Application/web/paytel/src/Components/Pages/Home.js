@@ -19,10 +19,10 @@ function NotFound(props) {
     <div>
       <Paper className={classes.root} elevation={1}>
         <Typography variant="headline" component="h3">
-          This is the Home Component
+          Welcome to PAyTEL Admin Dashboard!
         </Typography>
         <Typography component="p">
-          Use the side navigation to navigate.
+          You can flag transactions, search users, and monitor transactions!
         </Typography>
       </Paper>
     </div>

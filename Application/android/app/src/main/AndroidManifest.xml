@@ -54,6 +54,9 @@
             android:name=".util.accountsettings"
             android:theme="@style/paytel_main"/>
         <activity
+            android:name=".util.add_funds"
+            android:theme="@style/paytel_main"/>
+        <activity
             android:name=".transaction.create_new_transaction"
             android:theme="@style/paytel_main"/>
         <activity

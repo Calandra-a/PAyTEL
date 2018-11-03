@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,10 @@ import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
 import com.paytel.transaction.create_new_transaction;
 import com.paytel.transaction.start_buyer_transaction;
+import com.paytel.util.add_funds;
 import com.paytel.util.userDataObject;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -45,6 +50,7 @@ import java.util.Set;
 
 public class home extends AppCompatActivity{
     private TextView mTextMessage;
+    private CardView mCardview;
     private static PinpointManager pinpointManager;
 
     userDataObject user;
@@ -60,19 +66,13 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
                     refreshTransactions();
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
                     refreshTransactions();
                     queryUser();
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    refreshTransactions();
-                    return true;
-            }
+                }
             return false;
         }
     };
@@ -87,15 +87,17 @@ public class home extends AppCompatActivity{
         setSupportActionBar(mTopToolbar);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        mCardview = findViewById(R.id.cardView);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
         //Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
-
         queryUser();
+
         FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
+        Button btn_funds = findViewById(R.id.btn_funds);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -120,6 +122,20 @@ public class home extends AppCompatActivity{
                 //move to next frame
                 try {
                     Intent k = new Intent(home.this, create_new_transaction.class);
+                    startActivity(k);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btn_funds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                try {
+                    Intent k = new Intent(home.this, add_funds.class);
                     startActivity(k);
 
                 } catch (Exception e) {
@@ -183,8 +199,6 @@ public class home extends AppCompatActivity{
                     stringBuilder.append(jsonFormOfItem + "\n\n");
                 }
 
-                // Add your code here to deal with the data result
-                //Log.d("Query results: ", stringBuilder.toString());
                 if (result.isEmpty()) {
                     // There were no items matching your query.
                     Log.d("Query results: ", "none");
@@ -208,6 +222,7 @@ public class home extends AppCompatActivity{
 
                     //here
                     try {
+
                         Set<String> transactionSet = current_user.getTransactions();
                         ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                         for (int i = 0; i < dataSet.size(); i++) {
@@ -242,6 +257,10 @@ public class home extends AppCompatActivity{
                         eachTransaction.add(i + ") " + "$" + transAmounts.get(i));
                     ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, eachTransaction);
                     listView.setAdapter(adapter);
+
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: "+Double.toString(wallet));
                 }
             });
         }

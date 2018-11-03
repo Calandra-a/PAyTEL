@@ -135,7 +135,12 @@ class TableTransaction extends React.Component {
       const transactions = await this.transactions();
       for (var i of transactions)
         this.state.rows.push(
-          createData(i.time_created, i.transaction_id, i.buyer_username, i.seller_username)
+          createData(
+            i.time_created,
+            i.transaction_id,
+            i.buyer_username,
+            i.seller_username
+          )
         );
       this.setState({ transactions });
     } catch (e) {
@@ -187,7 +192,6 @@ class TableTransaction extends React.Component {
                       <TableRow key={row.id}>
                         <TableCell>{row.date}</TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push(
                               "/transaction/".concat(row.transaction_id)
@@ -197,7 +201,6 @@ class TableTransaction extends React.Component {
                           {row.transaction_id}
                         </TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push("/user/".concat(row.buyer));
                           }}
@@ -205,7 +208,6 @@ class TableTransaction extends React.Component {
                           {row.buyer}
                         </TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push(
                               "/user/".concat(row.seller)

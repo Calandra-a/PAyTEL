@@ -16,7 +16,7 @@ import Hidden from "@material-ui/core/Hidden";
 const styles = theme => ({
   gridStyling: {
     height: "100vh",
-    backgroundColor: "#002984",
+    backgroundColor: "#f7b271",
     display: "flex",
     flexGrow: 1,
     justifyContent: "center",
@@ -37,7 +37,9 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2
   },
   img: {
-    paddingTop: theme.spacing.unit * 4
+    marginTop: theme.spacing.unit * 4,
+    backgroundColor: "white",
+    borderRadius: "25%"
   },
   button: {
     marginTop: theme.spacing.unit * 4

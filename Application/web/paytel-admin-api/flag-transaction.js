@@ -8,19 +8,18 @@ export async function main(event, context, callback) {
     Key: {
       transaction_id: event.pathParameters.transaction_id
     },
-    UpdateExpression: data.flag ? "SET flag = :flag" : "REMOVE flag",
+    UpdateExpression: "SET transaction_status = :status",
     ExpressionAttributeValues: {
-      ":flag": data.flag
+      ":status": data.flag ? "flagged" : "confirm"
     },
     ReturnValues: "ALL_NEW"
   };
-
-  if (!data.flag) delete params.ExpressionAttributeValues;
 
   try {
     const result = await dynamoDbLib.call("update", params);
     callback(null, success({ status: true }));
   } catch (e) {
+    console.log(e);
     callback(null, failure({ status: false }));
   }
 }

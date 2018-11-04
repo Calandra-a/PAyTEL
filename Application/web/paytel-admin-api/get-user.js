@@ -6,6 +6,7 @@ export async function main(event, context, callback) {
     TableName: "paytel-mobilehub-2098009603-user-data",
     Key: {
       userId: event.pathParameters.user_id
+      /**username: event.pathParameters.username ## implement when primary key is username*/
     }
   };
 

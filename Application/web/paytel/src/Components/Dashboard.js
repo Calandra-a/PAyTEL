@@ -210,6 +210,17 @@ class Dashboard extends React.Component {
             <ListItem
               button
               onClick={() => {
+                this.props.history.push("/testing");
+              }}
+            >
+              <ListItemIcon>
+                <AttachMoneyIcon />
+              </ListItemIcon>
+              <ListItemText primary="New Table Test" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
                 this.props.history.push("/transactions/flagged");
               }}
             >

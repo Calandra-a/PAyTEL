@@ -70,7 +70,7 @@ public class complete_transaction extends AppCompatActivity{
 
         protected Boolean doInBackground(Void... params) {
             String transactionID =  ((global_objects) getApplication()).getCurrent_transaction().getTransactionId();
-            response= aat.callCloudLogic(transactionID, "confirm", "facial");
+            response = aat.callCloudLogic(transactionID, "confirm", "facial");
             return true;
         }
 

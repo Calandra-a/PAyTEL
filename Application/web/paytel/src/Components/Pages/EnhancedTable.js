@@ -21,9 +21,16 @@ import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { API } from "aws-amplify";
 
 let counter = 0;
-function createData(date, transaction_id, buyer, seller) {
+function createData(date, transaction_id, buyer, seller, transaction_status) {
   counter += 1;
-  return { id: counter, date, transaction_id, buyer, seller };
+  return {
+    id: counter,
+    date,
+    transaction_id,
+    buyer,
+    seller,
+    transaction_status
+  };
 }
 
 function desc(a, b, orderBy) {
@@ -76,6 +83,12 @@ const rows = [
     numeric: false,
     disablePadding: false,
     label: "Seller Username"
+  },
+  {
+    id: "transaction_status",
+    numeric: false,
+    disablePadding: false,
+    label: "Transaction Status"
   }
 ];
 
@@ -261,7 +274,8 @@ class EnhancedTable extends React.Component {
             i.time_created,
             i.transaction_id,
             i.buyer_username,
-            i.seller_username
+            i.seller_username,
+            i.transaction_status
           )
         );
       }
@@ -364,6 +378,7 @@ class EnhancedTable extends React.Component {
                         <TableCell>{n.transaction_id}</TableCell>
                         <TableCell>{n.buyer}</TableCell>
                         <TableCell>{n.seller}</TableCell>
+                        <TableCell>{n.transaction_status}</TableCell>
                       </TableRow>
                     );
                   })}

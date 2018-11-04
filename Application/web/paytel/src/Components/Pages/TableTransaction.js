@@ -131,18 +131,14 @@ class TableTransaction extends React.Component {
   };
 
   async componentDidMount() {
-    try {
-      const transactions = await this.transactions();
-      for (var i of transactions)
-        this.state.rows.push(
-          createData(i.time_created, i.transaction_id, i.buyer_username, i.seller_username)
-        );
-      this.setState({ transactions });
-    } catch (e) {
-      alert(e);
-    }
-
+    await this.transactions(this.props.location.search);
     this.setState({ isLoading: false });
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    this.setState({ rows: [] });
+    await this.transactions(nextProps.location.search);
+    this.handleChangePage(null, 0);
   }
 
   handleChangePage = (event, page) => {
@@ -153,11 +149,24 @@ class TableTransaction extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  transactions() {
-    return API.get(
-      "admin",
-      "/transactions".concat(this.props.location.search || "")
-    );
+  async transactions(search) {
+    try {
+      const transactions = await API.get(
+        "admin",
+        "/transactions".concat(search || "")
+      );
+      for (var i of transactions)
+        this.state.rows.push(
+          createData(
+            i.time_created,
+            i.transaction_id,
+            i.buyer_username,
+            i.seller_username
+          )
+        );
+    } catch (e) {
+      alert(e);
+    }
   }
 
   render() {
@@ -175,8 +184,8 @@ class TableTransaction extends React.Component {
                 <TableRow>
                   <TableCell>Date</TableCell>
                   <TableCell>ID</TableCell>
-                  <TableCell numeric>Buyer</TableCell>
-                  <TableCell numeric>Seller</TableCell>
+                  <TableCell>Buyer</TableCell>
+                  <TableCell>Seller</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -187,7 +196,6 @@ class TableTransaction extends React.Component {
                       <TableRow key={row.id}>
                         <TableCell>{row.date}</TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push(
                               "/transaction/".concat(row.transaction_id)
@@ -197,7 +205,6 @@ class TableTransaction extends React.Component {
                           {row.transaction_id}
                         </TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push("/user/".concat(row.buyer));
                           }}
@@ -205,7 +212,6 @@ class TableTransaction extends React.Component {
                           {row.buyer}
                         </TableCell>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push(
                               "/user/".concat(row.seller)

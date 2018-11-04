@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -18,9 +18,7 @@ import { Route, Switch } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import SettingsIcon from "@material-ui/icons/Settings";
 import ClearIcon from "@material-ui/icons/Clear";
-import MailIcon from "@material-ui/icons/Mail";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
@@ -33,7 +31,7 @@ import TableUser from "./Pages/TableUser";
 import TableTransactionFlagged from "./Pages/TableTransactionFlagged";
 import Home from "./Pages/Home";
 import EnhancedTable from "./Pages/EnhancedTable";
-import DialogSelect from "./Pages/DialogSelect";
+import DialogSelect from "./Pages/DatabaseLookup";
 
 const drawerWidth = 240;
 
@@ -103,10 +101,6 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     open: false
   };
@@ -212,6 +206,17 @@ class Dashboard extends React.Component {
                 <AttachMoneyIcon />
               </ListItemIcon>
               <ListItemText primary="Manage Transactions" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                this.props.history.push("/testing");
+              }}
+            >
+              <ListItemIcon>
+                <AttachMoneyIcon />
+              </ListItemIcon>
+              <ListItemText primary="New Table Test" />
             </ListItem>
             <ListItem
               button

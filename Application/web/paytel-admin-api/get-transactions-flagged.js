@@ -4,7 +4,10 @@ import { success, failure } from "./libs/response-lib";
 export async function main(event, context, callback) {
   const params = {
     TableName: "paytel-mobilehub-2098009603-transactions",
-    FilterExpression: "attribute_exists(flag)"
+    FilterExpression: "transaction_status = :status",
+    ExpressionAttributeValues: {
+      ":status": "flagged"
+    }
   };
 
   try {

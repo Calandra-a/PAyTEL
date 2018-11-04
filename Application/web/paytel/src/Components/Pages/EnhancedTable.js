@@ -15,14 +15,22 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
+import FlagIcon from "@material-ui/icons/Flag";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
+import { API } from "aws-amplify";
 
 let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
+function createData(date, transaction_id, buyer, seller, transaction_status) {
   counter += 1;
-  return { id: counter, name, calories, fat, carbs, protein };
+  return {
+    id: counter,
+    date,
+    transaction_id,
+    buyer,
+    seller,
+    transaction_status
+  };
 }
 
 function desc(a, b, orderBy) {
@@ -53,15 +61,35 @@ function getSorting(order, orderBy) {
 
 const rows = [
   {
-    id: "name",
+    id: "date",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)"
+    label: "Date"
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" }
+  {
+    id: "transaction_id",
+    numeric: false,
+    disablePadding: false,
+    label: "Transaction ID"
+  },
+  {
+    id: "buyer",
+    numeric: false,
+    disablePadding: false,
+    label: "Buyer Username"
+  },
+  {
+    id: "seller",
+    numeric: false,
+    disablePadding: false,
+    label: "Seller Username"
+  },
+  {
+    id: "transaction_status",
+    numeric: false,
+    disablePadding: false,
+    label: "Transaction Status"
+  }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -167,17 +195,17 @@ let EnhancedTableToolbar = props => {
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography variant="h6" id="tableTitle">
-            Nutrition
+          <Typography variant="title" id="tableTitle">
+            Database
           </Typography>
         )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
+          <Tooltip title="Flag">
+            <IconButton aria-label="Flag">
+              <FlagIcon />
             </IconButton>
           </Tooltip>
         ) : (
@@ -215,26 +243,46 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: "asc",
-    orderBy: "calories",
+    orderBy: "date",
     selected: [],
-    data: [
-      createData("Cupcake", 305, 3.7, 67, 4.3),
-      createData("Donut", 452, 25.0, 51, 4.9),
-      createData("Eclair", 262, 16.0, 24, 6.0),
-      createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-      createData("Gingerbread", 356, 16.0, 49, 3.9),
-      createData("Honeycomb", 408, 3.2, 87, 6.5),
-      createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-      createData("Jelly Bean", 375, 0.0, 94, 0.0),
-      createData("KitKat", 518, 26.0, 65, 7.0),
-      createData("Lollipop", 392, 0.2, 98, 0.0),
-      createData("Marshmallow", 318, 0, 81, 2.0),
-      createData("Nougat", 360, 19.0, 9, 37.0),
-      createData("Oreo", 437, 18.0, 63, 4.0)
-    ],
+    data: [],
     page: 0,
-    rowsPerPage: 5
+    rowsPerPage: 5,
+    isLoading: true
   };
+
+  async componentDidMount() {
+    await this.transactions(this.props.location.search);
+    this.setState({ isLoading: false });
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    this.setState({ data: [] });
+    await this.transactions(nextProps.location.search);
+    this.handleChangePage(null, 0);
+  }
+
+  async transactions(search) {
+    try {
+      const transactions = await API.get(
+        "admin",
+        "/transactions".concat(search || "")
+      );
+      for (var i of transactions) {
+        this.state.data.push(
+          createData(
+            i.time_created,
+            i.transaction_id,
+            i.buyer_username,
+            i.seller_username,
+            i.transaction_status
+          )
+        );
+      }
+    } catch (e) {
+      alert(e);
+    }
+  }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -293,69 +341,71 @@ class EnhancedTable extends React.Component {
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.name}
-                      </TableCell>
-                      <TableCell numeric>{n.calories}</TableCell>
-                      <TableCell numeric>{n.fat}</TableCell>
-                      <TableCell numeric>{n.carbs}</TableCell>
-                      <TableCell numeric>{n.protein}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "Previous Page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "Next Page"
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
+      !this.state.isLoading && (
+        <Paper className={classes.root}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleClick(event, n.id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isSelected} />
+                        </TableCell>
+                        <TableCell component="th" scope="row" padding="none">
+                          {n.date}
+                        </TableCell>
+                        <TableCell>{n.transaction_id}</TableCell>
+                        <TableCell>{n.buyer}</TableCell>
+                        <TableCell>{n.seller}</TableCell>
+                        <TableCell>{n.transaction_status}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "Previous Page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "Next Page"
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+      )
     );
   }
 }

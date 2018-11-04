@@ -1,13 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-  withRouter,
-  Switch
-} from "react-router-dom";
 import Routes from "./Routes.js";
 
 class App extends Component {

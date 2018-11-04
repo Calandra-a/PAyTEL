@@ -5,7 +5,6 @@
     <string name="title_activity_home">home</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Transactions</string>
-    <string name="title_notifications">Notifications</string>
 
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>

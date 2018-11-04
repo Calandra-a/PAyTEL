@@ -119,18 +119,22 @@ public class start_buyer_transaction extends AppCompatActivity {
                             TextView note = findViewById(R.id.txt_note);
                             TextView buyerID = findViewById(R.id.txt_buyerID);
                             TextView user = findViewById(R.id.txt_username);
+                            TextView status = findViewById(R.id.txt_status);
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
 
-                            if(current_transaction.getSellerUsername().equals(current_user.getUsername())) {
-                                approve.setVisibility(View.INVISIBLE);
-                                deny.setVisibility(View.INVISIBLE);
+                            if(current_transaction.getTransactionStatus() == "pending"){
+                                if(current_transaction.getSellerUsername().equals(current_user.getUsername())) {
+                                    approve.setVisibility(View.VISIBLE);
+                                    deny.setVisibility(View.VISIBLE);
+                                }
                             }
-                            
+
                             amount.setText("Amount: $" + current_transaction.getAmount());
                             note.setText("Description: " + current_transaction.getNote());
                             buyerID.setText("Buyer ID: " +  current_transaction.getBuyerUsername());
+                            status.setText("Status: " + current_transaction.getTransactionStatus());
 
                         }
                     });

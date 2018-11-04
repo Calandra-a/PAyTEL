@@ -56,8 +56,9 @@ public class home extends AppCompatActivity{
     userDataObject user;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
-    ArrayList<String> transTime = new ArrayList<>();
-    ArrayList<String> eachTransaction = new ArrayList<>();
+    ArrayList<String> transStatus = new ArrayList<>();
+    ArrayList<String> completedTransaction = new ArrayList<>();
+    ArrayList<String> pendingTransaction = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,7 +82,8 @@ public class home extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
+        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
@@ -99,7 +101,23 @@ public class home extends AppCompatActivity{
         FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
         Button btn_funds = findViewById(R.id.btn_funds);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+                String viewString = ((TextView) arg1).getText().toString();
+                String transactionNumber = viewString.substring(0, viewString.indexOf(")"));
+                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);
+
+                if ((transAmounts.get(Integer.parseInt(transactionNumber)).equals(amount))) {
+                    String transID = transIDs.get(Integer.parseInt(transactionNumber));
+                    //Toast.makeText(getBaseContext(), transID, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", transID);
+                    startActivity(intent);
+                }
+            }
+        });
+        completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
                 String viewString = ((TextView) arg1).getText().toString();
@@ -229,6 +247,7 @@ public class home extends AppCompatActivity{
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
                             transAmounts.add(transaction.getAmount());
+                            transStatus.add(transaction.getTransactionStatus());
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -250,13 +269,34 @@ public class home extends AppCompatActivity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ListView listView = (ListView) findViewById(R.id.mobile_list);
+                    String status = null;
+                    ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                    ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+
                     Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
-                    for (int i = 0; i < dataSet.size(); i++)
-                        eachTransaction.add(i + ") " + "$" + transAmounts.get(i));
-                    ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, eachTransaction);
-                    listView.setAdapter(adapter);
+                    for (int i = 0; i < dataSet.size(); i++) {
+                        switch (transStatus.get(i)){
+                            case "confirm":
+                                completedTransaction.add(i + ") " + "$" + transAmounts.get(i));
+                                break;
+                            case "pending":
+                                pendingTransaction.add(i + ") " + "$" + transAmounts.get(i));
+                                break;
+                            case "flagged":
+                                pendingTransaction.add(i + ") " + "$" + transAmounts.get(i));
+                                break;
+                            case "cancel":
+                                completedTransaction.add(i + ") " + "$" + transAmounts.get(i));
+                                break;
+                        }
+                     //   eachTransaction.add(i + ") " + "$" + transAmounts.get(i)+" "+ status);
+                    }
+                    ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, completedTransaction);
+                    ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, pendingTransaction);
+
+                    pendinglistView.setAdapter(adapterPending);
+                    completedlistView.setAdapter(adapterCompleted);
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
                     Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
@@ -273,12 +313,14 @@ public class home extends AppCompatActivity{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ListView listView = (ListView) findViewById(R.id.mobile_list);
-                listView.setAdapter(null);
+                ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+                pendinglistView.setAdapter(null);
+                completedlistView.setAdapter(null);
                 transAmounts.clear();
                 transIDs.clear();
-                eachTransaction.clear();
-                transTime.clear();
+                pendingTransaction.clear();
+                completedTransaction.clear();
             }
         });
     }

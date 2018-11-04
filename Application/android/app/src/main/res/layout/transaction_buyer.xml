@@ -62,6 +62,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_note" />
 
+        <TextView
+            android:id="@+id/txt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:ems="8"
+            android:textSize="18sp"
+            android:hint="Status"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_buyerID" />
+
     </LinearLayout>
 
     <Button
@@ -70,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Approve"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
@@ -83,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Deny"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"

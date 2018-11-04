@@ -1152,14 +1152,7 @@ public class transaction_facial_fragment extends Fragment
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            /*progress = new ProgressDialog(getActivity());
-            progress.setTitle("Analyzing face");
-            progress.setMessage("Please wait...");
-            progress.setCancelable(false);
-            progress.setCanceledOnTouchOutside(false);
-            progress.show();*/
             aaf = new apicall_facial();
-
         }
 
         protected Boolean doInBackground(Void... params) {

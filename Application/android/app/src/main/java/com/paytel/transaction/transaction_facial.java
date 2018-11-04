@@ -27,9 +27,6 @@ public class transaction_facial extends AppCompatActivity {
         btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //move to next frame
-                //API CALL
-                //FINGERPRINT
                 try {
                     Intent k = new Intent(transaction_facial.this, complete_transaction.class);
                     startActivity(k);

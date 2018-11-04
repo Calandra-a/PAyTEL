@@ -30,6 +30,16 @@ public class authentication_signup_facial extends AppCompatActivity {
 
         new_user = ((global_objects) getApplication()).getNew_user();
 
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ((global_objects) getApplication()).getDynamoDBMapper().save(new_user);
+                // Item saved
+            }
+        }).start();*/
+    }
+
+    public void pictureComplete() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -37,9 +47,6 @@ public class authentication_signup_facial extends AppCompatActivity {
                 // Item saved
             }
         }).start();
-    }
-
-    public void pictureComplete() {
         try {
             Intent k = new Intent(authentication_signup_facial.this, authentication_signup_complete.class);
             startActivity(k);

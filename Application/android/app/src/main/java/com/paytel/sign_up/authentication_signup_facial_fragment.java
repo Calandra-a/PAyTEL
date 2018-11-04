@@ -50,6 +50,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.paytel.R;
 import com.paytel.util.autofit_textureview;
 
@@ -861,23 +868,57 @@ public class authentication_signup_facial_fragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
+                    //showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                     closeCamera();
                     myTask = new WaitTask();
-                    myTask.execute();
-                    //authentication_apicall_facial aaf = new authentication_apicall_facial();
 
-                    //aaf.callCloudLogic(encodedString, pose);
-                    //progress.dismiss();
+                    progress = new ProgressDialog(getActivity());
+                    progress.setTitle("Analyzing face");
+                    progress.setMessage("Please wait...");
+                    progress.setCancelable(false);
+                    progress.setCanceledOnTouchOutside(false);
+                    progress.show();
 
-                      //  if (aaf.getResponseVal() == "true") {
-                        //    ((authentication_signup_facial) getActivity()).pictureComplete();
-                        //} else {
-                         //   new BadPictureDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-                        //}
+                    String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
+                    String S3Key = "uploads/"+userID+"/auth.jpg";
 
+                    TransferUtility transferUtility =
+                            TransferUtility.builder()
+                                    .context(getActivity().getApplicationContext())
+                                    .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                                    .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                                    .build();
+
+                    TransferObserver uploadObserver =
+                            transferUtility.upload(S3Key,
+                                    new File(getActivity().getExternalFilesDir(null), "pic.jpg"));
+
+                    uploadObserver.setTransferListener(new TransferListener() {
+
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if (TransferState.COMPLETED == state) {
+                                System.out.println("transfer complete");
+                                myTask.execute();
+                            }
+                        }
+
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                            int percentDone = (int)percentDonef;
+
+                            Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                    + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                        }
+
+                        @Override
+                        public void onError(int id, Exception ex) {
+                            // Handle errors
+                        }
+                    });
                 }
             };
 
@@ -1115,12 +1156,6 @@ public class authentication_signup_facial_fragment extends Fragment
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progress = new ProgressDialog(getActivity());
-            progress.setTitle("Analyzing face");
-            progress.setMessage("Please wait...");
-            progress.setCancelable(false);
-            progress.setCanceledOnTouchOutside(false);
-            progress.show();
             aaf = new authentication_apicall_facial();
 
         }
@@ -1130,9 +1165,8 @@ public class authentication_signup_facial_fragment extends Fragment
             ByteArrayOutputStream bOut = new ByteArrayOutputStream();
             bm.compress(Bitmap.CompressFormat.JPEG, 50, bOut);
 
-            encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
-
-            if ((aaf.callCloudLogic(encodedString, pose)) == "true") {
+            //encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
+            if ((aaf.callCloudLogic(pose)) == "true") {
                 responseVal = "true";
             }
 

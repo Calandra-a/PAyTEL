@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
@@ -19,7 +20,6 @@ public class authentication_signup_facial extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.authentication_activity_signup_facial);
         if (null == savedInstanceState) {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.amazonaws.mobileconnectors.apigateway.ApiRequest;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.util.IOUtils;
 import com.amazonaws.util.StringUtils;
 import com.paytel.global_objects;
@@ -24,9 +26,11 @@ import com.paytel.util.api.iddd6h4gihxi.SignupfacialinitialiMobileHubClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import com.amazonaws.mobileconnectors.s3.transferutility.*;
 
 public class authentication_apicall_facial extends Activity {
     private static final String LOG_TAG = authentication_signup_facial.class.getSimpleName();
@@ -34,14 +38,13 @@ public class authentication_apicall_facial extends Activity {
 
     private SignupfacialinitialiMobileHubClient apiClient;
 
-    public String callCloudLogic(String Image, String pose) {
-        //apiClient = ((global_objects) getApplication()).getSignup_facial_api_client();
+    public String callCloudLogic(String pose) {
+
+        String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
+
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(SignupfacialinitialiMobileHubClient.class);
-
-        String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
-        //String userID = "us-east-1:2826223d-5f83-44c8-993c-b8dd105e202e";
         // Create components of api request
         final String method = "POST";
 
@@ -51,7 +54,7 @@ public class authentication_apicall_facial extends Activity {
         try {
             json.put("userID", userID);
             json.put("pose", pose);
-            json.put("image", Image);
+            //json.put("image", Image);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,22 +76,12 @@ public class authentication_apicall_facial extends Activity {
                         .addHeader("Content-Type", "application/json")
                         .withParameters(parameters);
 
-        // Only set body if it has content.
-
-        //if (body.length() > 0) {
             System.out.println(body.length());
             localRequest = localRequest
                     .addHeader("Content-Length", String.valueOf(body.length()))
                     .withBody(body);
-       // }
 
         final ApiRequest request = localRequest;
-
-        // Make network call on background thread
-       //new Thread(new Runnable() {
-         //   @Override
-           // public void run() {
-
                 try {
                     Log.d(LOG_TAG,
                             "Invoking API w/ Request : " +

@@ -1,30 +1,23 @@
 package com.paytel.transaction;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
-import com.paytel.sign_up.authentication_signup_facial;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -55,7 +48,7 @@ public class start_buyer_transaction extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                 try {
-                    Intent k = new Intent(start_buyer_transaction.this, authentication_transaction_facial.class);
+                    Intent k = new Intent(start_buyer_transaction.this, transaction_facial.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -123,9 +116,9 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
-
-                            if(current_transaction.getTransactionStatus() == "pending"){
-                                if(current_transaction.getSellerUsername().equals(current_user.getUsername())) {
+                            System.out.println(current_transaction.getTransactionStatus());
+                            if(current_transaction.getTransactionStatus().equals("pending")){
+                                if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
                                     approve.setVisibility(View.VISIBLE);
                                     deny.setVisibility(View.VISIBLE);
                                 }

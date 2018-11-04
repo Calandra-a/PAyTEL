@@ -1,6 +1,5 @@
 package com.paytel.transaction;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.amazonaws.http.HttpMethodName;
@@ -20,12 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class apicall_facial{
-    private static final String LOG_TAG = authentication_transaction_facial.class.getSimpleName();
+    private static final String LOG_TAG = transaction_facial.class.getSimpleName();
     ApiResponse responseVal;
 
     private UsertransactionMobileHubClient apiClient;
 
-    public ApiResponse callCloudLogic(String Image, String pose) {
+    public ApiResponse callCloudLogic(String pose) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
@@ -41,7 +40,7 @@ public class apicall_facial{
         try {
             json.put("userID", userID);
             json.put("pose", pose);
-            json.put("image", Image);
+            //json.put("image", Image);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,11 +72,6 @@ public class apicall_facial{
        // }
 
         final ApiRequest request = localRequest;
-
-        // Make network call on background thread
-       //new Thread(new Runnable() {
-         //   @Override
-           // public void run() {
 
                 try {
                     Log.d(LOG_TAG,

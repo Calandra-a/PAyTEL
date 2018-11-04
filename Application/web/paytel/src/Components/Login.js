@@ -12,8 +12,13 @@ import logo_paytel from "../Resources/Images/logo_paytel.png";
 import logo_pt from "../Resources/Images/logo_pt.png";
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const styles = theme => ({
+  button: {
+    marginTop: theme.spacing.unit * 4
+  },
   gridStyling: {
     height: "100vh",
     backgroundColor: "#f7b271",
@@ -29,10 +34,6 @@ const styles = theme => ({
     justifyContent: "center",
     alignItems: "center"
   },
-  paper: {
-    margin: theme.spacing.unit * 2,
-    textAlign: "center"
-  },
   form: {
     margin: theme.spacing.unit * 2
   },
@@ -41,8 +42,9 @@ const styles = theme => ({
     backgroundColor: "white",
     borderRadius: "25%"
   },
-  button: {
-    marginTop: theme.spacing.unit * 4
+  paper: {
+    margin: theme.spacing.unit * 2,
+    textAlign: "center"
   }
 });
 
@@ -51,9 +53,11 @@ class Login extends Component {
     super(props);
 
     this.state = {
+      open: false,
       loading: false,
       username: "",
-      password: ""
+      password: "",
+      message: ""
     };
   }
 
@@ -73,9 +77,14 @@ class Login extends Component {
       this.props.userHasAuthenticated(true);
       this.props.history.push("/");
     } catch (e) {
-      alert(e.message);
       this.setState({ loading: false });
+      this.setState({ message: e.message });
+      this.setState({ open: true });
     }
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
   };
 
   render() {
@@ -127,12 +136,28 @@ class Login extends Component {
                   color="primary"
                   className={classes.button}
                 >
-                  Sign in
+                  {this.state.loading ? (
+                    <CircularProgress
+                      className={classes.progress}
+                      color="secondary"
+                    />
+                  ) : (
+                    "Sign in"
+                  )}
                 </Button>
               </form>
             </Paper>
           </Grid>
         </Grid>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={this.state.open}
+          onClose={this.handleClose}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={<span id="message-id">{this.state.message}</span>}
+        />
       </div>
     );
   }

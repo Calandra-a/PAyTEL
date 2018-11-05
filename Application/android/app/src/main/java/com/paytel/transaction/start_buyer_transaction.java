@@ -126,7 +126,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             amount.setText("Amount: $" + current_transaction.getAmount());
                             note.setText("Description: " + current_transaction.getNote());
-                            buyerID.setText("Buyer ID: " +  current_transaction.getBuyerUsername());
+                            buyerID.setText("" +  current_transaction.getBuyerUsername() + " paid you");
                             status.setText("Status: " + current_transaction.getTransactionStatus());
 
                         }

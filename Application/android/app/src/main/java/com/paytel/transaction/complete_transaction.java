@@ -14,7 +14,7 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 import com.paytel.util.TransactionDataObject;
-
+//useless
 public class complete_transaction extends AppCompatActivity{
 
     TransactionDataObject new_transaction;

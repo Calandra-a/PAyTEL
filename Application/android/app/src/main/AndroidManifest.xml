@@ -64,7 +64,8 @@
         <activity
             android:name=".transaction.create_new_transaction"
             android:theme="@style/paytel_main"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".transaction.start_buyer_transaction"
             android:theme="@style/paytel_main"

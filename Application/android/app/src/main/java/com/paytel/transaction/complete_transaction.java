@@ -1,5 +1,6 @@
 package com.paytel.transaction;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class complete_transaction extends AppCompatActivity{
     TransactionDataObject new_transaction;
     apicall_transaction aat;
     ApiResponse response;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +72,31 @@ public class complete_transaction extends AppCompatActivity{
 
         protected Boolean doInBackground(Void... params) {
             String transactionID =  ((global_objects) getApplication()).getCurrent_transaction().getTransactionId();
-            response= aat.callCloudLogic(transactionID, "confirm", "facial");
+            response = aat.callCloudLogic(transactionID, "confirm", "facial");
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
-            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
-            try {
-                Intent k = new Intent(complete_transaction.this, home.class);
-                startActivity(k);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(response.getStatusCode() == 200){
+                try {
+                    Intent k = new Intent(complete_transaction.this, home.class);
+                    startActivity(k);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    Intent k = new Intent(complete_transaction.this, home.class);
+                    startActivity(k);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
+
         }
     }
 }

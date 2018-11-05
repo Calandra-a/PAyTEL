@@ -15,7 +15,6 @@
         android:orientation="vertical"
         android:gravity="center"
         tools:context=".util.accountsettings">
-        xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <TextView
             android:id="@+id/message"

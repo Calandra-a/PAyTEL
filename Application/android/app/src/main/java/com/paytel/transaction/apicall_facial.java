@@ -1,6 +1,5 @@
 package com.paytel.transaction;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.amazonaws.http.HttpMethodName;
@@ -10,8 +9,7 @@ import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.amazonaws.mobileconnectors.apigateway.ApiRequest;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.amazonaws.util.IOUtils;
-import com.paytel.sign_up.authentication_signup_facial;
-import com.paytel.util.api.id4pxy6j7c4b.AuthenticatefacialMobileHubClient;
+import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,29 +19,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class apicall_facial{
-    private static final String LOG_TAG = authentication_signup_facial.class.getSimpleName();
-    String responseVal = null;
+    private static final String LOG_TAG = transaction_facial.class.getSimpleName();
+    ApiResponse responseVal;
 
-    private AuthenticatefacialMobileHubClient apiClient;
+    private UsertransactionMobileHubClient apiClient;
 
-    public String callCloudLogic(String Image, String pose) {
-        //apiClient = ((global_objects) getApplication()).getSignup_facial_api_client();
+    public ApiResponse callCloudLogic(String pose) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
-                .build(AuthenticatefacialMobileHubClient.class);
+                .build(UsertransactionMobileHubClient.class);
 
         String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
-        //String userID = "us-east-1:2826223d-5f83-44c8-993c-b8dd105e202e";
+
         // Create components of api request
         final String method = "POST";
 
-        final String path = "/authenticate-facial";
+        final String path = "/transaction-facial";
 
         JSONObject json = new JSONObject();
         try {
             json.put("userID", userID);
             json.put("pose", pose);
-            json.put("image", Image);
+            //json.put("image", Image);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -76,11 +73,6 @@ public class apicall_facial{
 
         final ApiRequest request = localRequest;
 
-        // Make network call on background thread
-       //new Thread(new Runnable() {
-         //   @Override
-           // public void run() {
-
                 try {
                     Log.d(LOG_TAG,
                             "Invoking API w/ Request : " +
@@ -95,15 +87,8 @@ public class apicall_facial{
                         final String responseData = IOUtils.toString(responseContentStream);
                         Log.d(LOG_TAG, "Response : " + responseData);
                     }
-
+                    responseVal = response;
                     Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
-
-                    if (response.getStatusCode() != 200) {
-                        responseVal = "false";
-
-                    }else {
-                        responseVal = "true";
-                    }
 
 
                 } catch (final Exception exception) {

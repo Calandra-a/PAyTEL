@@ -11,16 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@DynamoDBTable(tableName = "csi-mobilehub-447478737-transactions")
+@DynamoDBTable(tableName = "paytel-mobilehub-2098009603-transactions")
 
 public class TransactionDataObject {
     private String _transactionId;
     private String _amount;
-    private String _authenticationType;
+    private String _biometricUsed;
     private String _buyerId;
+    private String _buyerUsername;
     private String _note;
     private String _sellerId;
+    private String _sellerUsername;
     private String _time;
+    private String _timeLastEdit;
     private String _transactionStatus;
 
     @DynamoDBHashKey(attributeName = "transaction_id")
@@ -40,13 +43,13 @@ public class TransactionDataObject {
     public void setAmount(final String _amount) {
         this._amount = _amount;
     }
-    @DynamoDBAttribute(attributeName = "authentication_type")
-    public String getAuthenticationType() {
-        return _authenticationType;
+    @DynamoDBAttribute(attributeName = "biometric_used")
+    public String getBiometricUsed() {
+        return _biometricUsed;
     }
 
-    public void setAuthenticationType(final String _authenticationType) {
-        this._authenticationType = _authenticationType;
+    public void setBiometricUsed(final String _biometricUsed) {
+        this._biometricUsed = _biometricUsed;
     }
     @DynamoDBAttribute(attributeName = "buyer_id")
     public String getBuyerId() {
@@ -55,6 +58,14 @@ public class TransactionDataObject {
 
     public void setBuyerId(final String _buyerId) {
         this._buyerId = _buyerId;
+    }
+    @DynamoDBAttribute(attributeName = "buyer_username")
+    public String getBuyerUsername() {
+        return _buyerUsername;
+    }
+
+    public void setBuyerUsername(final String _buyerUsername) {
+        this._buyerUsername = _buyerUsername;
     }
     @DynamoDBAttribute(attributeName = "note")
     public String getNote() {
@@ -72,6 +83,14 @@ public class TransactionDataObject {
     public void setSellerId(final String _sellerId) {
         this._sellerId = _sellerId;
     }
+    @DynamoDBAttribute(attributeName = "seller_username")
+    public String getSellerUsername() {
+        return _sellerUsername;
+    }
+
+    public void setSellerUsername(final String _sellerUsername) {
+        this._sellerUsername = _sellerUsername;
+    }
     @DynamoDBAttribute(attributeName = "time")
     public String getTime() {
         return _time;
@@ -79,6 +98,14 @@ public class TransactionDataObject {
 
     public void setTime(final String _time) {
         this._time = _time;
+    }
+    @DynamoDBAttribute(attributeName = "time_last_edit")
+    public String getTimeLastEdit() {
+        return _timeLastEdit;
+    }
+
+    public void setTimeLastEdit(final String _timeLastEdit) {
+        this._timeLastEdit = _timeLastEdit;
     }
     @DynamoDBAttribute(attributeName = "transaction_status")
     public String getTransactionStatus() {

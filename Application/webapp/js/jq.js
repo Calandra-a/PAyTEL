@@ -1,7 +1,7 @@
  $(document).ready(function() {
      $('#myTable').DataTable( {
          ajax: {
-			 "url": "https://2lzayywjtk.execute-api.us-east-1.amazonaws.com/Development/get-all-Transactions",
+			 "url": "https://eoa9urrjyl.execute-api.us-east-1.amazonaws.com/Development/get-all-Transactions",
 			 "dataSrc": "transactions"
 		 },
          columns: [

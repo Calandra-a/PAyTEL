@@ -73,15 +73,15 @@ public class accountsettings extends AppCompatActivity {
         MaskEditText phone_number = findViewById(R.id.txt_phone_number);
         TextInputLayout city = findViewById(R.id.txt_city);
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
-        TextInputLayout card_number = findViewById(R.id.txt_card_number);
+        MaskEditText card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
-        TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
+        MaskEditText exp_date = findViewById(R.id.txt_exp_date);
 
         if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 || 
             street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 || 
             phone_number.getRawText().length() == 0 || city.getEditText().getText().toString().length() == 0 ||
-            name_on_card.getEditText().getText().toString().length() == 0 || card_number. getEditText().getText().toString().length() == 0 || 
-            CVC.getEditText().getText().toString().length() == 0 || exp_date.getEditText().getText().toString().length() == 0){
+            name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() == 0 ||
+            CVC.getEditText().getText().toString().length() == 0 || exp_date.getRawText().length() == 0){
 
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
@@ -90,14 +90,14 @@ public class accountsettings extends AppCompatActivity {
         }
 
         //handle bad expiration date format
-        if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
+        if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
             CharSequence fail = "Expiration date must be mm/yy format";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         //parses month and year for date check
-        String date[]= exp_date.getEditText().getText().toString().split("/");
+        String date[]= exp_date.getText().toString().split("/");
         int month = Integer.parseInt(date[0]);
         int year = Integer.parseInt(date[1]);
 
@@ -133,7 +133,7 @@ public class accountsettings extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (card_number.getEditText().getText().toString().length() != 16){ 
+        else if (card_number.getRawText().length() != 16){
             CharSequence fail = "Card number must be 16 digits"; 
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -160,9 +160,9 @@ public class accountsettings extends AppCompatActivity {
         else{
         Map<String, String> cc = new HashMap<String, String>();
         cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
-        cc.put("card_number", card_number.getEditText().getText().toString().trim());
+        cc.put("card_number", card_number.getRawText().trim());
         cc.put("cvc", CVC.getEditText().getText().toString().trim());
-        cc.put("expiration_date", exp_date.getEditText().getText().toString().trim());
+        cc.put("expiration_date", exp_date.getRawText().trim());
         if(f_name != null)current_user.setFirstName(f_name.getEditText().getText().toString().trim());
         if(l_name != null)current_user.setLastName(l_name.getEditText().getText().toString().trim());
         if(street != null)current_user.setStreet(street.getEditText().getText().toString().trim());
@@ -182,9 +182,9 @@ public class accountsettings extends AppCompatActivity {
         MaskEditText phone_number = findViewById(R.id.txt_phone_number);
         TextInputLayout city = findViewById(R.id.txt_city);
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
-        TextInputLayout card_number = findViewById(R.id.txt_card_number);
+        MaskEditText card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
-        TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
+        MaskEditText exp_date = findViewById(R.id.txt_exp_date);
 
         f_name.getEditText().setText(current_user.getFirstName());
         l_name.getEditText().setText(current_user.getLastName());
@@ -193,9 +193,9 @@ public class accountsettings extends AppCompatActivity {
         phone_number.setText(current_user.getPhoneNumber());
         city.getEditText().setText(current_user.getCity());
         name_on_card.getEditText().setText(current_user.getCreditCard().get("name_on_card"));
-        card_number.getEditText().setText(current_user.getCreditCard().get("card_number"));
+        card_number.setText(current_user.getCreditCard().get("card_number"));
         CVC.getEditText().setText(current_user.getCreditCard().get("cvc"));
-        exp_date.getEditText().setText(current_user.getCreditCard().get("expiration_date"));
+        exp_date.setText(current_user.getCreditCard().get("expiration_date"));
 
     }
 }

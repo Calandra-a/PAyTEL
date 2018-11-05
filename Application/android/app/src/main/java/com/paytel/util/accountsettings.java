@@ -11,6 +11,7 @@ import com.paytel.global_objects;
 import com.paytel.home;
 
 import com.paytel.R;
+import com.santalu.widget.MaskEditText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class accountsettings extends AppCompatActivity {
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         TextInputLayout street = findViewById(R.id.txt_street);
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
-        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
+        MaskEditText phone_number = findViewById(R.id.txt_phone_number);
         TextInputLayout city = findViewById(R.id.txt_city);
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
         TextInputLayout card_number = findViewById(R.id.txt_card_number);
@@ -80,7 +81,7 @@ public class accountsettings extends AppCompatActivity {
 
         if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 || 
             street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 || 
-            phone_number.getEditText().getText().toString().length() == 0 || city.getEditText().getText().toString().length() == 0 || 
+            phone_number.getRawText().length() == 0 || city.getEditText().getText().toString().length() == 0 ||
             name_on_card.getEditText().getText().toString().length() == 0 || card_number. getEditText().getText().toString().length() == 0 || 
             CVC.getEditText().getText().toString().length() == 0 || exp_date.getEditText().getText().toString().length() == 0){
 
@@ -116,7 +117,7 @@ public class accountsettings extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (phone_number.getEditText().getText().toString().length() != 10) {
+        else if (phone_number.getRawText().length() != 10) {
             CharSequence fail = "Phone number must be 10 digits";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -169,7 +170,7 @@ public class accountsettings extends AppCompatActivity {
         if(street != null)current_user.setStreet(street.getEditText().getText().toString().trim());
         if(city != null)current_user.setCity(city.getEditText().getText().toString().trim());
         if(zip != null)current_user.setZipCode(zip.getEditText().getText().toString().trim());
-        if(phone_number != null)current_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
+        if(phone_number != null)current_user.setPhoneNumber(phone_number.getRawText().trim());
         if(cc != null)current_user.setCreditCard(cc);
         return true;
         }

@@ -63,5 +63,8 @@ dependencies {
     //Amazon API gateway dependendices
     implementation 'com.amazonaws:aws-android-sdk-apigateway-core:2.7.+'
 
+    //textbox masks
+    implementation 'com.github.santalu:mask-edittext:1.0.9'
+
 }
 apply plugin: 'com.google.gms.google-services'

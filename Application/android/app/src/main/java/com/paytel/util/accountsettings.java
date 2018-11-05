@@ -179,7 +179,7 @@ public class accountsettings extends AppCompatActivity {
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         TextInputLayout street = findViewById(R.id.txt_street);
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
-        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
+        MaskEditText phone_number = findViewById(R.id.txt_phone_number);
         TextInputLayout city = findViewById(R.id.txt_city);
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
         TextInputLayout card_number = findViewById(R.id.txt_card_number);
@@ -190,7 +190,7 @@ public class accountsettings extends AppCompatActivity {
         l_name.getEditText().setText(current_user.getLastName());
         street.getEditText().setText(current_user.getStreet());
         zip.getEditText().setText(current_user.getZipCode());
-        phone_number.getEditText().setText(current_user.getPhoneNumber());
+        phone_number.setText(current_user.getPhoneNumber());
         city.getEditText().setText(current_user.getCity());
         name_on_card.getEditText().setText(current_user.getCreditCard().get("name_on_card"));
         card_number.getEditText().setText(current_user.getCreditCard().get("card_number"));

@@ -300,7 +300,7 @@ public class home extends AppCompatActivity{
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
                     Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                    mCardview.setText("Wallet: "+Double.toString(wallet));
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
                 }
             });
         }

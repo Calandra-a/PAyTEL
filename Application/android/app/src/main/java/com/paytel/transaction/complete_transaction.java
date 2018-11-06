@@ -14,7 +14,7 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 import com.paytel.util.TransactionDataObject;
-//useless
+//screen that shows up after transaction facial
 public class complete_transaction extends AppCompatActivity{
 
     TransactionDataObject new_transaction;
@@ -77,18 +77,18 @@ public class complete_transaction extends AppCompatActivity{
         }
 
         @Override
-        protected void onPostExecute(Boolean bool) {
+        protected void onPostExecute(Boolean bool) {//progress to transaction_facial_success.java
             super.onPostExecute(bool);
             if(response.getStatusCode() == 200){
                 try {
-                    Intent k = new Intent(complete_transaction.this, home.class);
+                    Intent k = new Intent(complete_transaction.this, transaction_facial_success.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Intent k = new Intent(complete_transaction.this, home.class);
+                    Intent k = new Intent(complete_transaction.this, transaction_facial_success.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();

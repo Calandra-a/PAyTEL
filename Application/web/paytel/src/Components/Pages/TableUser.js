@@ -183,7 +183,6 @@ class TableUser extends React.Component {
                     return (
                       <TableRow key={row.id}>
                         <TableCell
-                          button
                           onClick={() => {
                             this.props.history.push(
                               "/user/".concat(row.user_id)

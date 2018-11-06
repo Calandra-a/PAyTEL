@@ -6,7 +6,9 @@ export async function main(event, context, callback) {
     TableName: "paytel-mobilehub-2098009603-transactions",
     Key: {
       transaction_id: event.pathParameters.transaction_id
-    }
+    },
+    ProjectionExpression:
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status"
   };
 
   try {

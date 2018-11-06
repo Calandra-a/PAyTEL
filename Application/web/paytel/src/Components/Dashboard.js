@@ -180,7 +180,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem
                 button
@@ -205,7 +204,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem
                 button
@@ -227,7 +225,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem
                 button
@@ -249,7 +246,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem
                 button
@@ -271,7 +267,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem
                 button
@@ -296,7 +291,6 @@ class Dashboard extends React.Component {
               disableFocusListener={this.state.open}
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
-              interactive
             >
               <ListItem button onClick={this.handleLogout}>
                 <ListItemIcon>

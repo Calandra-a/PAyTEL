@@ -135,7 +135,12 @@ class TableTransactionFlagged extends React.Component {
       const transactions = await this.transactions();
       for (var i of transactions)
         this.state.rows.push(
-          createData(i.time_created, i.transaction_id, i.buyer_id, i.seller_id)
+          createData(
+            i.time_created,
+            i.transaction_id,
+            i.buyer_username,
+            i.seller_username
+          )
         );
       this.setState({ transactions });
     } catch (e) {

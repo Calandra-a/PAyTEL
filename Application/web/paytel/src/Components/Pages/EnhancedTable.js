@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -18,6 +18,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FlagIcon from "@material-ui/icons/Flag";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Build from "@material-ui/icons/Build";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { API } from "aws-amplify";
 
@@ -174,7 +176,10 @@ const toolbarStyles = theme => ({
     flex: "1 1 auto"
   },
   actions: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
   },
   title: {
     flex: "0 0 auto"
@@ -213,9 +218,11 @@ let EnhancedTableToolbar = props => {
             </IconButton>
           </Tooltip>
         )}
-        {numSelected > 0 ? (
+        {props.isFlagging ? (
+          <CircularProgress className={classes.progress} color="primary" />
+        ) : numSelected > 0 ? (
           <Tooltip title="Flag Transaction">
-            <IconButton aria-label="Flag Transaction">
+            <IconButton aria-label="Flag Transaction" onClick={props.flag}>
               <FlagIcon />
             </IconButton>
           </Tooltip>
@@ -248,6 +255,9 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: "auto"
+  },
+  loader: {
+    marginTop: theme.spacing.unit * 3
   }
 });
 
@@ -259,28 +269,59 @@ class EnhancedTable extends React.Component {
     data: [],
     page: 0,
     rowsPerPage: 5,
-    isLoading: true
+    isLoading: true,
+    isFlagging: false
   };
 
   async componentDidMount() {
-    await this.transactions(this.props.location.search);
+    await this.transactions();
     this.setState({ isLoading: false });
   }
 
   async componentWillReceiveProps(nextProps) {
-    this.setState({ data: [] });
-    await this.transactions(nextProps.location.search);
+    if (nextProps.location.search !== nextProps.location.search) {
+      this.setState({ isLoading: true });
+      await this.transactions(nextProps.location.search);
+      this.setState({ isLoading: false });
+    }
+  }
+
+  flag = () => {
+    if (this.state.selected.length > 0) {
+      this.flagSelected();
+    }
+  };
+
+  async flagSelected() {
+    this.setState({ isFlagging: true });
+    for (var i in this.state.selected) {
+      var transaction_data = this.state.data.find(
+        x => x.id === this.state.selected[i]
+      );
+      var transaction_id = transaction_data.transaction_id;
+      await API.put("admin", "/transactions/".concat(transaction_id));
+
+      var transaction = await API.get(
+        "admin",
+        "/transactions/".concat(transaction_id)
+      );
+
+      transaction_data.transaction_status = transaction.transaction_status;
+    }
+
+    this.setState({ selected: [] });
     this.handleChangePage(null, 0);
+    this.setState({ isFlagging: false });
   }
 
   async transactions(search) {
     try {
       const transactions = await API.get(
         "admin",
-        "/transactions".concat(search || "")
+        "/transactions".concat(search || this.props.location.search || "")
       );
       counter = 0;
-      await this.setState({ selected: [] });
+      await this.setState({ data: [], selected: [] });
       for (var i of transactions) {
         this.state.data.push(
           createData(
@@ -292,6 +333,7 @@ class EnhancedTable extends React.Component {
           )
         );
       }
+      this.handleChangePage(null, 0);
     } catch (e) {
       alert(e);
     }
@@ -363,77 +405,87 @@ class EnhancedTable extends React.Component {
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-    return (
-      !this.state.isLoading && (
-        <Paper className={classes.root}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            handleManageTransaction={this.handleManageTransaction}
-          />
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
-              <TableBody>
-                {stableSort(data, getSorting(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    const isSelected = this.isSelected(n.id);
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n.id}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isSelected}
-                            onClick={event => this.handleClick(event, n.id)}
-                          />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          {n.date}
-                        </TableCell>
-                        <TableCell>{n.transaction_id}</TableCell>
-                        <TableCell>{n.buyer}</TableCell>
-                        <TableCell>{n.seller}</TableCell>
-                        <TableCell>{n.transaction_status}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <TablePagination
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            backIconButtonProps={{
-              "aria-label": "Previous Page"
-            }}
-            nextIconButtonProps={{
-              "aria-label": "Next Page"
-            }}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
-        </Paper>
-      )
+    return !this.state.isLoading ? (
+      <Paper className={classes.root}>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          handleManageTransaction={this.handleManageTransaction}
+          flag={this.flag}
+          isFlagging={this.state.isFlagging}
+        />
+        <div className={classes.tableWrapper}>
+          <Table className={classes.table} aria-labelledby="tableTitle">
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={this.handleSelectAllClick}
+              onRequestSort={this.handleRequestSort}
+              rowCount={data.length}
+            />
+            <TableBody>
+              {stableSort(data, getSorting(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(n => {
+                  const isSelected = this.isSelected(n.id);
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      key={n.id}
+                      selected={isSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          onClick={event => this.handleClick(event, n.id)}
+                        />
+                      </TableCell>
+                      <TableCell component="th" scope="row" padding="none">
+                        {n.date}
+                      </TableCell>
+                      <TableCell>{n.transaction_id}</TableCell>
+                      <TableCell>{n.buyer}</TableCell>
+                      <TableCell>{n.seller}</TableCell>
+                      <TableCell>{n.transaction_status}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <TablePagination
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "Previous Page"
+          }}
+          nextIconButtonProps={{
+            "aria-label": "Next Page"
+          }}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
+      </Paper>
+    ) : (
+      <Fragment>
+        <LinearProgress color="secondary" className={classes.loader} />
+        <LinearProgress
+          color="primary"
+          variant="query"
+          className={classes.loader}
+        />
+        <LinearProgress color="secondary" className={classes.loader} />
+      </Fragment>
     );
   }
 }

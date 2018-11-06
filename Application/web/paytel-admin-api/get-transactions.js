@@ -33,16 +33,18 @@ export async function main(event, context, callback) {
     }
   }
 
-  const params =
-    expression === ""
-      ? {
-          TableName: "paytel-mobilehub-2098009603-transactions"
-        }
-      : {
-          TableName: "paytel-mobilehub-2098009603-transactions",
-          FilterExpression: expression,
-          ExpressionAttributeValues: vals
-        };
+  const params = {
+    TableName: "paytel-mobilehub-2098009603-transactions",
+    FilterExpression: expression,
+    ExpressionAttributeValues: vals,
+    ProjectionExpression:
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status"
+  };
+
+  if (expression === "") {
+    delete params.FilterExpression;
+    delete params.ExpressionAttributeValues;
+  }
 
   try {
     const result = await dynamoDbLib.call("scan", params);

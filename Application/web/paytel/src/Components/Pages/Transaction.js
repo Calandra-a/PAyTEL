@@ -37,16 +37,9 @@ class Transaction extends React.Component {
   }
 
   async flag() {
-    const response = await API.put(
-      "admin",
-      "/transactions/".concat(this.props.match.params.id),
-      typeof this.state.transaction.flag === "undefined"
-        ? { body: { flag: "1" } }
-        : { body: {} }
-    );
+    await API.put("admin", "/transactions/".concat(this.props.match.params.id));
     const transaction = await this.transaction();
     this.setState({ transaction });
-    return response;
   }
 
   transaction() {
@@ -67,18 +60,22 @@ class Transaction extends React.Component {
             <Typography variant="headline" component="h3">
               Transaction # {transaction.transaction_id}
             </Typography>
-            <Typography component="p">Buyer: {transaction.buyer_username}</Typography>
+            <Typography component="p">
+              Time of Creation: {transaction.time_created}
+            </Typography>
+            <Typography component="p">
+              Buyer: {transaction.buyer_username}
+            </Typography>
             <Typography component="p">
               Seller: {transaction.seller_username}
             </Typography>
-			<Typography component="p">
-              Status: {transaction.transaction_status	}
-            </Typography>
             <Typography component="p">
-              Flag: {transaction.flag ? transaction.flag : "No flag"}
+              Status: {transaction.transaction_status}
             </Typography>
             <Button className={classes.button} onClick={this.flag}>
-              {transaction.flag ? "Unflag" : "Flag"}
+              {transaction.transaction_status.startsWith("flagged_")
+                ? "Unflag"
+                : "Flag"}
             </Button>
           </Paper>
         </div>

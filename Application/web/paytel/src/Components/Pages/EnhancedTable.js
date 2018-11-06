@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FlagIcon from "@material-ui/icons/Flag";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Build from "@material-ui/icons/Build";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { API } from "aws-amplify";
 
@@ -170,7 +171,7 @@ const toolbarStyles = theme => ({
           backgroundColor: theme.palette.secondary.dark
         },
   spacer: {
-    flex: "1 1 100%"
+    flex: "1 1 auto"
   },
   actions: {
     color: theme.palette.text.secondary
@@ -191,7 +192,7 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
+          <Typography color="inherit" variant="subheading">
             {numSelected} selected
           </Typography>
         ) : (
@@ -202,9 +203,19 @@ let EnhancedTableToolbar = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
+        {numSelected === 1 && (
+          <Tooltip title="Manage Transaction">
+            <IconButton
+              aria-label="Manage Transaction"
+              onClick={props.handleManageTransaction}
+            >
+              <Build />
+            </IconButton>
+          </Tooltip>
+        )}
         {numSelected > 0 ? (
-          <Tooltip title="Flag">
-            <IconButton aria-label="Flag">
+          <Tooltip title="Flag Transaction">
+            <IconButton aria-label="Flag Transaction">
               <FlagIcon />
             </IconButton>
           </Tooltip>
@@ -268,6 +279,8 @@ class EnhancedTable extends React.Component {
         "admin",
         "/transactions".concat(search || "")
       );
+      counter = 0;
+      await this.setState({ selected: [] });
       for (var i of transactions) {
         this.state.data.push(
           createData(
@@ -332,6 +345,16 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
+  handleManageTransaction = () => {
+    if (this.state.selected[0] && this.state.selected.length === 1)
+      this.props.history.push(
+        "/transaction/".concat(
+          this.state.data.find(x => x.id === this.state.selected[0])
+            .transaction_id
+        )
+      );
+  };
+
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
@@ -343,7 +366,10 @@ class EnhancedTable extends React.Component {
     return (
       !this.state.isLoading && (
         <Paper className={classes.root}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            handleManageTransaction={this.handleManageTransaction}
+          />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHead
@@ -362,7 +388,6 @@ class EnhancedTable extends React.Component {
                     return (
                       <TableRow
                         hover
-                        onClick={event => this.handleClick(event, n.id)}
                         role="checkbox"
                         aria-checked={isSelected}
                         tabIndex={-1}
@@ -370,7 +395,10 @@ class EnhancedTable extends React.Component {
                         selected={isSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
+                          <Checkbox
+                            checked={isSelected}
+                            onClick={event => this.handleClick(event, n.id)}
+                          />
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           {n.date}

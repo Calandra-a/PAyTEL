@@ -32,6 +32,7 @@ import TableTransactionFlagged from "./Pages/TableTransactionFlagged";
 import Home from "./Pages/Home";
 import EnhancedTable from "./Pages/EnhancedTable";
 import DialogSelect from "./Pages/DatabaseLookup";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 240;
 
@@ -171,84 +172,139 @@ class Dashboard extends React.Component {
           </div>
           <Divider />
           <List>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.history.push("/");
-              }}
+            <Tooltip
+              title={this.state.open ? "" : "Home"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
             >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  this.props.history.push("/");
+                }}
+              >
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Tooltip>
           </List>
           <Divider />
           <List>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.history.push("/users");
-              }}
+            <Tooltip
+              title={this.state.open ? "" : "Manage Users"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
             >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Manage Users" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.history.push("/transactions");
-              }}
+              <ListItem
+                button
+                onClick={() => {
+                  this.props.history.push("/users");
+                }}
+              >
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Manage Users" />
+              </ListItem>
+            </Tooltip>
+            <Tooltip
+              title={this.state.open ? "" : "Manage Transactions"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
             >
-              <ListItemIcon>
-                <AttachMoneyIcon />
-              </ListItemIcon>
-              <ListItemText primary="Manage Transactions" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.history.push("/testing");
-              }}
+              <ListItem
+                button
+                onClick={() => {
+                  this.props.history.push("/transactions");
+                }}
+              >
+                <ListItemIcon>
+                  <AttachMoneyIcon />
+                </ListItemIcon>
+                <ListItemText primary="Manage Transactions" />
+              </ListItem>
+            </Tooltip>
+            <Tooltip
+              title={this.state.open ? "" : "Flagged Transactions"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
             >
-              <ListItemIcon>
-                <AttachMoneyIcon />
-              </ListItemIcon>
-              <ListItemText primary="New Table Test" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.history.push("/transactions/flagged");
-              }}
+              <ListItem
+                button
+                onClick={() => {
+                  this.props.history.push("/transactions/flagged");
+                }}
+              >
+                <ListItemIcon>
+                  <FlagIcon />
+                </ListItemIcon>
+                <ListItemText primary="Flagged Transactions" />
+              </ListItem>
+            </Tooltip>
+            <Tooltip
+              title={this.state.open ? "" : "Database Lookup"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
             >
-              <ListItemIcon>
-                <FlagIcon />
-              </ListItemIcon>
-              <ListItemText primary="Flagged Transactions" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                this.select.handleClickOpen();
-              }}
-            >
-              <ListItemIcon>
-                <ListIcon />
-              </ListItemIcon>
-              <ListItemText primary="Database Lookup" />
-            </ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  this.select.handleClickOpen();
+                }}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Database Lookup" />
+              </ListItem>
+            </Tooltip>
           </List>
           <Divider />
           <List>
-            <ListItem button onClick={this.handleLogout}>
-              <ListItemIcon>
-                <ClearIcon />
-              </ListItemIcon>
-              <ListItemText primary="Log Out" />
-            </ListItem>
+            <Tooltip
+              title={this.state.open ? "" : "Log Out"}
+              placement="right"
+              enterDelay={150}
+              leaveDelay={150}
+              disableFocusListener={this.state.open}
+              disableHoverListener={this.state.open}
+              disableTouchListener={this.state.open}
+              interactive
+            >
+              <ListItem button onClick={this.handleLogout}>
+                <ListItemIcon>
+                  <ClearIcon />
+                </ListItemIcon>
+                <ListItemText primary="Log Out" />
+              </ListItem>
+            </Tooltip>
           </List>
         </Drawer>
         <main className={classes.content}>
@@ -257,7 +313,7 @@ class Dashboard extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/transaction/:id" component={Transaction} />
-            <Route exact path="/transactions" component={TableTransaction} />
+            <Route exact path="/transactions" component={EnhancedTable} />
             <Route
               exact
               path="/transactions/flagged"
@@ -265,7 +321,6 @@ class Dashboard extends React.Component {
             />
             <Route exact path="/user/:id" component={User} />
             <Route exact path="/users" component={TableUser} />
-            <Route exact path="/testing" component={EnhancedTable} />
             <Route component={NotFound} />
           </Switch>
         </main>

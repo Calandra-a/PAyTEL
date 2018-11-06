@@ -52,21 +52,26 @@ class DatabaseLookup extends React.Component {
   handleSubmit = () => {
     var search = "";
 
+    this.setState({ transaction_id: this.state.transaction_id.trim() });
+    this.setState({ user: this.state.user.trim() });
+    this.setState({ buyer: this.state.buyer.trim() });
+    this.setState({ seller: this.state.seller.trim() });
+
     if (this.state.transaction_id)
-      search = search.concat("t=".concat(this.state.transaction_id));
+      search = search.concat("t=".concat(this.state.transaction_id.trim()));
 
     if (this.state.user) {
       if (search) search = search.concat("&");
-      search = search.concat("u=".concat(this.state.user));
+      search = search.concat("u=".concat(this.state.user.trim()));
     } else {
       if (this.state.buyer) {
         if (search) search = search.concat("&");
-        search = search.concat("b=".concat(this.state.buyer));
+        search = search.concat("b=".concat(this.state.buyer.trim()));
       }
 
       if (this.state.seller) {
         if (search) search = search.concat("&");
-        search = search.concat("s=".concat(this.state.seller));
+        search = search.concat("s=".concat(this.state.seller.trim()));
       }
     }
 

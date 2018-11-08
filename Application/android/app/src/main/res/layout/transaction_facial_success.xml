@@ -24,7 +24,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginBottom="8dp"
         android:singleLine="false"
-        android:text="Transfer succesfull"
+        android:text="Transfer succesful"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_complete"

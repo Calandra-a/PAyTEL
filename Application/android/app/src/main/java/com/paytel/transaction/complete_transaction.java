@@ -29,7 +29,7 @@ public class complete_transaction extends AppCompatActivity{
         setContentView(R.layout.approvedeny_transaction);
         new_transaction = ((global_objects) getApplication()).getNew_transaction();
 
-        ImageButton btn_deny = findViewById(R.id.btn_cancel);
+       /* ImageButton btn_deny = findViewById(R.id.btn_cancel);
         btn_deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class complete_transaction extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
         WaitTask myTask = new complete_transaction.WaitTask();
         myTask.execute();
 
@@ -81,14 +81,14 @@ public class complete_transaction extends AppCompatActivity{
             super.onPostExecute(bool);
             if(response.getStatusCode() == 200){
                 try {
-                    Intent k = new Intent(complete_transaction.this, transaction_facial_success.class);
+                    Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Intent k = new Intent(complete_transaction.this, transaction_facial_success.class);
+                    Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();

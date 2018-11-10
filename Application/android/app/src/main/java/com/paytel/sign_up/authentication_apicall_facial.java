@@ -34,11 +34,14 @@ import com.amazonaws.mobileconnectors.s3.transferutility.*;
 
 public class authentication_apicall_facial extends Activity {
     private static final String LOG_TAG = authentication_signup_facial.class.getSimpleName();
-    String responseVal = null;
+    Object[] responseArray = new Object[2];
+    ApiResponse responseVal;
+    String responseData;
+
 
     private SignupfacialinitialiMobileHubClient apiClient;
 
-    public String callCloudLogic(String pose) {
+    public Object[] callCloudLogic(String pose) {
 
         String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
 
@@ -93,25 +96,21 @@ public class authentication_apicall_facial extends Activity {
                     final InputStream responseContentStream = response.getContent();
 
                     if (responseContentStream != null) {
-                        final String responseData = IOUtils.toString(responseContentStream);
+                        responseData = IOUtils.toString(responseContentStream);
                         Log.d(LOG_TAG, "Response : " + responseData);
                     }
 
+                    responseVal = response;
+                    responseArray[0] = responseVal;
+                    responseArray[1] = responseData;
                     Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
-
-                    if (response.getStatusCode() != 200) {
-                        responseVal = "false";
-
-                    }else {
-                        responseVal = "true";
-                    }
 
 
                 } catch (final Exception exception) {
                     Log.e(LOG_TAG, exception.getMessage(), exception);
                     exception.printStackTrace();
                 }
-                return responseVal;
+                return responseArray;
             }
         //}).start();
 

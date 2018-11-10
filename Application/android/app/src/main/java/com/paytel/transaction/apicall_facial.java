@@ -20,11 +20,13 @@ import java.util.Map;
 
 public class apicall_facial{
     private static final String LOG_TAG = transaction_facial.class.getSimpleName();
+    Object[] responseArray = new Object[2];
     ApiResponse responseVal;
+    String responseData;
 
     private UsertransactionMobileHubClient apiClient;
 
-    public ApiResponse callCloudLogic(String pose) {
+    public Object[] callCloudLogic(String pose) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
@@ -84,10 +86,12 @@ public class apicall_facial{
                     final InputStream responseContentStream = response.getContent();
 
                     if (responseContentStream != null) {
-                        final String responseData = IOUtils.toString(responseContentStream);
+                        responseData = IOUtils.toString(responseContentStream);
                         Log.d(LOG_TAG, "Response : " + responseData);
                     }
                     responseVal = response;
+                    responseArray[0] = responseVal;
+                    responseArray[1] = responseData;
                     Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
 
 
@@ -95,7 +99,7 @@ public class apicall_facial{
                     Log.e(LOG_TAG, exception.getMessage(), exception);
                     exception.printStackTrace();
                 }
-                return responseVal;
+                return responseArray;
             }
         //}).start();
 

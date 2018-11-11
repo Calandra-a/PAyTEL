@@ -9,7 +9,7 @@ export async function main(event, context, callback) {
       ":status": "flagged_"
     },
     ProjectionExpression:
-      "transaction_id, time_created, buyer_username, seller_username, transaction_status"
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status, note"
   };
 
   try {

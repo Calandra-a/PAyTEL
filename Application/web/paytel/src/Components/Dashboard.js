@@ -11,7 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import TableTransaction from "./Pages/TableTransaction";
 import NotFound from "./Pages/NotFound";
 import logo_paytel from "../Resources/Images/logo_paytel.png";
 import { Route, Switch } from "react-router-dom";
@@ -27,12 +26,11 @@ import ListIcon from "@material-ui/icons/List";
 import { Auth } from "aws-amplify";
 import Transaction from "./Pages/Transaction";
 import User from "./Pages/User";
-import TableUser from "./Pages/TableUser";
-import TableTransactionFlagged from "./Pages/TableTransactionFlagged";
 import Home from "./Pages/Home";
 import EnhancedTable from "./Pages/EnhancedTable";
 import DialogSelect from "./Pages/DatabaseLookup";
 import Tooltip from "@material-ui/core/Tooltip";
+import AppliedRoute from "./AppliedRoute";
 
 const drawerWidth = 240;
 
@@ -306,15 +304,21 @@ class Dashboard extends React.Component {
           <DialogSelect onRef={ref => (this.select = ref)} />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/transaction/:id" component={Transaction} />
-            <Route exact path="/transactions" component={EnhancedTable} />
-            <Route
+            <AppliedRoute
               exact
               path="/transactions/flagged"
-              component={TableTransactionFlagged}
+              component={EnhancedTable}
+              props={{ state: "flagged" }}
             />
+            <Route exact path="/transaction/:id" component={Transaction} />
+            <Route exact path="/transactions" component={EnhancedTable} />
             <Route exact path="/user/:id" component={User} />
-            <Route exact path="/users" component={TableUser} />
+            <AppliedRoute
+              exact
+              path="/users"
+              component={EnhancedTable}
+              props={{ state: "user" }}
+            />
             <Route component={NotFound} />
           </Switch>
         </main>

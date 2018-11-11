@@ -14,21 +14,23 @@ export async function main(event, context, callback) {
 
     if (data.u) {
       expression = expressionCheck(expression).concat(
-        "(buyer_id = :buyer_id or seller_id = :seller_id)"
+        "(buyer_username = :buyer_username or seller_username = :seller_username)"
       );
-      vals[":buyer_id"] = data.u;
-      vals[":seller_id"] = data.u;
+      vals[":buyer_username"] = data.u;
+      vals[":seller_username"] = data.u;
     } else {
       if (data.b) {
-        expression = expressionCheck(expression).concat("buyer_id = :buyer_id");
-        vals[":buyer_id"] = data.b;
+        expression = expressionCheck(expression).concat(
+          "buyer_username = :buyer_username"
+        );
+        vals[":buyer_username"] = data.b;
       }
 
       if (data.s) {
         expression = expressionCheck(expression).concat(
-          "seller_id = :seller_id"
+          "seller_username = :seller_username"
         );
-        vals[":seller_id"] = data.s;
+        vals[":seller_username"] = data.s;
       }
     }
   }
@@ -38,7 +40,7 @@ export async function main(event, context, callback) {
     FilterExpression: expression,
     ExpressionAttributeValues: vals,
     ProjectionExpression:
-      "transaction_id, time_created, buyer_username, seller_username, transaction_status"
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status, note"
   };
 
   if (expression === "") {

@@ -20,11 +20,34 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Build from "@material-ui/icons/Build";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Grow from "@material-ui/core/Grow";
+import Zoom from "@material-ui/core/Zoom";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { API } from "aws-amplify";
 
+const table_user = "user";
+const table_flagged = "flagged";
+
 let counter = 0;
-function createData(date, transaction_id, buyer, seller, transaction_status) {
+
+function createUser(username, name_first, name_last) {
+  counter += 1;
+  return {
+    id: counter,
+    username,
+    name_first,
+    name_last
+  };
+}
+
+function createTransaction(
+  date,
+  transaction_id,
+  buyer,
+  seller,
+  transaction_status,
+  note
+) {
   counter += 1;
   return {
     id: counter,
@@ -32,7 +55,8 @@ function createData(date, transaction_id, buyer, seller, transaction_status) {
     transaction_id,
     buyer,
     seller,
-    transaction_status
+    transaction_status,
+    note
   };
 }
 
@@ -92,6 +116,33 @@ const rows = [
     numeric: false,
     disablePadding: false,
     label: "Transaction Status"
+  },
+  {
+    id: "note",
+    numeric: false,
+    disablePadding: false,
+    label: "Note"
+  }
+];
+
+const user_rows = [
+  {
+    id: "username",
+    numeric: false,
+    disablePadding: false,
+    label: "Username"
+  },
+  {
+    id: "name_first",
+    numeric: false,
+    disablePadding: false,
+    label: "First Name"
+  },
+  {
+    id: "name_last",
+    numeric: false,
+    disablePadding: false,
+    label: "Last Name"
   }
 ];
 
@@ -106,7 +157,8 @@ class EnhancedTableHead extends React.Component {
       order,
       orderBy,
       numSelected,
-      rowCount
+      rowCount,
+      rows
     } = this.props;
 
     return (
@@ -160,7 +212,8 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit
+    paddingRight: theme.spacing.unit,
+    transition: "background-color 250ms"
   },
   highlight:
     theme.palette.type === "light"
@@ -197,7 +250,7 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subheading">
+          <Typography color="inherit" variant="title">
             {numSelected} selected
           </Typography>
         ) : (
@@ -208,16 +261,17 @@ let EnhancedTableToolbar = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        {numSelected === 1 && (
-          <Tooltip title="Manage Transaction">
+        <Tooltip title="Manage Transaction">
+          <Grow in={numSelected === 1}>
             <IconButton
               aria-label="Manage Transaction"
-              onClick={props.handleManageTransaction}
+              onClick={props.handleManage}
+              disabled={numSelected !== 1}
             >
               <Build />
             </IconButton>
-          </Tooltip>
-        )}
+          </Grow>
+        </Tooltip>
         {props.isFlagging ? (
           <CircularProgress className={classes.progress} color="primary" />
         ) : numSelected > 0 ? (
@@ -270,24 +324,28 @@ class EnhancedTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isLoading: true,
-    isFlagging: false
+    isFlagging: false,
+    rows: []
   };
 
   async componentDidMount() {
-    await this.transactions();
+    await this.scans();
     this.setState({ isLoading: false });
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.location.search !== nextProps.location.search) {
+    if (
+      this.props.location.search !== nextProps.location.search ||
+      this.props.state !== nextProps.state
+    ) {
       this.setState({ isLoading: true });
-      await this.transactions(nextProps.location.search);
+      await this.scans(nextProps.location.search, nextProps.state);
       this.setState({ isLoading: false });
     }
   }
 
   flag = () => {
-    if (this.state.selected.length > 0) {
+    if (this.state.selected.length > 0 && this.props.state !== table_user) {
       this.flagSelected();
     }
   };
@@ -314,24 +372,37 @@ class EnhancedTable extends React.Component {
     this.setState({ isFlagging: false });
   }
 
-  async transactions(search) {
+  async scans(search, state) {
     try {
-      const transactions = await API.get(
+      const scans = await API.get(
         "admin",
-        "/transactions".concat(search || this.props.location.search || "")
+        state === table_user || this.props.state === table_user
+          ? "/users".concat(search || this.props.location.search || "")
+          : state === table_flagged || this.props.state === table_flagged
+          ? "/transactions/flagged"
+          : "/transactions".concat(search || this.props.location.search || "")
       );
       counter = 0;
       await this.setState({ data: [], selected: [] });
-      for (var i of transactions) {
-        this.state.data.push(
-          createData(
-            i.time_created,
-            i.transaction_id,
-            i.buyer_username,
-            i.seller_username,
-            i.transaction_status
-          )
-        );
+      if (state === table_user || this.props.state === table_user) {
+        for (var i of scans) {
+          this.state.data.push(
+            createUser(i.username, i.first_name, i.last_name)
+          );
+        }
+      } else {
+        for (var i of scans) {
+          this.state.data.push(
+            createTransaction(
+              i.time_created,
+              i.transaction_id,
+              i.buyer_username,
+              i.seller_username,
+              i.transaction_status,
+              i.note
+            )
+          );
+        }
       }
       this.handleChangePage(null, 0);
     } catch (e) {
@@ -387,13 +458,21 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleManageTransaction = () => {
+  handleManage = () => {
+    console.log(
+      this.state.data.find(x => x.id === this.state.selected[0]).username
+    );
     if (this.state.selected[0] && this.state.selected.length === 1)
       this.props.history.push(
-        "/transaction/".concat(
-          this.state.data.find(x => x.id === this.state.selected[0])
-            .transaction_id
-        )
+        this.props.state === table_user
+          ? "/user/".concat(
+              this.state.data.find(x => x.id === this.state.selected[0])
+                .username
+            )
+          : "/transaction/".concat(
+              this.state.data.find(x => x.id === this.state.selected[0])
+                .transaction_id
+            )
       );
   };
 
@@ -406,76 +485,165 @@ class EnhancedTable extends React.Component {
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return !this.state.isLoading ? (
-      <Paper className={classes.root}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          handleManageTransaction={this.handleManageTransaction}
-          flag={this.flag}
-          isFlagging={this.state.isFlagging}
-        />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          onClick={event => this.handleClick(event, n.id)}
-                        />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.date}
-                      </TableCell>
-                      <TableCell>{n.transaction_id}</TableCell>
-                      <TableCell>{n.buyer}</TableCell>
-                      <TableCell>{n.seller}</TableCell>
-                      <TableCell>{n.transaction_status}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "Previous Page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "Next Page"
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
+      <Grow
+        in={!this.state.isLoading}
+        style={{
+          transitionDelay: this.state.isLoading ? 0 : 75
+        }}
+      >
+        <Paper className={classes.root}>
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            handleManage={this.handleManage}
+            flag={this.flag}
+            isFlagging={this.state.isFlagging}
+          />
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+                rows={this.props.state === table_user ? user_rows : rows}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    const isSelected = this.isSelected(n.id);
+                    return this.props.state === table_user ? (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            onClick={event => this.handleClick(event, n.id)}
+                          />
+                        </TableCell>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 75
+                          }}
+                        >
+                          <TableCell>{n.username}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 175
+                          }}
+                        >
+                          <TableCell>{n.name_first}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 275
+                          }}
+                        >
+                          <TableCell>{n.name_last}</TableCell>
+                        </Zoom>
+                      </TableRow>
+                    ) : (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            onClick={event => this.handleClick(event, n.id)}
+                          />
+                        </TableCell>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 75
+                          }}
+                        >
+                          <TableCell>{n.date}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 175
+                          }}
+                        >
+                          <TableCell>{n.transaction_id}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 275
+                          }}
+                        >
+                          <TableCell>{n.buyer}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 375
+                          }}
+                        >
+                          <TableCell>{n.seller}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 475
+                          }}
+                        >
+                          <TableCell>{n.transaction_status}</TableCell>
+                        </Zoom>
+                        <Zoom
+                          in={!this.state.isLoading}
+                          style={{
+                            transitionDelay: this.state.isLoading ? 0 : 575
+                          }}
+                        >
+                          <TableCell>{n.note}</TableCell>
+                        </Zoom>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "Previous Page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "Next Page"
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Grow>
     ) : (
       <Fragment>
         <LinearProgress color="secondary" className={classes.loader} />

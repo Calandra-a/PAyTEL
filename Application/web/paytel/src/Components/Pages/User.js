@@ -37,10 +37,6 @@ class User extends React.Component {
     return API.get("admin", "/users/".concat(this.props.match.params.id));
   }
 
-  /**user() {
-    return API.get("api_pull", "/user-info?username=".concat(this.props.match.params.id));
-  }*/
-
   render() {
     const { classes } = this.props;
     const { user } = this.state;

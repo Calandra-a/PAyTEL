@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { API } from "aws-amplify";
 
 const styles = theme => ({
@@ -19,7 +20,8 @@ class Transaction extends React.Component {
     super(props);
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      isFlagging: false
     };
 
     this.flag = this.flag.bind(this);
@@ -37,9 +39,10 @@ class Transaction extends React.Component {
   }
 
   async flag() {
+    this.setState({ isFlagging: true });
     await API.put("admin", "/transactions/".concat(this.props.match.params.id));
     const transaction = await this.transaction();
-    this.setState({ transaction });
+    this.setState({ transaction, isFlagging: false });
   }
 
   transaction() {
@@ -72,10 +75,21 @@ class Transaction extends React.Component {
             <Typography component="p">
               Status: {transaction.transaction_status}
             </Typography>
-            <Button className={classes.button} onClick={this.flag}>
-              {transaction.transaction_status.startsWith("flagged_")
-                ? "Unflag"
-                : "Flag"}
+            <Button
+              className={classes.button}
+              onClick={this.flag}
+              disabled={this.state.isFlagging}
+            >
+              {this.state.isFlagging ? (
+                <CircularProgress
+                  className={classes.progress}
+                  color="primary"
+                />
+              ) : transaction.transaction_status.startsWith("flagged_") ? (
+                "Unflag"
+              ) : (
+                "Flag"
+              )}
             </Button>
           </Paper>
         </div>

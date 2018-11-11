@@ -8,8 +8,18 @@ export async function main(event, context, callback) {
 
   if (data) {
     if (data.u) {
-      expression = expression.concat("userId = :user_id");
-      vals[":user_id"] = data.u;
+      expression = expression.concat("username = :username");
+      vals[":username"] = data.u;
+    }
+
+    if (data.f) {
+      expression = expression.concat("first_name = :first_name");
+      vals[":first_name"] = data.f;
+    }
+
+    if (data.l) {
+      expression = expression.concat("last_name = :last_name");
+      vals[":last_name"] = data.l;
     }
   }
 
@@ -17,11 +27,13 @@ export async function main(event, context, callback) {
     expression === ""
       ? {
           TableName: "paytel-mobilehub-2098009603-user-data"
+          //ProjectionExpression:
         }
       : {
           TableName: "paytel-mobilehub-2098009603-user-data",
           FilterExpression: expression,
           ExpressionAttributeValues: vals
+          //ProjectionExpression:
         };
 
   try {

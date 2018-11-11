@@ -8,7 +8,7 @@ export async function main(event, context, callback) {
       transaction_id: event.pathParameters.transaction_id
     },
     ProjectionExpression:
-      "transaction_id, time_created, buyer_username, seller_username, transaction_status"
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status, note"
   };
 
   try {

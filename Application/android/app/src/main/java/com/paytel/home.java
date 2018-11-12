@@ -54,6 +54,7 @@ public class home extends AppCompatActivity{
     private static PinpointManager pinpointManager;
 
     userDataObject user;
+    boolean nav_bool;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
@@ -68,9 +69,12 @@ public class home extends AppCompatActivity{
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     refreshTransactions();
+                    nav_bool = false;
+                    queryUser();
                     return true;
                 case R.id.navigation_dashboard:
                     refreshTransactions();
+                    nav_bool = true;
                     queryUser();
                     return true;
                 }
@@ -295,8 +299,11 @@ public class home extends AppCompatActivity{
                     ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, completedTransaction);
                     ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, pendingTransaction);
 
-                    pendinglistView.setAdapter(adapterPending);
-                    completedlistView.setAdapter(adapterCompleted);
+                    if(nav_bool == true)
+                        completedlistView.setAdapter(adapterCompleted);
+                    else{
+                        pendinglistView.setAdapter(adapterPending);
+                    }
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
                     Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();

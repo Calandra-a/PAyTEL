@@ -1,13 +1,16 @@
 package com.paytel.transaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amazonaws.http.HttpMethodName;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -30,29 +33,55 @@ import java.util.Map;
 public class create_new_transaction extends AppCompatActivity {
 
     private UsertransactionMobileHubClient apiClient;
-
+    private static int transactionCount = 0;
+    private static boolean lock = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //transactionCount = 0;
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.transaction_seller);
 
         //credit card
         Button btn_submit = findViewById(R.id.btn_submit);
-
         btn_submit.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 //move to next frame
-                add_transactioninfo();
 
-                try {
-                    Intent k = new Intent(create_new_transaction.this, home.class);
-                    startActivity(k);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (transactionCount == 0){
+                    setTimer();
                 }
+                transactionCount += 1;
+                 if (lock == false && transactionCount == 6){
+
+                    Context context = getApplicationContext();
+                    int dLong = Toast.LENGTH_LONG;
+                    CharSequence fail = "You're creating transactions too quickly - you can make another one in 1 minute";
+                    Toast toast = Toast.makeText(context, fail, dLong);
+                    toast.show();
+                    lock = true;
+                    lockout();
+                }
+                if (lock == true){
+                     Context context = getApplicationContext();
+                     int dShort = Toast.LENGTH_SHORT;
+                     CharSequence fail = "Locked - Please wait";
+                     Toast toast = Toast.makeText(context, fail, dShort);
+                     toast.show();
+                 }
+                if(lock == false) {
+                     add_transactioninfo();
+
+                     try {
+                         Intent k = new Intent(create_new_transaction.this, home.class);
+                         startActivity(k);
+
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                 }
             }
         });
         //load api gateway
@@ -75,7 +104,53 @@ public class create_new_transaction extends AppCompatActivity {
             }
         });
     }
+    void setTimer(){
+        new CountDownTimer(30000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                //debugging toast
+                // Context context = getApplicationContext();
+                //int dShort = Toast.LENGTH_SHORT;
+                //CharSequence value = String.valueOf("count  = "+transactionCount);
+                // Toast toast = Toast.makeText(context, value, dShort);
+                //toast.show();
+            }
+
+            public void onFinish() {
+                transactionCount = 0;
+
+            }
+
+        }.start();
+
+    }
+
+
+    void lockout(){
+        new CountDownTimer(60000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                //debugging toast
+                // Context context = getApplicationContext();
+                //int dShort = Toast.LENGTH_SHORT;
+                //CharSequence value = String.valueOf("count  = "+transactionCount);
+                // Toast toast = Toast.makeText(context, value, dShort);
+                //toast.show();
+            }
+
+            public void onFinish() {
+                lock = false;
+                transactionCount = 0;
+
+                //debugging toast
+                Context context = getApplicationContext();
+                int dShort = Toast.LENGTH_SHORT;
+                CharSequence value = "Transactions unlocked";
+                Toast toast = Toast.makeText(context, value, dShort);
+                toast.show();
+            }
+        }.start();
+    }
     void add_transactioninfo(){
         TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
         TextInputLayout amount = findViewById(R.id.txt_amount);

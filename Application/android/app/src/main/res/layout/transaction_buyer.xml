@@ -24,12 +24,12 @@
             android:layout_marginBottom="-42dp"
             android:background="@color/common_google_signin_btn_text_light_default"
             android:paddingRight="2dp"
-            android:text="X"
+            android:text="💰"
             android:textSize="48sp" />
 
         <TextView
             android:id="@+id/txt_buyerID"
-            android:layout_width="wrap_content"
+            android:layout_width="195dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/txt_emoji"

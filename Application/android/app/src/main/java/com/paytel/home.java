@@ -108,7 +108,8 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                String viewString = ((TextView) arg1).getText().toString();
+                TextView label = arg1.findViewById(R.id.label);
+                String viewString = label.getText().toString();
                 String transactionNumber = viewString.substring(0, viewString.indexOf(")"));
                 String amount = viewString.substring(viewString.lastIndexOf("$") + 1);
 
@@ -124,7 +125,8 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                String viewString = ((TextView) arg1).getText().toString();
+                TextView label = arg1.findViewById(R.id.label);
+                String viewString = label.getText().toString();
                 String transactionNumber = viewString.substring(0, viewString.indexOf(")"));
                 String amount = viewString.substring(viewString.lastIndexOf("$") + 1);
 
@@ -296,8 +298,8 @@ public class home extends AppCompatActivity{
                         }
                      //   eachTransaction.add(i + ") " + "$" + transAmounts.get(i)+" "+ status);
                     }
-                    ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, completedTransaction);
-                    ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, pendingTransaction);
+                    ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
+                    ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
                     if(nav_bool == true)
                         completedlistView.setAdapter(adapterCompleted);

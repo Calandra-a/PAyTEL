@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.paytel.authenticatoractivity;
 import com.paytel.global_objects;
 import com.paytel.home;
 
@@ -33,6 +34,7 @@ public class accountsettings extends AppCompatActivity {
         display_userinfo();
 
         Button btn_SAVE_userinfo = findViewById(R.id.btn_save_userinfo);
+        Button btn_SIGN_OUT = findViewById(R.id.btn_sign_out);
 
         btn_SAVE_userinfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +57,17 @@ public class accountsettings extends AppCompatActivity {
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+        btn_SIGN_OUT.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                try {
+                    Intent k = new Intent(accountsettings.this, authenticatoractivity.class);
+                    startActivity(k);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

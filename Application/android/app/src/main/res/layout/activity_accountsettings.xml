@@ -301,6 +301,17 @@
             android:background="@color/colorPrimaryDark"
             android:text="SAVE"
             android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/btn_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Sign Out"
+            android:textColor="@color/colorAccent" />
     </LinearLayout>
 
 </ScrollView>

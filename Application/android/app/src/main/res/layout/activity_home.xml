@@ -108,17 +108,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:text="Username"
                 android:textSize="24sp" />
+
             <TextView
                 android:id="@+id/info_text"
-                android:layout_width="217dp"
+                android:layout_width="192dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/info_username"
-                android:layout_toLeftOf="@+id/btn_funds"
                 android:layout_alignBaseline="@id/btn_funds"
-                android:textAlignment="textEnd"
+                android:layout_alignTop="@+id/info_username"
+                android:layout_marginRight="25dp"
+                android:layout_toLeftOf="@+id/btn_funds"
                 android:text="Wallet: $0.00"
+                android:textAlignment="textEnd"
                 android:textSize="24sp" />
 
             <Button

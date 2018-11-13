@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/paytel_logo_128" />
+                android:src="@drawable/paytel_incognitologo_128" />
         </FrameLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -47,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:divider="@null"
         app:layout_constraintTop_toBottomOf="@+id/cardView"></ListView>
 
     <ListView
@@ -54,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:divider="@null"
         app:layout_constraintTop_toBottomOf="@+id/cardView"></ListView>
 
     <android.support.design.widget.BottomNavigationView
@@ -85,9 +87,9 @@
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardView"
-        android:layout_width="368dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
@@ -96,21 +98,39 @@
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/info_text"
-            android:layout_width="217dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="116dp"
-            android:layout_marginLeft="5dp"
-            android:textAlignment="textEnd"
-            android:textSize="24sp" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/info_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:text="Username"
+                android:textSize="24sp" />
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="217dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/info_username"
+                android:layout_toLeftOf="@+id/btn_funds"
+                android:layout_alignBaseline="@id/btn_funds"
+                android:textAlignment="textEnd"
+                android:text="Wallet: $0.00"
+                android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btn_funds"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Funds" />
+            <Button
+                android:id="@+id/btn_funds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/info_username"
+                android:layout_marginRight="8dp"
+                android:text="Add Funds" />
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

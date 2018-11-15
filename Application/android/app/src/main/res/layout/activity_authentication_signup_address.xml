@@ -87,14 +87,14 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="8dp"
-            android:gravity="center"
+            android:gravity="top"
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_zipcode"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="80dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="5"
                 app:counterOverflowTextAppearance="@style/CounterOverFlow"
@@ -109,24 +109,30 @@
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/txt_state"
-                android:layout_width="130dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="2"
-                app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                app:counterTextAppearance="@style/CounterText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_city">
-
-                <android.support.design.widget.TextInputEditText
-                    android:layout_width="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/state"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="State"
-                    android:inputType="textCapCharacters" />
-            </android.support.design.widget.TextInputLayout>
+                    android:textSize="12sp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingBottom="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/states_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/states_array"
+                    android:prompt="@string/State"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
 
         </LinearLayout>
 

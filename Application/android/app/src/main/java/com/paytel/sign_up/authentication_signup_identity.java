@@ -15,6 +15,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
+import com.santalu.widget.MaskEditText;
 
 
 public class authentication_signup_identity extends AppCompatActivity {
@@ -63,11 +64,11 @@ public class authentication_signup_identity extends AppCompatActivity {
         TextInputLayout f_name = findViewById(R.id.txt_first_name);
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         TextInputLayout user_name = findViewById(R.id.txt_username);
-        TextInputLayout phone_number = findViewById(R.id.txt_phone_number);
+        MaskEditText phone_number = findViewById(R.id.txt_phone_number);
 
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
         if (user_name.getEditText().getText().toString().length() == 0 || f_name.getEditText().getText().toString().length() == 0 ||
-                l_name.getEditText().getText().toString().length() == 0 || phone_number.getEditText().getText().toString().length() == 0) {
+                l_name.getEditText().getText().toString().length() == 0 || phone_number.getRawText().length() == 0) {
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -77,7 +78,7 @@ public class authentication_signup_identity extends AppCompatActivity {
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
-        } else if (phone_number.getEditText().getText().toString().length() != 10) {
+        } else if (phone_number.getRawText().length() != 10) {
             CharSequence fail = "Phone number must be 10 digits";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -90,7 +91,7 @@ public class authentication_signup_identity extends AppCompatActivity {
             new_user.setUsername(user_name.getEditText().getText().toString().trim());
             new_user.setFirstName(f_name.getEditText().getText().toString().trim());
             new_user.setLastName(l_name.getEditText().getText().toString().trim());
-            new_user.setPhoneNumber(phone_number.getEditText().getText().toString().trim());
+            new_user.setPhoneNumber(phone_number.getRawText().trim());
             return true;
         }
     }

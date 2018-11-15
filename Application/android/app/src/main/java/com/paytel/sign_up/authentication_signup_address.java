@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.paytel.R;
@@ -18,7 +21,7 @@ import com.paytel.util.userDataObject;
 //TODO: logic
 
 
-public class authentication_signup_address extends AppCompatActivity {
+public class authentication_signup_address extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     userDataObject new_user;
 
@@ -48,6 +51,30 @@ public class authentication_signup_address extends AppCompatActivity {
                 }
             }
         });
+
+        //state drop down stuff:
+        Spinner spinner = (Spinner) findViewById(R.id.states_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.states_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        //spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        spinner.setOnItemSelectedListener(this);
+        //set default value of State drop-down menu
+        spinner.setSelection(21);//default to Michigan
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     boolean add_address(){
@@ -59,10 +86,10 @@ public class authentication_signup_address extends AppCompatActivity {
         TextInputLayout street = findViewById(R.id.txt_street);
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
         TextInputLayout city = findViewById(R.id.txt_city);
-        TextInputLayout state = findViewById(R.id.txt_state);
+        Spinner spinner = findViewById(R.id.states_spinner);
 
         if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() ==0 ||
-                city.getEditText().getText().toString().length() == 0 || state.getEditText().getText().toString().length() == 0){
+                city.getEditText().getText().toString().length() == 0 || String.valueOf(spinner.getSelectedItem()).length() == 0){
 
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
@@ -88,7 +115,7 @@ public class authentication_signup_address extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if(state.getEditText().getText().toString().length() != 2){
+        else if(String.valueOf(spinner.getSelectedItem()).length() != 2){
             CharSequence fail = "State must be 2 characters";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -101,7 +128,7 @@ public class authentication_signup_address extends AppCompatActivity {
             new_user.setStreet(street.getEditText().getText().toString());
             new_user.setCity(city.getEditText().getText().toString());
             new_user.setZipCode(zip.getEditText().getText().toString());
-            new_user.setState(state.getEditText().getText().toString()); 
+            new_user.setState(String.valueOf(spinner.getSelectedItem()));
             return true;
         }
     }

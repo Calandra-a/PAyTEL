@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.paytel.authenticatoractivity;
@@ -19,10 +21,12 @@ import java.util.Map;
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.lang.String;
 
-public class accountsettings extends AppCompatActivity {
+public class accountsettings extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     userDataObject current_user;
 
     @Override
@@ -71,6 +75,29 @@ public class accountsettings extends AppCompatActivity {
                 }
             }
         });
+
+        //state drop down stuff:
+        Spinner spinner = (Spinner) findViewById(R.id.states_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.states_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        //spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        spinner.setOnItemSelectedListener(this);
+        //set default value of State drop-down menu
+        display_state(spinner, adapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     boolean edit_userinfo(){
@@ -89,6 +116,7 @@ public class accountsettings extends AppCompatActivity {
         MaskEditText card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
         MaskEditText exp_date = findViewById(R.id.txt_exp_date);
+        Spinner spinner = findViewById(R.id.states_spinner);
 
         if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 || 
             street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 || 
@@ -183,6 +211,7 @@ public class accountsettings extends AppCompatActivity {
         if(zip != null)current_user.setZipCode(zip.getEditText().getText().toString().trim());
         if(phone_number != null)current_user.setPhoneNumber(phone_number.getRawText().trim());
         if(cc != null)current_user.setCreditCard(cc);
+        if(cc != null)current_user.setState(String.valueOf(spinner.getSelectedItem()));
         return true;
         }
     }
@@ -209,6 +238,22 @@ public class accountsettings extends AppCompatActivity {
         card_number.setText(current_user.getCreditCard().get("card_number"));
         CVC.getEditText().setText(current_user.getCreditCard().get("cvc"));
         exp_date.setText(current_user.getCreditCard().get("expiration_date"));
+    }
+
+    void display_state(Spinner spinner, ArrayAdapter adapter){
+        String myString = current_user.getState(); //the value you want the position for
+        try {
+            int spinnerPosition = adapter.getPosition(myString);
+            //set the default according to value
+            spinner.setSelection(spinnerPosition);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

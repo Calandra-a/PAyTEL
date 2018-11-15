@@ -70,4 +70,12 @@
         <item name="colorButtonNormal">@color/button_next</item>
         <item name="android:textColor">@color/button_next_txt</item>
     </style>
+
+
+    //divider line
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
 </resources>

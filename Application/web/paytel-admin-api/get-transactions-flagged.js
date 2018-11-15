@@ -4,10 +4,12 @@ import { success, failure } from "./libs/response-lib";
 export async function main(event, context, callback) {
   const params = {
     TableName: "paytel-mobilehub-2098009603-transactions",
-    FilterExpression: "transaction_status = :status",
+    FilterExpression: "begins_with(transaction_status, :status)",
     ExpressionAttributeValues: {
-      ":status": "flagged"
-    }
+      ":status": "flagged_"
+    },
+    ProjectionExpression:
+      "transaction_id, time_created, buyer_username, seller_username, transaction_status, note"
   };
 
   try {

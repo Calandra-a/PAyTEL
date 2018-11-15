@@ -64,18 +64,19 @@
         <activity
             android:name=".transaction.create_new_transaction"
             android:theme="@style/paytel_main"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".transaction.start_buyer_transaction"
             android:theme="@style/paytel_main"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".transaction.transaction_facial"
-            android:theme="@style/AppTheme"
+            android:theme="@style/paytel_main"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".transaction.complete_transaction"
-            android:theme="@style/AppTheme"
+            android:theme="@style/paytel_main"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".sign_up.authentication_signup_identity"
@@ -86,7 +87,10 @@
             android:theme="@style/paytel_setup"
             android:screenOrientation="portrait"/>
         <activity android:name=".sign_up.authentication_apicall_facial" />
-
+        <activity
+            android:name=".transaction.transaction_facial_success"
+            android:theme="@style/paytel_main"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".util.PushListenerService">
             <intent-filter>

@@ -108,6 +108,7 @@ public class start_buyer_transaction extends AppCompatActivity {
                         @Override
                         public void run() {
                             //you can add phone number and username here
+                            TextView icon = findViewById(R.id.txt_emoji);
                             TextView amount = findViewById(R.id.txt_amount);
                             TextView note = findViewById(R.id.txt_note);
                             TextView buyerID = findViewById(R.id.txt_buyerID);
@@ -117,16 +118,22 @@ public class start_buyer_transaction extends AppCompatActivity {
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
                             System.out.println(current_transaction.getTransactionStatus());
-                            if(current_transaction.getTransactionStatus().equals("pending")){
-                                if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
-                                    approve.setVisibility(View.VISIBLE);
-                                    deny.setVisibility(View.VISIBLE);
-                                }
-                            }
 
-                            amount.setText("Amount: $" + current_transaction.getAmount());
-                            note.setText("Description: " + current_transaction.getNote());
-                            buyerID.setText("Buyer ID: " +  current_transaction.getBuyerUsername());
+                                if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
+                                    if(current_transaction.getTransactionStatus().equals("pending")) {
+                                        approve.setVisibility(View.VISIBLE);
+                                        deny.setVisibility(View.VISIBLE);
+                                    }
+                                    buyerID.setText(current_transaction.getSellerUsername() + " requested:");
+                                }else{
+                                    buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
+                                }
+
+
+                            //int eggplant = 0x1F346;//eggplant emoji
+                            //icon.setText(new String(Character.toChars(eggplant)));
+                            amount.setText("+$" + current_transaction.getAmount());
+                            note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
 
                         }

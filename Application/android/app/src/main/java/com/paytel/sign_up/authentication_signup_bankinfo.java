@@ -10,6 +10,8 @@ import android.widget.Button;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
+import com.santalu.widget.MaskEditText;
+
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -55,13 +57,13 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
 
 
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
-        TextInputLayout card_number = findViewById(R.id.txt_card_number);
+        MaskEditText card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
-        TextInputLayout exp_date = findViewById(R.id.txt_exp_date);
+        MaskEditText exp_date = findViewById(R.id.txt_exp_date);
 
         //Handle empty field
-        if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getEditText().getText().toString().length() ==0 ||
-                CVC.getEditText().getText().toString().length() == 0 || exp_date.getEditText().getText().toString().length() == 0){
+        if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() ==0 ||
+                CVC.getEditText().getText().toString().length() == 0 || exp_date.getRawText().length() == 0){
 
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
@@ -69,14 +71,14 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             return false;
         }
         //handle bad expiration date format
-        if (!exp_date.getEditText().getText().toString().matches("\\d{2}/\\d{2}")){
+        if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
             CharSequence fail = "Expiration date must be mm/yy format";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         //parses month and year for date check
-        String date[]= exp_date.getEditText().getText().toString().split("/");
+        String date[]= exp_date.getText().toString().split("/");
         int month = Integer.parseInt(date[0]);
         int year = Integer.parseInt(date[1]);
 
@@ -87,7 +89,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (card_number.getEditText().getText().toString().length() != 16){ 
+        else if (card_number.getRawText().length() != 16){
             CharSequence fail = "Card number must be 16 digits"; 
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
@@ -117,9 +119,9 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
 
             Map<String, String> cc = new HashMap<String, String>();
             cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
-            cc.put("card_number", card_number.getEditText().getText().toString().trim());
+            cc.put("card_number", card_number.getRawText().trim());
             cc.put("cvc", CVC.getEditText().getText().toString().trim());
-            cc.put("expiration_date", exp_date.getEditText().getText().toString().trim());
+            cc.put("expiration_date", exp_date.getRawText().trim());
             new_user.setCreditCard(cc);
             new_user.setRekognitionIds(null);
             new_user.setWallet(100.00);

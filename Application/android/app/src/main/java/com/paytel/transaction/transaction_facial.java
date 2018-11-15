@@ -23,7 +23,7 @@ public class transaction_facial extends AppCompatActivity {
         }
 
         //facial rekognition
-        Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
+        /*Button btn_NEXT_facial = findViewById(R.id.btn_next_facial);
         btn_NEXT_facial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +34,7 @@ public class transaction_facial extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
 
     }
     public void pictureComplete() {

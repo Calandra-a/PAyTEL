@@ -52,6 +52,7 @@ import android.widget.Toast;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -1136,11 +1137,19 @@ public class authentication_signup_facial_fragment extends Fragment
     }
 
     public static class BadPictureDialog extends DialogFragment {
+        public static BadPictureDialog newInstance(CharSequence message) {
+            BadPictureDialog bad = new BadPictureDialog();
+            Bundle args = new Bundle();
+            args.putCharSequence("msg", message);
+            bad.setArguments(args);
+            return bad;
+        }
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            CharSequence message = getArguments().getCharSequence("msg");
             return new AlertDialog.Builder(getActivity())
-                    .setMessage("Picture did not go through")
+                    .setMessage(message)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -1153,6 +1162,11 @@ public class authentication_signup_facial_fragment extends Fragment
     }
 
     class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        Object[] responseArray;
+        ApiResponse globalResponse;
+        String responseData;
+        String statusCode;
+        String statusText;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1161,18 +1175,19 @@ public class authentication_signup_facial_fragment extends Fragment
         }
 
         protected Boolean doInBackground(Void... params) {
-            Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
-            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 50, bOut);
+            //Bitmap bm = BitmapFactory.decodeFile(mFile.toString());
+            //ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+            //bm.compress(Bitmap.CompressFormat.JPEG, 50, bOut);
 
             //encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
-            if ((aaf.callCloudLogic(pose)) == "true") {
-                responseVal = "true";
-            }
+            responseArray = aaf.callCloudLogic(pose);
 
-            else {
-                responseVal = "false";
-            }
+            globalResponse = (ApiResponse)responseArray[0];
+            responseData = (String)responseArray[1];
+            statusCode = Integer.toString(globalResponse.getStatusCode());
+            statusText = globalResponse.getStatusText();
+
+            System.out.println(globalResponse);
             return true;
         }
 
@@ -1180,10 +1195,10 @@ public class authentication_signup_facial_fragment extends Fragment
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
             progress.dismiss();
-            if (responseVal == "true") {
+            if (globalResponse.getStatusCode() == 200) {
                 ((authentication_signup_facial) getActivity()).pictureComplete();
             } else {
-                BadPictureDialog bad = new BadPictureDialog();
+                BadPictureDialog bad = BadPictureDialog.newInstance(statusCode + ": " + statusText + "\n" + responseData.substring(13, (responseData.length()-2)) + "\nPlease try again!");
                 bad.setCancelable(false);
                 bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }

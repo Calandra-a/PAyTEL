@@ -71,13 +71,27 @@ public class add_funds extends AppCompatActivity {
             toast.show();
             return false;
         }
-        if(wallet.getEditText().getText().toString().length() >=5){
+        else if(!wallet.getEditText().getText().toString().matches( "\\d+([.]\\d{2})?")){
+            if(wallet.getEditText().getText().toString().matches( "([.]\\d{2})?")){
+            CharSequence fail = "Additions below a dollar must be in 0.00 format";
+            Toast toast = Toast.makeText(context, fail, dLong);
+            toast.show();
+            return false;
+            }
+            else{
+                CharSequence fail = "Please revise input try using 0.00 format";
+                Toast toast = Toast.makeText(context, fail, dLong);
+                toast.show();
+                return false;
+            }
+        }
+        else if((!wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >=5) ||
+                (wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >= 8)){
             CharSequence fail = "Funds added must be under $10000 per addition";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
-
         else{
             if(wallet != null){
             Double currentFunds = current_user.getWallet();

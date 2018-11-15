@@ -95,3 +95,5 @@ functions:
             parameters:
               querystrings:
                 u: false
+                f: false
+                l: false

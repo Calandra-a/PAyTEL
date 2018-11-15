@@ -53,12 +53,14 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.util.IOUtils;
 import com.paytel.R;
 import com.paytel.util.autofit_textureview;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1131,11 +1133,19 @@ public class transaction_facial_fragment extends Fragment
     }
 
     public static class BadPictureDialog extends DialogFragment {
+        public static BadPictureDialog newInstance(CharSequence message) {
+            BadPictureDialog bad = new BadPictureDialog();
+            Bundle args = new Bundle();
+            args.putCharSequence("msg", message);
+            bad.setArguments(args);
+            return bad;
+        }
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            CharSequence message = getArguments().getCharSequence("msg");
             return new AlertDialog.Builder(getActivity())
-                    .setMessage("Picture did not go through")
+                    .setMessage(message)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -1148,7 +1158,11 @@ public class transaction_facial_fragment extends Fragment
     }
 
     class WaitTask extends AsyncTask<Void, Void, Boolean> {
+        Object[] responseArray;
         ApiResponse globalResponse;
+        String responseData;
+        String statusCode;
+        String statusText;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1162,7 +1176,12 @@ public class transaction_facial_fragment extends Fragment
 
             //encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
 
-            globalResponse= aaf.callCloudLogic(pose);
+            responseArray = aaf.callCloudLogic(pose);
+
+            globalResponse = (ApiResponse)responseArray[0];
+            responseData = (String)responseArray[1];
+            statusCode = Integer.toString(globalResponse.getStatusCode());
+            statusText = globalResponse.getStatusText();
 
             System.out.println(globalResponse);
             return true;
@@ -1172,11 +1191,10 @@ public class transaction_facial_fragment extends Fragment
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
             progress.dismiss();
-            System.out.println(globalResponse);
             if (globalResponse.getStatusCode() == 200) {
                 ((transaction_facial) getActivity()).pictureComplete();
             } else {
-                BadPictureDialog bad = new BadPictureDialog();
+                BadPictureDialog bad = BadPictureDialog.newInstance(statusCode + ": " + statusText + "\n" + responseData.substring(13, (responseData.length()-2)) + "\nPlease try again!");
                 bad.setCancelable(false);
                 bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }

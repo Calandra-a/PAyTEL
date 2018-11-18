@@ -277,6 +277,7 @@ public class home extends AppCompatActivity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    try{
                     ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
                     ListView completedlistView = (ListView) findViewById(R.id.completed_list);
 
@@ -315,6 +316,10 @@ public class home extends AppCompatActivity{
                     mCardview.setText("Wallet: $"+Double.toString(wallet));
                     mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
                 }
+                catch(Exception e){
+                        e.printStackTrace();
+                } }
+
             });
         }
         catch(Exception e){

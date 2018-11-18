@@ -1196,9 +1196,10 @@ public class authentication_signup_facial_fragment extends Fragment
             super.onPostExecute(bool);
             progress.dismiss();
             if (globalResponse.getStatusCode() == 200) {
+
                 ((authentication_signup_facial) getActivity()).pictureComplete();
             } else {
-                BadPictureDialog bad = BadPictureDialog.newInstance(statusCode + ": " + statusText + "\n" + responseData.substring(13, (responseData.length()-2)) + "\nPlease try again!");
+                BadPictureDialog bad = BadPictureDialog.newInstance(responseData.substring(12, (responseData.length()-2)) + "\nPlease try again!");
                 bad.setCancelable(false);
                 bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }

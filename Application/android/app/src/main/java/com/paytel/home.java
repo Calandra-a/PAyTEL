@@ -37,6 +37,7 @@ import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.accountsettings;
+import com.paytel.settings.settings_main;
 import com.paytel.transaction.create_new_transaction;
 import com.paytel.transaction.start_buyer_transaction;
 import com.paytel.util.add_funds;
@@ -184,7 +185,8 @@ public class home extends AppCompatActivity{
         //noinspection SimplifiableIfStatement
         if (id == R.id.btn_settingspage) {
             try {
-                Intent k = new Intent(home.this, accountsettings.class);
+                //Intent k = new Intent(home.this, accountsettings.class);
+                Intent k = new Intent(home.this, settings_main.class);
                 startActivity(k);
             } catch(Exception e) {
                 e.printStackTrace();

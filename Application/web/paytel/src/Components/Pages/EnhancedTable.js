@@ -324,6 +324,7 @@ class EnhancedTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isLoading: true,
+    isLoadingRows: true,
     isFlagging: false,
     rows: []
   };
@@ -331,6 +332,7 @@ class EnhancedTable extends React.Component {
   async componentDidMount() {
     await this.scans();
     this.setState({ isLoading: false });
+    this.setState({ isLoadingRows: false });
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -338,9 +340,11 @@ class EnhancedTable extends React.Component {
       this.props.location.search !== nextProps.location.search ||
       this.props.state !== nextProps.state
     ) {
+      this.setState({ isLoadingRows: true });
       this.setState({ isLoading: true });
       await this.scans(nextProps.location.search, nextProps.state);
       this.setState({ isLoading: false });
+      this.setState({ isLoadingRows: false });
     }
   }
 
@@ -451,7 +455,9 @@ class EnhancedTable extends React.Component {
   };
 
   handleChangePage = (event, page) => {
+    this.setState({ isLoadingRows: true });
     this.setState({ page });
+    this.setState({ isLoadingRows: false });
   };
 
   handleChangeRowsPerPage = event => {
@@ -530,25 +536,25 @@ class EnhancedTable extends React.Component {
                           />
                         </TableCell>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 75
+                            transitionDelay: this.state.isLoadingRows ? 0 : 75
                           }}
                         >
                           <TableCell>{n.username}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 175
+                            transitionDelay: this.state.isLoadingRows ? 0 : 175
                           }}
                         >
                           <TableCell>{n.name_first}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 275
+                            transitionDelay: this.state.isLoadingRows ? 0 : 275
                           }}
                         >
                           <TableCell>{n.name_last}</TableCell>
@@ -570,49 +576,49 @@ class EnhancedTable extends React.Component {
                           />
                         </TableCell>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 75
+                            transitionDelay: this.state.isLoadingRows ? 0 : 75
                           }}
                         >
                           <TableCell>{n.date}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 175
+                            transitionDelay: this.state.isLoadingRows ? 0 : 175
                           }}
                         >
                           <TableCell>{n.transaction_id}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 275
+                            transitionDelay: this.state.isLoadingRows ? 0 : 275
                           }}
                         >
                           <TableCell>{n.buyer}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 375
+                            transitionDelay: this.state.isLoadingRows ? 0 : 375
                           }}
                         >
                           <TableCell>{n.seller}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 475
+                            transitionDelay: this.state.isLoadingRows ? 0 : 475
                           }}
                         >
                           <TableCell>{n.transaction_status}</TableCell>
                         </Zoom>
                         <Zoom
-                          in={!this.state.isLoading}
+                          in={!this.state.isLoadingRows}
                           style={{
-                            transitionDelay: this.state.isLoading ? 0 : 575
+                            transitionDelay: this.state.isLoadingRows ? 0 : 575
                           }}
                         >
                           <TableCell>{n.note}</TableCell>
@@ -622,7 +628,7 @@ class EnhancedTable extends React.Component {
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={7} />
                   </TableRow>
                 )}
               </TableBody>
@@ -648,7 +654,19 @@ class EnhancedTable extends React.Component {
       <Fragment>
         <LinearProgress color="secondary" className={classes.loader} />
         <LinearProgress
-          color="primary"
+          color="secondary"
+          variant="query"
+          className={classes.loader}
+        />
+        <LinearProgress color="secondary" className={classes.loader} />
+        <LinearProgress
+          color="secondary"
+          variant="query"
+          className={classes.loader}
+        />
+        <LinearProgress color="secondary" className={classes.loader} />
+        <LinearProgress
+          color="secondary"
           variant="query"
           className={classes.loader}
         />

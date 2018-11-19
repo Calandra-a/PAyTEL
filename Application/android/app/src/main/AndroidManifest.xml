@@ -91,6 +91,22 @@
             android:name=".transaction.transaction_facial_success"
             android:theme="@style/paytel_main"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.settings_main"
+            android:theme="@style/paytel_main"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.settings_identity"
+            android:theme="@style/paytel_main"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.settings_bankinfo"
+            android:theme="@style/paytel_main"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.settings_address"
+            android:theme="@style/paytel_main"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".util.PushListenerService">
             <intent-filter>

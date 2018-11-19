@@ -90,4 +90,10 @@
         <item>WI</item>
         <item>WY</item>
     </string-array>
+    <string-array name="settings_array">
+        <item>Edit Profile</item>
+        <item>Change Payment Method</item>
+        <item>Change Billing Address</item>
+        <item>Sign Out</item>
+    </string-array>
 </resources>

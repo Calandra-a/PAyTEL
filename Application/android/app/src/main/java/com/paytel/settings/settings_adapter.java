@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.paytel.R;
-import com.paytel.authenticatoractivity;
 import com.paytel.home;
+import com.paytel.sign_in;
 import com.paytel.sign_up.authentication_signup_bankinfo;
 import com.paytel.settings.settings_identity;
 
@@ -55,7 +55,7 @@ public class settings_adapter extends RecyclerView.Adapter<settings_adapter.View
                     intent =  new Intent(context, settings_address.class);
                     break;
                 case 3:
-                    intent = new Intent(context, authenticatoractivity.class);
+                    intent = new Intent(context, sign_in.class);
                     break;
                 default:
                     intent =  new Intent(context, home.class);

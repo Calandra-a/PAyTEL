@@ -3,12 +3,15 @@ package com.paytel.util;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import com.paytel.authenticatoractivity;
+import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.auth.core.SignInStateChangeListener;
+import com.paytel.sign_in;
 import com.paytel.global_objects;
 import com.paytel.home;
 
@@ -22,7 +25,6 @@ import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.lang.String;
 
@@ -33,7 +35,7 @@ public class accountsettings extends AppCompatActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_accountsettings);
+        setContentView(R.layout.account_settings);
         current_user = ((global_objects) getApplication()).getCurrent_user();
         display_userinfo();
 
@@ -67,8 +69,9 @@ public class accountsettings extends AppCompatActivity implements AdapterView.On
         btn_SIGN_OUT.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                IdentityManager.getDefaultIdentityManager().signOut();
                 try {
-                    Intent k = new Intent(accountsettings.this, authenticatoractivity.class);
+                    Intent k = new Intent(accountsettings.this, sign_in.class);
                     startActivity(k);
                 } catch (Exception e) {
                     e.printStackTrace();

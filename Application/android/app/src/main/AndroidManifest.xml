@@ -29,7 +29,7 @@
         android:theme="@style/paytel_setup"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".authenticatoractivity"
+            android:name=".sign_in"
             android:label="@string/title_activity_authenticatoractivity"
             android:theme="@style/paytel_setup">
             <intent-filter>
@@ -87,10 +87,7 @@
             android:theme="@style/paytel_setup"
             android:screenOrientation="portrait"/>
         <activity android:name=".sign_up.authentication_apicall_facial" />
-        <activity
-            android:name=".transaction.transaction_facial_success"
-            android:theme="@style/paytel_main"
-            android:screenOrientation="portrait"/>
+
         <service
             android:name=".util.PushListenerService">
             <intent-filter>

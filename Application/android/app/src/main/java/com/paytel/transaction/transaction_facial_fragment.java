@@ -53,7 +53,6 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.util.IOUtils;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.autofit_textureview;
@@ -61,7 +60,6 @@ import com.paytel.util.autofit_textureview;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -102,7 +100,7 @@ public class transaction_facial_fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "authentication_signup_facial_fragment";
+    private static final String TAG = "signup_facial_fragment";
 
     static String pose;
 
@@ -434,7 +432,7 @@ public class transaction_facial_fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_authentication_signup_facial, container, false);
+        return inflater.inflate(R.layout.signup_facial_fragment, container, false);
     }
 
     @Override

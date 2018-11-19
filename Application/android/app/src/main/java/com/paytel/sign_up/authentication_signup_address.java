@@ -29,7 +29,7 @@ public class authentication_signup_address extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_authentication_signup_address);
+        setContentView(R.layout.signup_address);
 
         new_user = ((global_objects) getApplication()).getNew_user();
 

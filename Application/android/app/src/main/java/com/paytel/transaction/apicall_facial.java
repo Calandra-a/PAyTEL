@@ -26,7 +26,7 @@ public class apicall_facial{
 
     private UsertransactionMobileHubClient apiClient;
 
-    public Object[] callCloudLogic(String pose) {
+    public Object[] callCloudLogic(String pose, String S3Key) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
@@ -42,6 +42,7 @@ public class apicall_facial{
         try {
             json.put("userID", userID);
             json.put("pose", pose);
+            json.put("S3Key", S3Key);
             //json.put("image", Image);
         } catch (JSONException e) {
             e.printStackTrace();

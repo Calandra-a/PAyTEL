@@ -24,7 +24,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.authentication_activity_signup_bankinfo);
+        setContentView(R.layout.signup_bankinfo);
 
         new_user = ((global_objects) getApplication()).getNew_user();
 

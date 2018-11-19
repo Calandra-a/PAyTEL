@@ -9,8 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -28,10 +26,8 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.FileObserver;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -39,7 +35,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -61,7 +56,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.paytel.R;
 import com.paytel.util.autofit_textureview;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -103,7 +97,7 @@ public class authentication_signup_facial_fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "authentication_signup_facial_fragment";
+    private static final String TAG = "signup_facial_fragment";
 
     static String pose;
 
@@ -435,7 +429,7 @@ public class authentication_signup_facial_fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_authentication_signup_facial, container, false);
+        return inflater.inflate(R.layout.signup_facial_fragment, container, false);
     }
 
     @Override
@@ -1196,9 +1190,10 @@ public class authentication_signup_facial_fragment extends Fragment
             super.onPostExecute(bool);
             progress.dismiss();
             if (globalResponse.getStatusCode() == 200) {
+
                 ((authentication_signup_facial) getActivity()).pictureComplete();
             } else {
-                BadPictureDialog bad = BadPictureDialog.newInstance(statusCode + ": " + statusText + "\n" + responseData.substring(13, (responseData.length()-2)) + "\nPlease try again!");
+                BadPictureDialog bad = BadPictureDialog.newInstance(responseData.substring(12, (responseData.length()-2)) + "\nPlease try again!");
                 bad.setCancelable(false);
                 bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }

@@ -53,19 +53,20 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.util.IOUtils;
 import com.paytel.R;
+import com.paytel.global_objects;
 import com.paytel.util.autofit_textureview;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -85,9 +86,9 @@ public class transaction_facial_fragment extends Fragment
     Boolean mAutoFocusSupported;
     ProgressDialog progress;
     apicall_facial aaf;
-    String encodedString;
-    ApiResponse responseVal;
+    static ApiResponse globalResponse;
     WaitTask myTask;
+    String S3Key;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -99,7 +100,7 @@ public class transaction_facial_fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "authentication_signup_facial_fragment";
+    private static final String TAG = "signup_facial_fragment";
 
     static String pose;
 
@@ -431,7 +432,7 @@ public class transaction_facial_fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_authentication_signup_facial, container, false);
+        return inflater.inflate(R.layout.signup_facial_fragment, container, false);
     }
 
     @Override
@@ -877,9 +878,11 @@ public class transaction_facial_fragment extends Fragment
                     progress.setCancelable(false);
                     progress.setCanceledOnTouchOutside(false);
                     progress.show();
-
+                    String transactionID =  ((global_objects) getActivity().getApplication()).getCurrent_transaction().getTransactionId();
                     String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
-                    String S3Key = "uploads/"+userID+"/transaction.jpg";
+                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+
+                    S3Key = "uploads/transactions/"+transactionID+"/"+timeStamp+".jpg";
 
                     TransferUtility transferUtility =
                             TransferUtility.builder()
@@ -1150,7 +1153,12 @@ public class transaction_facial_fragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            ((transaction_facial)getActivity()).pictureIncomplete();
+                            if(globalResponse.getStatusCode() == 200){
+                                ((transaction_facial) getActivity()).pictureComplete();
+
+                            }else{
+                                ((transaction_facial)getActivity()).pictureIncomplete();
+                            }
                         }
                     })
                     .create();
@@ -1159,7 +1167,6 @@ public class transaction_facial_fragment extends Fragment
 
     class WaitTask extends AsyncTask<Void, Void, Boolean> {
         Object[] responseArray;
-        ApiResponse globalResponse;
         String responseData;
         String statusCode;
         String statusText;
@@ -1176,14 +1183,14 @@ public class transaction_facial_fragment extends Fragment
 
             //encodedString = Base64.encodeToString(bOut.toByteArray(), Base64.DEFAULT);
 
-            responseArray = aaf.callCloudLogic(pose);
+            responseArray = aaf.callCloudLogic(pose, S3Key);
 
             globalResponse = (ApiResponse)responseArray[0];
             responseData = (String)responseArray[1];
             statusCode = Integer.toString(globalResponse.getStatusCode());
             statusText = globalResponse.getStatusText();
 
-            System.out.println(globalResponse);
+            System.out.println("globalResponse " + globalResponse);
             return true;
         }
 
@@ -1192,9 +1199,12 @@ public class transaction_facial_fragment extends Fragment
             super.onPostExecute(bool);
             progress.dismiss();
             if (globalResponse.getStatusCode() == 200) {
-                ((transaction_facial) getActivity()).pictureComplete();
+                BadPictureDialog bad = BadPictureDialog.newInstance(responseData.substring(12, (responseData.length()-2)));
+                bad.setCancelable(false);
+                bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                //((transaction_facial) getActivity()).pictureComplete();
             } else {
-                BadPictureDialog bad = BadPictureDialog.newInstance(statusCode + ": " + statusText + "\n" + responseData.substring(13, (responseData.length()-2)) + "\nPlease try again!");
+                BadPictureDialog bad = BadPictureDialog.newInstance(responseData.substring(12, (responseData.length()-2)) + "\nPlease try again!");
                 bad.setCancelable(false);
                 bad.show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }

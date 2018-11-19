@@ -25,7 +25,7 @@ public class authentication_signup_identity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_authentication_signup_identity);
+        setContentView(R.layout.signup_identity);
 
         ((global_objects) getApplication()).setNew_user(new userDataObject());
         new_user = ((global_objects) getApplication()).getNew_user();

@@ -26,7 +26,7 @@ public class start_buyer_transaction extends AppCompatActivity {
     TransactionDataObject current_transaction;
     String transactionID;
     apicall_transaction aat;
-    ApiResponse response;
+    Object[] response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,6 @@ public class start_buyer_transaction extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
-            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
             try {
                 Intent k = new Intent(start_buyer_transaction.this, home.class);
                 startActivity(k);

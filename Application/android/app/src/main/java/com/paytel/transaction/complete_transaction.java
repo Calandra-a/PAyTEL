@@ -94,5 +94,11 @@ public class complete_transaction extends AppCompatActivity{
             //Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
 
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
     }
 }

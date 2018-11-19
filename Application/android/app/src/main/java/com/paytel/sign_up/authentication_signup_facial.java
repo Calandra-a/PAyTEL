@@ -59,5 +59,9 @@ public class authentication_signup_facial extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }
 

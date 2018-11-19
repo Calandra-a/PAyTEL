@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                app:counterEnabled="true"
+                app:counterEnabled="false"
                 app:counterMaxLength="3"
                 android:maxLength="3"
                 app:counterOverflowTextAppearance="@style/CounterOverFlow"

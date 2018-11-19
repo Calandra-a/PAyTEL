@@ -366,4 +366,8 @@ public class home extends AppCompatActivity{
 
         return pinpointManager;
     }
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }

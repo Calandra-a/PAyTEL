@@ -259,4 +259,5 @@ public class accountsettings extends AppCompatActivity implements AdapterView.On
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
 }

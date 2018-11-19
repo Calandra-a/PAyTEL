@@ -54,5 +54,8 @@ public class sign_in extends AppCompatActivity {
             }
         }).execute();
     }
-
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }

@@ -127,4 +127,8 @@ public class authentication_signup_identity extends AppCompatActivity {
             }
         }).start();
     }
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }

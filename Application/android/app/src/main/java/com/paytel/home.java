@@ -101,8 +101,6 @@ public class home extends AppCompatActivity{
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //System.out.println("user id: " + IdentityManager.getDefaultIdentityManager().getCachedUserID());
-        //Log.d("HOME", IdentityManager.getDefaultIdentityManager().getCachedUserID());
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
 
         queryUser();
@@ -228,6 +226,7 @@ public class home extends AppCompatActivity{
 
                 if (result.isEmpty()) {
                     // There were no items matching your query.
+
                     Log.d("Query results: ", "none");
                     //go to sign up activity
                     try {
@@ -262,12 +261,14 @@ public class home extends AppCompatActivity{
                         initializingTranasactions();
                         if (result.isEmpty()) {
                             // There were no items matching your query.
+                            initialSignup();
                             Log.d("Query results: ", "none");
                         }
                     }
-                    catch(NullPointerException e){
+                    catch(Exception e){
                         e.printStackTrace();
                         Log.d("Error", "No transactions being pulled?");
+                        initialSignup();
                     }
                 }
             }
@@ -343,6 +344,24 @@ public class home extends AppCompatActivity{
                 completedTransaction.clear();
             }
         });
+    }
+    void initialSignup(){
+        try{
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView mCardview = (TextView) findViewById(R.id.info_text);
+                TextView mUsername = (TextView) findViewById(R.id.info_username);
+
+                Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                mCardview.setText("Wallet: $"+Double.toString(wallet));
+                mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+            }
+        });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static PinpointManager getPinpointManager(final Context applicationContext) {

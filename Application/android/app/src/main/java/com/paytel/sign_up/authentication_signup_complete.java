@@ -49,7 +49,7 @@ public class authentication_signup_complete extends AppCompatActivity {
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
-
+/*
     void useFingerprint() {
         BiometricPrompt prompt = new BiometricPrompt.Builder(this)
                 .setTitle("Verify")
@@ -84,6 +84,6 @@ public class authentication_signup_complete extends AppCompatActivity {
         };
         prompt.authenticate(new CancellationSignal(), getMainExecutor(), callback);
 
-        }
+        }*/
     }
 

@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/txt_emoji"
                 android:layout_width="wrap_content"
                 android:layout_height="57dp"
@@ -35,7 +35,7 @@
                 android:background="@color/common_google_signin_btn_text_light_default"
                 android:paddingRight="0dp"
                 android:text="⚡"
-                android:textSize="36sp" />
+                android:textSize="36sp" />-->
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/txt_user"
@@ -46,6 +46,13 @@
                 android:textSize="16dip"
                 android:text="User requested:"
                 android:textStyle="bold"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/txt_invisID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/txt_user"
+                android:visibility="gone"/>
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/label"

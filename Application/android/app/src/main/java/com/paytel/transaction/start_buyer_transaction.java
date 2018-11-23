@@ -117,7 +117,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
-                            System.out.println(current_transaction.getTransactionStatus());
+//                            System.out.println(current_transaction.getTransactionStatus());
 
                                 if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
                                     if(current_transaction.getTransactionStatus().equals("pending")) {

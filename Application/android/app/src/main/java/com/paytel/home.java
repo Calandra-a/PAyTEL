@@ -18,8 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
@@ -32,19 +30,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
-
 import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_identity;
+import com.paytel.util.TransactionAdapter;
+import com.paytel.util.TransactionCard;
 import com.paytel.util.TransactionDataObject;
-import com.paytel.util.accountsettings;
 import com.paytel.settings.settings_main;
 import com.paytel.transaction.create_new_transaction;
 import com.paytel.transaction.start_buyer_transaction;
 import com.paytel.util.add_funds;
 import com.paytel.util.userDataObject;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,10 +55,14 @@ public class home extends AppCompatActivity{
     boolean nav_bool;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
+    private ArrayList<String> IDs = new ArrayList<>();
+    private ArrayList<String> transSeller = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
-    ArrayList<String> completedTransaction = new ArrayList<>();
-    ArrayList<String> pendingTransaction = new ArrayList<>();
+    ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
+    ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
     Map<String, String> map = new HashMap<String, String>();
+    private TransactionAdapter tPendingAdapter, tCompleteAdapter;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -111,22 +110,31 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                TextView label = arg1.findViewById(R.id.label);
+                /*TextView label = arg1.findViewById(R.id.label);
                 String viewString = label.getText().toString();
                 String transactionNumber = viewString.substring(4,8);
-                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);;
-
-                if(map.get(transactionNumber) != null){
+                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);;*/
+                TextView invis = arg1.findViewById(R.id.txt_invisID);
+                String viewString = invis.getText().toString();
+                Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                intent.putExtra("name", viewString);
+                startActivity(intent);
+                /*if(map.get(transactionNumber) != null){
                     Intent intent = new Intent(home.this, start_buyer_transaction.class);
                     intent.putExtra("name", map.get(transactionNumber));
                     startActivity(intent);
-                }
+                }*/
             }
         });
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                TextView label = arg1.findViewById(R.id.label);
+                TextView invis = arg1.findViewById(R.id.txt_invisID);
+                String viewString = invis.getText().toString();
+                Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                intent.putExtra("name", viewString);
+                startActivity(intent);
+                /*TextView label = arg1.findViewById(R.id.label);
                 String viewString = label.getText().toString();
                 String transactionNumber = viewString.substring(4,8);
                 String amount = viewString.substring(viewString.lastIndexOf("$") + 1);;
@@ -135,7 +143,7 @@ public class home extends AppCompatActivity{
                     Intent intent = new Intent(home.this, start_buyer_transaction.class);
                     intent.putExtra("name", map.get(transactionNumber));
                     startActivity(intent);
-                }
+                }*/
             }
         });
 
@@ -254,6 +262,7 @@ public class home extends AppCompatActivity{
                         for (int i = 0; i < dataSet.size(); i++) {
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
+                            transSeller.add(transaction.getSellerUsername());
                             transAmounts.add(transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
                             map.put(transaction.getTransactionId().substring(0,4),transaction.getTransactionId());
@@ -289,27 +298,35 @@ public class home extends AppCompatActivity{
                     for (int i = 0; i < dataSet.size(); i++) {
                         switch (transStatus.get(i)){
                             case "confirm":
-                                completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
+                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
+                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
                                 break;
                             case "pending":
-                                pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
+                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
+                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
                                 break;
                             case "flagged":
-                                pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
+                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
+                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
                                 break;
                             case "cancel":
-                                completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
+                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
+                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
                                 break;
                         }
 
                     }
-                    ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
-                    ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
+                        tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
+                        tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
+                    //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
+                    //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
                     if(nav_bool == true)
-                        completedlistView.setAdapter(adapterCompleted);
+                        completedlistView.setAdapter(tCompleteAdapter);
+                        //completedlistView.setAdapter(adapterCompleted);
                     else{
-                        pendinglistView.setAdapter(adapterPending);
+                        pendinglistView.setAdapter(tPendingAdapter);
+                        //pendinglistView.setAdapter(adapterPending);
                     }
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);

@@ -1,75 +1,95 @@
-package com.paytel.sign_up;
+package com.paytel.settings;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
 import com.santalu.widget.MaskEditText;
 
-import android.widget.Toast;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class authentication_signup_bankinfo  extends AppCompatActivity {
-    userDataObject new_user;
+public class settings_bankinfo extends AppCompatActivity {
+    userDataObject current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.signup_bankinfo);
+        setContentView(R.layout.settings_bankinfo);
+        current_user = ((global_objects) getApplication()).getCurrent_user();
+        display_userinfo();
 
-        new_user = ((global_objects) getApplication()).getNew_user();
+        Button btn_SAVE_userinfo = findViewById(R.id.btn_save_userinfo);
 
-        //credit card
-        Button btn_NEXT_bankinfo = findViewById(R.id.btn_next_bankinfo);
-
-        btn_NEXT_bankinfo.setOnClickListener(new View.OnClickListener() {
+        btn_SAVE_userinfo.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View v) {
-                //move to next frame
-                boolean next = add_creditcard();
+                boolean next = edit_userinfo();
                 if (next == true) {
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((global_objects) getApplication()).getDynamoDBMapper().save(current_user);
+                            // Item updated
+                        }
+                    }).start();
                     try {
-                        Intent k = new Intent(authentication_signup_bankinfo.this, authentication_signup_address.class);
+                        Intent k = new Intent(settings_bankinfo.this, settings_main.class);
                         startActivity(k);
-                    } catch (Exception e) {
+                    } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
 
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Change Payment Method");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //toolbar back button
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),settings_main.class));
+                finish();
+            }
+        });
     }
+    boolean edit_userinfo(){
 
-    boolean add_creditcard(){
         Context context = getApplicationContext();
         int dShort = Toast.LENGTH_SHORT;
-        int dLong = Toast.LENGTH_SHORT;
-
-
+        int dLong = Toast.LENGTH_LONG;
 
         TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
         MaskEditText card_number = findViewById(R.id.txt_card_number);
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
         MaskEditText exp_date = findViewById(R.id.txt_exp_date);
 
-        //Handle empty field
-        if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() ==0 ||
+        if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() == 0 ||
                 CVC.getEditText().getText().toString().length() == 0 || exp_date.getRawText().length() == 0){
-
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
+
         //handle bad expiration date format
         if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
             CharSequence fail = "Expiration date must be mm/yy format";
@@ -82,7 +102,6 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
         int month = Integer.parseInt(date[0]);
         int year = Integer.parseInt(date[1]);
 
-        //runs rest of checks that dont need to be independently ran
         if(name_on_card.getEditText().getText().toString().length() >= 50){
             CharSequence fail = "Name on card must be less than 50 characters";
             Toast toast = Toast.makeText(context, fail, dLong);
@@ -90,7 +109,7 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             return false;
         }
         else if (card_number.getRawText().length() != 16){
-            CharSequence fail = "Card number must be 16 digits"; 
+            CharSequence fail = "Card number must be 16 digits";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
@@ -111,22 +130,28 @@ public class authentication_signup_bankinfo  extends AppCompatActivity {
             CharSequence fail = "Year must be 18 or later ";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
-            return false;}
-        else {
-            CharSequence succ = "Success";
-            Toast toast = Toast.makeText(context, succ, dShort);
-            toast.show();
-
+            return false;
+        }
+        else{
             Map<String, String> cc = new HashMap<String, String>();
             cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
             cc.put("card_number", card_number.getRawText().trim());
             cc.put("cvc", CVC.getEditText().getText().toString().trim());
             cc.put("expiration_date", exp_date.getRawText().trim());
-            new_user.setCreditCard(cc);
-            new_user.setRekognitionIds(null);
-            new_user.setWallet(100.00);
+            if(cc != null)current_user.setCreditCard(cc);
             return true;
         }
+    }
 
+    void display_userinfo(){
+        TextInputLayout name_on_card = findViewById(R.id.txt_name_on_card);
+        MaskEditText card_number = findViewById(R.id.txt_card_number);
+        TextInputLayout CVC = findViewById(R.id.txt_cvc);
+        MaskEditText exp_date = findViewById(R.id.txt_exp_date);
+
+        name_on_card.getEditText().setText(current_user.getCreditCard().get("name_on_card"));
+        card_number.setText(current_user.getCreditCard().get("card_number"));
+        CVC.getEditText().setText(current_user.getCreditCard().get("cvc"));
+        exp_date.setText(current_user.getCreditCard().get("expiration_date"));
     }
 }

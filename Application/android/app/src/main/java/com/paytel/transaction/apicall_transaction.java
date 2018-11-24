@@ -22,10 +22,11 @@ import java.util.Map;
 public class apicall_transaction {
     private static final String LOG_TAG = apicall_transaction.class.getSimpleName();
     ApiResponse responseVal = null;
-
+    Object[] responseArray = new Object[2];
+    String responseData;
     private UsertransactionMobileHubClient apiClient;
 
-    public ApiResponse callCloudLogic(String transID, String requesttype, String biometric) {
+    public Object[] callCloudLogic(String transID, String requesttype, String biometric) {
         apiClient =new ApiClientFactory()
                 .credentialsProvider(AWSMobileClient.getInstance().getCredentialsProvider())
                 .build(UsertransactionMobileHubClient.class);
@@ -91,25 +92,21 @@ public class apicall_transaction {
             final InputStream responseContentStream = response.getContent();
 
             if (responseContentStream != null) {
-                final String responseData = IOUtils.toString(responseContentStream);
+                responseData = IOUtils.toString(responseContentStream);
                 Log.d(LOG_TAG, "Response : " + responseData);
             }
-
+            responseVal = response;
+            responseArray[0] = responseVal;
+            responseArray[1] = responseData;
             Log.d(LOG_TAG, response.getStatusCode() + " " + response.getStatusText());
 
-            if (response.getStatusCode() != 200) {
-                responseVal = response;
-
-            }else {
-                responseVal = response;
-            }
 
 
         } catch (final Exception exception) {
             Log.e(LOG_TAG, exception.getMessage(), exception);
             exception.printStackTrace();
         }
-        return responseVal;
+        return responseArray;
     }
     //}).start();
 

@@ -40,6 +40,7 @@
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="8dp"
             app:counterMaxLength="50"
+            android:maxLength="50"
             app:counterOverflowTextAppearance="@style/CounterOverFlow"
             app:counterTextAppearance="@style/CounterText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,6 +65,7 @@
             android:layout_marginBottom="8dp"
             app:counterEnabled="false"
             app:counterMaxLength="50"
+            android:maxLength="50"
             app:counterOverflowTextAppearance="@style/CounterOverFlow"
             app:counterTextAppearance="@style/CounterText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -95,8 +97,9 @@
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="80dp"
-                app:counterEnabled="true"
+                app:counterEnabled="false"
                 app:counterMaxLength="5"
+                android:maxLength="5"
                 app:counterOverflowTextAppearance="@style/CounterOverFlow"
                 app:counterTextAppearance="@style/CounterText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Zip Code"
+                    android:maxLength="5"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 

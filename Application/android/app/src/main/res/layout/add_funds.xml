@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:ems="8"
                 android:hint="Add Funds"
-                android:inputType="textPersonName" />
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
 
         <Button

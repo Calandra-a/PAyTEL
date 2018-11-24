@@ -37,7 +37,8 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: "100vh",
+    minHeight: "100vh",
+    height: "100%",
     zIndex: 1,
     overflow: "hidden",
     position: "relative",
@@ -80,6 +81,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
+    minWidth: theme.spacing.unit * 7,
     width: theme.spacing.unit * 7,
     [theme.breakpoints.up("sm")]: {
       width: theme.spacing.unit * 9
@@ -171,7 +173,7 @@ class Dashboard extends React.Component {
           <Divider />
           <List>
             <Tooltip
-              title={this.state.open ? "" : "Home"}
+              title="Home"
               placement="right"
               enterDelay={150}
               leaveDelay={150}
@@ -195,7 +197,7 @@ class Dashboard extends React.Component {
           <Divider />
           <List>
             <Tooltip
-              title={this.state.open ? "" : "Manage Users"}
+              title="Manage Users"
               placement="right"
               enterDelay={150}
               leaveDelay={150}
@@ -216,7 +218,7 @@ class Dashboard extends React.Component {
               </ListItem>
             </Tooltip>
             <Tooltip
-              title={this.state.open ? "" : "Manage Transactions"}
+              title="Manage Transactions"
               placement="right"
               enterDelay={150}
               leaveDelay={150}
@@ -237,7 +239,7 @@ class Dashboard extends React.Component {
               </ListItem>
             </Tooltip>
             <Tooltip
-              title={this.state.open ? "" : "Flagged Transactions"}
+              title="Flagged Transactions"
               placement="right"
               enterDelay={150}
               leaveDelay={150}
@@ -258,7 +260,7 @@ class Dashboard extends React.Component {
               </ListItem>
             </Tooltip>
             <Tooltip
-              title={this.state.open ? "" : "Database Lookup"}
+              title="Database Lookup"
               placement="right"
               enterDelay={150}
               leaveDelay={150}
@@ -282,7 +284,7 @@ class Dashboard extends React.Component {
           <Divider />
           <List>
             <Tooltip
-              title={this.state.open ? "" : "Log Out"}
+              title="Log Out"
               placement="right"
               enterDelay={150}
               leaveDelay={150}

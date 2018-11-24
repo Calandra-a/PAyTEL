@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:padding="0dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".settings.settings_bankinfo">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/navbar_material_dark"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:padding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,8 +116,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                app:counterEnabled="true"
+                app:counterEnabled="false"
                 app:counterMaxLength="3"
+                android:maxLength="3"
                 app:counterOverflowTextAppearance="@style/CounterOverFlow"
                 app:counterTextAppearance="@style/CounterText"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -106,6 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/cvv"
+                    android:maxLength="3"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
@@ -121,6 +144,7 @@
             android:layout_marginBottom="8dp"
             app:counterEnabled="false"
             app:counterMaxLength="50"
+            android:maxLength="50"
             app:counterOverflowTextAppearance="@style/CounterOverFlow"
             app:counterTextAppearance="@style/CounterText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -142,13 +166,14 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/btn_next_bankinfo"
+            android:id="@+id/btn_save_userinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="80dp"
             android:layout_marginBottom="68dp"
-            android:text="@string/next" />
+            android:text="SAVE" />
 
     </LinearLayout>
 </ScrollView>
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.paytel;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,14 +15,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import static android.graphics.Color.rgb;
 
 
-public class authenticatoractivity extends AppCompatActivity {
+public class sign_in extends AppCompatActivity {
     DynamoDBMapper dynamoDBMapper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authenticatoractivity);
+        setContentView(R.layout.sign_in);
 
 
         // Add a call to initialize AWSMobileClient
@@ -41,9 +40,9 @@ public class authenticatoractivity extends AppCompatActivity {
                                 .build();
 
 
-                SignInUI signin = (SignInUI) AWSMobileClient.getInstance().getClient(authenticatoractivity.this, SignInUI.class);
+                SignInUI signin = (SignInUI) AWSMobileClient.getInstance().getClient(sign_in.this, SignInUI.class);
 
-                signin.login(authenticatoractivity.this,home.class).authUIConfiguration(config).execute();
+                signin.login(sign_in.this,home.class).authUIConfiguration(config).execute();
 
                 AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(AWSMobileClient.getInstance().getCredentialsProvider());
 
@@ -55,5 +54,8 @@ public class authenticatoractivity extends AppCompatActivity {
             }
         }).execute();
     }
-
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }

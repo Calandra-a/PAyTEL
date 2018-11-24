@@ -34,7 +34,7 @@
     <string name="paytel_logo">PAyTEL logo</string>
     <string name="complete">COMPLETE</string>
     <string name="complete_message">You\'re all setup to start making secure transactions on PAyTEL</string>
-    <string name="congratulations">Congratulations!</string>
+    <string name="congratulations">Congratulations! Here is $100 to start off!</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="State">State</string>
 
@@ -89,5 +89,11 @@
         <item>WV</item>
         <item>WI</item>
         <item>WY</item>
+    </string-array>
+    <string-array name="settings_array">
+        <item>Edit Profile</item>
+        <item>Change Payment Method</item>
+        <item>Change Billing Address</item>
+        <item>Sign Out</item>
     </string-array>
 </resources>

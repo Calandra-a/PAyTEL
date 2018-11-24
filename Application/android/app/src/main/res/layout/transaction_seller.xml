@@ -104,11 +104,10 @@
                     android:layout_height="match_parent"
                     android:ems="8"
                     android:gravity="top|left"
-                    android:hint="Note"
-                    android:inputType="textMultiLine"
-                    android:lines="2"
-                    android:maxLines="2"
-                    android:minLines="2"
+                    android:hint="Message"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minLines="1"
                     android:scrollbars="vertical" />
             </android.support.design.widget.TextInputLayout>
 

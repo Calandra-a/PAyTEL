@@ -2,14 +2,8 @@ package com.paytel.sign_up;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.FileObserver;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
@@ -21,7 +15,7 @@ public class authentication_signup_facial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.authentication_activity_signup_facial);
+        setContentView(R.layout.signup_facial);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, authentication_signup_facial_fragment.newInstance())
@@ -64,6 +58,10 @@ public class authentication_signup_facial extends AppCompatActivity {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
     }
 }
 

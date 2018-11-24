@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
 import com.paytel.R;
@@ -19,23 +20,19 @@ public class complete_transaction extends AppCompatActivity{
 
     TransactionDataObject new_transaction;
     apicall_transaction aat;
-    ApiResponse response;
-    ProgressDialog progress;
+    Object[] response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.approvedeny_transaction);
+        setContentView(R.layout.transaction_complete);
         new_transaction = ((global_objects) getApplication()).getNew_transaction();
 
-       /* ImageButton btn_deny = findViewById(R.id.btn_cancel);
-        btn_deny.setOnClickListener(new View.OnClickListener() {
+        Button btn_complete = findViewById(R.id.btn_complete);
+        btn_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ADD DENY TO DB STUFF
-                //move to next frame
-
                 try {
                     Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
@@ -45,20 +42,6 @@ public class complete_transaction extends AppCompatActivity{
             }
         });
 
-        ImageButton btn_approve = findViewById(R.id.btn_check);
-        //APPROVE TRANSACTION
-        btn_approve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //move to next frame
-                try {
-                    Intent k = new Intent(complete_transaction.this, home.class);
-                    startActivity(k);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
         WaitTask myTask = new complete_transaction.WaitTask();
         myTask.execute();
 
@@ -79,7 +62,20 @@ public class complete_transaction extends AppCompatActivity{
         @Override
         protected void onPostExecute(Boolean bool) {//progress to transaction_facial_success.java
             super.onPostExecute(bool);
-            if(response.getStatusCode() == 200){
+            String responseData = (String)response[1];
+            ApiResponse globalData = (ApiResponse)response[0];
+            String text = responseData.substring(12, (responseData.length()-2));
+
+            TextView Title = findViewById(R.id.txt_transaction_complete_title);
+            TextView subText = findViewById(R.id.txt_transaction_complete_subtitle);
+
+            subText.setText(text);
+            if(globalData.getStatusCode() == 200){
+                Title.setText("Success!");
+            }else{
+                Title.setText("Failed");
+            }
+            /*if(response.getStatusCode() == 200){
                 try {
                     Intent k = new Intent(complete_transaction.this, home.class);
                     startActivity(k);
@@ -93,10 +89,16 @@ public class complete_transaction extends AppCompatActivity{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 
-            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
+            //Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
 
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
     }
 }

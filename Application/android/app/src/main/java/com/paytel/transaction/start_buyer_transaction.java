@@ -1,5 +1,6 @@
 package com.paytel.transaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
@@ -26,7 +28,7 @@ public class start_buyer_transaction extends AppCompatActivity {
     TransactionDataObject current_transaction;
     String transactionID;
     apicall_transaction aat;
-    ApiResponse response;
+    Object[] response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +43,35 @@ public class start_buyer_transaction extends AppCompatActivity {
         //LOAD DB HERE
         initialize();
 
+
+
+
         //user actions
         Button btn_approve = findViewById(R.id.btn_approve);
         btn_approve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //move to next frame
-                try {
-                    Intent k = new Intent(start_buyer_transaction.this, transaction_facial.class);
-                    startActivity(k);
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                Double amount = Double.parseDouble(current_transaction.getAmount());
+
+                if (wallet > amount) {
+                    //move to next frame
+                    try {
+                        Intent k = new Intent(start_buyer_transaction.this, transaction_facial.class);
+                        startActivity(k);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Context context = getApplicationContext();
+                    int dShort = Toast.LENGTH_SHORT;
+
+                    CharSequence fail = "Insufficient Funds";
+                    Toast toast = Toast.makeText(context, fail, dShort);
+                    toast.show();
+
+
                 }
             }
         });
@@ -117,7 +137,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
-                            System.out.println(current_transaction.getTransactionStatus());
+//                            System.out.println(current_transaction.getTransactionStatus());
 
                                 if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
                                     if(current_transaction.getTransactionStatus().equals("pending")) {
@@ -161,13 +181,31 @@ public class start_buyer_transaction extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
-            Log.d("transaction", response.getStatusCode() + " " + response.getStatusText());
             try {
                 Intent k = new Intent(start_buyer_transaction.this, home.class);
                 startActivity(k);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    void initialSignup(){
+        try{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    TextView mUsername = (TextView) findViewById(R.id.info_username);
+
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
+                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                }
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

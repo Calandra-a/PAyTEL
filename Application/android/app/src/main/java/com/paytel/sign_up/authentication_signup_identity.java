@@ -76,8 +76,8 @@ public class authentication_signup_identity extends AppCompatActivity {
             toast.show();
             return false;
         }
-        else if (phone_number.getEditText().getText().toString().length() != 10) {
-            CharSequence fail = "Phone number must be 10 digits";
+        else if (phone_number.getText().toString().length() != 14) {
+            CharSequence fail = "Invalid Phone Number";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
@@ -126,10 +126,11 @@ public class authentication_signup_identity extends AppCompatActivity {
             }
         }).start();
     }
-}
+
 
     @Override
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
+        }
     }
-}
+

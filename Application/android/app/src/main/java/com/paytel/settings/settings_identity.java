@@ -20,6 +20,7 @@ import com.santalu.widget.MaskEditText;
 
 public class settings_identity extends AppCompatActivity {
     userDataObject current_user;
+    private Toast toast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +84,20 @@ public class settings_identity extends AppCompatActivity {
         if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 ||
                 phone_number.getRawText().length() == 0 ){
             CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
 
         if (phone_number.getRawText().length() != 10) {
             CharSequence fail = "Phone number must be 10 digits";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }

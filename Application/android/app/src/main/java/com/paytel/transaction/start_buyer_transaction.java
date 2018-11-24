@@ -29,6 +29,7 @@ public class start_buyer_transaction extends AppCompatActivity {
     String transactionID;
     apicall_transaction aat;
     Object[] response;
+    private Toast toast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,10 @@ public class start_buyer_transaction extends AppCompatActivity {
                     int dShort = Toast.LENGTH_SHORT;
 
                     CharSequence fail = "Insufficient Funds";
-                    Toast toast = Toast.makeText(context, fail, dShort);
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+                    toast = Toast.makeText(context, fail, dShort);
                     toast.show();
 
 

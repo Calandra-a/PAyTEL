@@ -21,6 +21,7 @@ import com.santalu.widget.MaskEditText;
 
 public class settings_address extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     userDataObject current_user;
+    private Toast toast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,25 +109,37 @@ public class settings_address extends AppCompatActivity implements AdapterView.O
         if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 ||
                 city.getEditText().getText().toString().length() == 0){
             CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         if(street.getEditText().getText().toString().length() >=50){
             CharSequence fail = "Street address must be under 50 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(zip.getEditText().getText().toString().length() != 5){
             CharSequence fail = "Zip code must be 5 digits";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(city.getEditText().getText().toString().length() >=50){
             CharSequence fail = "City must be under 50 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }

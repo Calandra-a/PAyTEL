@@ -39,11 +39,11 @@ public class authentication_signup_identity extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                 boolean next = add_userinfo();
-                if (next == true)
+                if (next == true){
                     check_username(new_user.getUsername());
-                    TextInputLayout user_name = findViewById(R.id.txt_username);
-                    user_name.setHelperText("Username already taken");
+                }
             }
+
         });
 
 
@@ -121,7 +121,17 @@ public class authentication_signup_identity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
+                else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Context context = getApplicationContext();
+                            int dShort = Toast.LENGTH_SHORT;
+                            CharSequence fail = "Username Already Exists";
+                            Toast toast = Toast.makeText(context, fail, dShort);
+                            toast.show();
+                        }
+                    });
+                }
 
             }
         }).start();

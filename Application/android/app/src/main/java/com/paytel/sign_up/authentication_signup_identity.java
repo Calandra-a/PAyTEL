@@ -40,7 +40,7 @@ public class authentication_signup_identity extends AppCompatActivity {
                 //move to next frame
                 boolean next = add_userinfo();
                 if (next == true){
-                    check_username(new_user.getUsername());
+                    check_username(new_user.getUsername().toLowerCase());
                 }
             }
 
@@ -84,7 +84,7 @@ public class authentication_signup_identity extends AppCompatActivity {
         } else {
 
 
-            new_user.setUsername(user_name.getEditText().getText().toString().trim());
+            new_user.setUsername(user_name.getEditText().getText().toString().trim().toLowerCase());
             new_user.setFirstName(f_name.getEditText().getText().toString().trim());
             new_user.setLastName(l_name.getEditText().getText().toString().trim());
             new_user.setPhoneNumber(phone_number.getRawText().trim());

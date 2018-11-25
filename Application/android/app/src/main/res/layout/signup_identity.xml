@@ -53,6 +53,7 @@
         android:layout_marginTop="68dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="0dp"
+        android:textAllCaps="false"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         android:maxLength="20"

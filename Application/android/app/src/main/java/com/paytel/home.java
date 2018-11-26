@@ -300,16 +300,18 @@ public class home extends AppCompatActivity{
                     Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     for (int i = 0; i < dataSet.size(); i++) {
-                        switch (transStatus.get(i)){
-                            case "Confirmed":
-                            case "Cancelled":
-                                completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i),transIDs.get(i),transAmounts.get(i),transStatus.get(i)));
-                                break;
-                            case "Pending":
-                            case "flagged":
-                                pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i),transIDs.get(i),transAmounts.get(i),transStatus.get(i)));
-                                break;
-                        }
+                        try {
+                            switch (transStatus.get(i)) {
+                                case "Confirmed":
+                                case "Cancelled":
+                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    break;
+                                case "Pending":
+                                case "flagged":
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    break;
+                            }
+                        }catch(Exception e){}
 
                     }
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);

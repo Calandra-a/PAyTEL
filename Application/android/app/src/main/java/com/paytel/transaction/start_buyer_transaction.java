@@ -144,7 +144,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 //                            System.out.println(current_transaction.getTransactionStatus());
 
                                 if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
-                                    if(current_transaction.getTransactionStatus().equals("pending")) {
+                                    if(current_transaction.getTransactionStatus().equals("Pending")) {
                                         approve.setVisibility(View.VISIBLE);
                                         deny.setVisibility(View.VISIBLE);
                                     }
@@ -178,7 +178,7 @@ public class start_buyer_transaction extends AppCompatActivity {
         }
 
         protected Boolean doInBackground(Void... params) {
-            response= aat.callCloudLogic(transactionID, "cancel", "");
+            response= aat.callCloudLogic(transactionID, "Cancelled", "");
             return true;
         }
 

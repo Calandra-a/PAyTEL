@@ -300,11 +300,11 @@ public class home extends AppCompatActivity{
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     for (int i = 0; i < dataSet.size(); i++) {
                         switch (transStatus.get(i)){
-                            case "confirm":
+                            case "Confirmed":
                                 completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
                                 //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
                                 break;
-                            case "pending":
+                            case "Pending":
                                 pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
                                 //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
                                 break;
@@ -312,7 +312,7 @@ public class home extends AppCompatActivity{
                                 pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
                                 //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
                                 break;
-                            case "cancel":
+                            case "Cancelled":
                                 completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
                                 //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
                                 break;

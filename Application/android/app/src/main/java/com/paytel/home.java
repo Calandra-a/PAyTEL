@@ -57,6 +57,7 @@ public class home extends AppCompatActivity{
     ArrayList<String> transIDs = new ArrayList<>();
     private ArrayList<String> IDs = new ArrayList<>();
     private ArrayList<String> transSeller = new ArrayList<>();
+    private ArrayList<String> transBuyer = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
@@ -262,10 +263,8 @@ public class home extends AppCompatActivity{
                         for (int i = 0; i < dataSet.size(); i++) {
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
-                            if(transaction.getSellerUsername().equals(current_user.getUsername()))
-                                transSeller.add(transaction.getBuyerUsername() + " paid you:");
-                            else
-                                transSeller.add(transaction.getSellerUsername() + " requested:");
+                            transSeller.add(transaction.getSellerUsername());
+                            transBuyer.add(transaction.getBuyerUsername());
                             transAmounts.add("$"+transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
                             map.put(transaction.getTransactionId().substring(0,4),transaction.getTransactionId());
@@ -296,25 +295,19 @@ public class home extends AppCompatActivity{
                     ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
                     ListView completedlistView = (ListView) findViewById(R.id.completed_list);
 
+                    String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
+
                     Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     for (int i = 0; i < dataSet.size(); i++) {
                         switch (transStatus.get(i)){
                             case "Confirmed":
-                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
+                            case "Cancelled":
+                                completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i),transIDs.get(i),transAmounts.get(i),transStatus.get(i)));
                                 break;
                             case "Pending":
-                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
-                                break;
                             case "flagged":
-                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
-                                break;
-                            case "Cancelled":
-                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
+                                pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i),transIDs.get(i),transAmounts.get(i),transStatus.get(i)));
                                 break;
                         }
 
@@ -337,7 +330,7 @@ public class home extends AppCompatActivity{
 
                     Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
                     mCardview.setText("Wallet: $"+Double.toString(wallet));
-                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                    mUsername.setText(currentUserName);
                 }
                 catch(Exception e){
                         e.printStackTrace();
@@ -383,6 +376,8 @@ public class home extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
+
 
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {

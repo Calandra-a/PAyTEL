@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -149,14 +150,17 @@ public class start_buyer_transaction extends AppCompatActivity {
                                         deny.setVisibility(View.VISIBLE);
                                     }
                                     buyerID.setText(current_transaction.getSellerUsername() + " requested:");
+                                    amount.setText("-$" + current_transaction.getAmount());
+                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
                                 }else{
                                     buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
+                                    amount.setText("+$" + current_transaction.getAmount());
+                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
                                 }
 
 
                             //int eggplant = 0x1F346;//eggplant emoji
                             //icon.setText(new String(Character.toChars(eggplant)));
-                            amount.setText("+$" + current_transaction.getAmount());
                             note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
 

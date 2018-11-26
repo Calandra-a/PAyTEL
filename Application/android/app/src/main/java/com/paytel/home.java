@@ -263,9 +263,9 @@ public class home extends AppCompatActivity{
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
                             if(transaction.getSellerUsername().equals(current_user.getUsername()))
-                                transSeller.add("You Requested: "+transaction.getBuyerUsername());
+                                transSeller.add(transaction.getBuyerUsername() + " paid you:");
                             else
-                                transSeller.add("User Requested: "+transaction.getSellerUsername());
+                                transSeller.add(transaction.getSellerUsername() + " requested:");
                             transAmounts.add("$"+transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
                             map.put(transaction.getTransactionId().substring(0,4),transaction.getTransactionId());

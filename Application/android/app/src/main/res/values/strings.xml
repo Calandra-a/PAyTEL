@@ -34,7 +34,7 @@
     <string name="paytel_logo">PAyTEL logo</string>
     <string name="complete">COMPLETE</string>
     <string name="complete_message">You\'re all setup to start making secure transactions on PAyTEL</string>
-    <string name="congratulations">Congratulations! Here is $100 to start off!</string>
+    <string name="congratulations">Congratulations!\nHere\'s $100 to start off!</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="State">State</string>
 

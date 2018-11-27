@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -51,12 +53,16 @@ public class home extends AppCompatActivity{
     private CardView mCardview;
     private static PinpointManager pinpointManager;
 
+    private ConstraintLayout mConstraintLayout;
+    private ConstraintSet mConstraintSet = new ConstraintSet();
+
     userDataObject user;
     boolean nav_bool;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
     private ArrayList<String> IDs = new ArrayList<>();
     private ArrayList<String> transSeller = new ArrayList<>();
+    private ArrayList<String> transBuyer = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
@@ -90,6 +96,7 @@ public class home extends AppCompatActivity{
         setContentView(R.layout.activity_home);
         ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
         ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+        mConstraintLayout = findViewById(R.id.container);
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
@@ -262,10 +269,8 @@ public class home extends AppCompatActivity{
                         for (int i = 0; i < dataSet.size(); i++) {
                             TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                             transIDs.add(transaction.getTransactionId());
-                            if(transaction.getSellerUsername().equals(current_user.getUsername()))
-                                transSeller.add("You Requested: "+transaction.getBuyerUsername());
-                            else
-                                transSeller.add("User Requested: "+transaction.getSellerUsername());
+                            transSeller.add(transaction.getSellerUsername());
+                            transBuyer.add(transaction.getBuyerUsername());
                             transAmounts.add("$"+transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
                             map.put(transaction.getTransactionId().substring(0,4),transaction.getTransactionId());
@@ -296,27 +301,23 @@ public class home extends AppCompatActivity{
                     ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
                     ListView completedlistView = (ListView) findViewById(R.id.completed_list);
 
+                    String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
+
                     Set<String> transactionSet = ((global_objects) getApplication()).getCurrent_user().getTransactions();
                     ArrayList<String> dataSet = new ArrayList<>(transactionSet);
                     for (int i = 0; i < dataSet.size(); i++) {
-                        switch (transStatus.get(i)){
-                            case "confirm":
-                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
-                                break;
-                            case "pending":
-                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
-                                break;
-                            case "flagged":
-                                pendingTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //pendingTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" " + "$" + transAmounts.get(i));
-                                break;
-                            case "cancel":
-                                completedTransaction.add(new TransactionCard(transSeller.get(i),transIDs.get(i),transAmounts.get(i)));
-                                //completedTransaction.add("ID: " + transIDs.get(i).substring(0,4)+" "  + "$" + transAmounts.get(i));
-                                break;
-                        }
+                        try {
+                            switch (transStatus.get(i)) {
+                                case "Confirmed":
+                                case "Cancelled":
+                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    break;
+                                case "Pending":
+                                case "flagged":
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    break;
+                            }
+                        }catch(Exception e){}
 
                     }
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
@@ -324,12 +325,29 @@ public class home extends AppCompatActivity{
                     //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
                     //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
-                    if(nav_bool == true)
+                    if(nav_bool == true) {
+                        pendinglistView.setVisibility(View.INVISIBLE);
+                        completedlistView.setVisibility(View.VISIBLE);
                         completedlistView.setAdapter(tCompleteAdapter);
                         //completedlistView.setAdapter(adapterCompleted);
+                        mConstraintSet.clone(mConstraintLayout);
+                        mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                R.id.navigation, ConstraintSet.TOP);
+                        mConstraintSet.applyTo(mConstraintLayout);
+                    }
                     else{
+                        completedlistView.setVisibility(View.INVISIBLE);
+                        pendinglistView.setVisibility(View.VISIBLE);
                         pendinglistView.setAdapter(tPendingAdapter);
                         //pendinglistView.setAdapter(adapterPending);
+                        mConstraintSet.clone(mConstraintLayout);
+                        mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                                R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                                R.id.navigation, ConstraintSet.TOP);
+                        mConstraintSet.applyTo(mConstraintLayout);
                     }
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
@@ -337,7 +355,7 @@ public class home extends AppCompatActivity{
 
                     Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
                     mCardview.setText("Wallet: $"+Double.toString(wallet));
-                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                    mUsername.setText(currentUserName);
                 }
                 catch(Exception e){
                         e.printStackTrace();
@@ -383,6 +401,8 @@ public class home extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
+
 
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {

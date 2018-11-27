@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.paytel.R;
 import com.paytel.home;
 import com.paytel.sign_in;
@@ -55,6 +56,7 @@ public class settings_adapter extends RecyclerView.Adapter<settings_adapter.View
                     intent =  new Intent(context, settings_address.class);
                     break;
                 case 3:
+                    IdentityManager.getDefaultIdentityManager().signOut();
                     intent = new Intent(context, sign_in.class);
                     break;
                 default:

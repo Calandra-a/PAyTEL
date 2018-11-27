@@ -35,6 +35,7 @@ public class create_new_transaction extends AppCompatActivity {
     private UsertransactionMobileHubClient apiClient;
     private static int transactionCount = 0;
     private static boolean lock = false;
+    private Toast toast = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //transactionCount = 0;
@@ -59,6 +60,9 @@ public class create_new_transaction extends AppCompatActivity {
                     Context context = getApplicationContext();
                     int dLong = Toast.LENGTH_LONG;
                     CharSequence fail = "You're creating transactions too quickly - you can make another one in 1 minute";
+                     if (toast != null) {
+                         toast.cancel();
+                     }
                     Toast toast = Toast.makeText(context, fail, dLong);
                     toast.show();
                     lock = true;
@@ -68,6 +72,9 @@ public class create_new_transaction extends AppCompatActivity {
                      Context context = getApplicationContext();
                      int dShort = Toast.LENGTH_SHORT;
                      CharSequence fail = "Locked - Please wait";
+                    if (toast != null) {
+                        toast.cancel();
+                    }
                      Toast toast = Toast.makeText(context, fail, dShort);
                      toast.show();
                  }
@@ -146,6 +153,9 @@ public class create_new_transaction extends AppCompatActivity {
                 Context context = getApplicationContext();
                 int dShort = Toast.LENGTH_SHORT;
                 CharSequence value = "Transactions unlocked";
+                if (toast != null) {
+                    toast.cancel();
+                }
                 Toast toast = Toast.makeText(context, value, dShort);
                 toast.show();
             }

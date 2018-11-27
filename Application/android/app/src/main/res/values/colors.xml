@@ -23,4 +23,5 @@
     <color name="button_next_txt">#000000</color>
     //transactions
     <color name="text_money_receive">#B9F6CA</color>
+    <color name="text_money_send">#FF9E80</color>
 </resources>

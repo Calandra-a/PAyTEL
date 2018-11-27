@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".transaction.create_new_transaction">
+    tools:context=".transaction.start_buyer_transaction">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout2"
@@ -21,7 +21,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="-42dp"
+            android:layout_marginBottom="-40dp"
             android:background="@color/common_google_signin_btn_text_light_default"
             android:paddingRight="2dp"
             android:text="💰"
@@ -35,7 +35,7 @@
             android:layout_toRightOf="@+id/txt_emoji"
             android:ems="8"
             android:hint="BuyerID"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/txt_amount"
@@ -49,7 +49,7 @@
             android:hint="Amount"
             android:textAlignment="textEnd"
             android:textColor="@color/text_money_receive"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/txt_note"
@@ -61,7 +61,7 @@
             android:layout_marginTop="8dp"
             android:ems="8"
             android:hint="Note"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <View
             android:id="@+id/status_div"

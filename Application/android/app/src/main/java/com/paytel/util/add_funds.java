@@ -16,6 +16,7 @@ import com.paytel.home;
 
 public class add_funds extends AppCompatActivity {
     userDataObject current_user;
+    private Toast toast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,20 +68,29 @@ public class add_funds extends AppCompatActivity {
         if(wallet.getEditText().getText().toString().length() == 0){
 
             CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(!wallet.getEditText().getText().toString().matches( "\\d+([.]\\d{2})?")){
             if(wallet.getEditText().getText().toString().matches( "([.]\\d{2})?")){
             CharSequence fail = "Additions below a dollar must be in 0.00 format";
-            Toast toast = Toast.makeText(context, fail, dLong);
+                if (toast != null) {
+                    toast.cancel();
+                }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
             }
             else{
                 CharSequence fail = "Please revise input try using 0.00 format";
-                Toast toast = Toast.makeText(context, fail, dLong);
+                if (toast != null) {
+                    toast.cancel();
+                }
+                toast = Toast.makeText(context, fail, dLong);
                 toast.show();
                 return false;
             }
@@ -88,7 +98,10 @@ public class add_funds extends AppCompatActivity {
         else if((!wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >=5) ||
                 (wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >= 8)){
             CharSequence fail = "Funds added must be under $10000 per addition";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }

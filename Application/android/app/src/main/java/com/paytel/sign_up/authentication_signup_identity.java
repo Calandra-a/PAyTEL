@@ -1,9 +1,11 @@
 package com.paytel.sign_up;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,7 +22,6 @@ import com.santalu.widget.MaskEditText;
 
 public class authentication_signup_identity extends AppCompatActivity {
     userDataObject new_user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,21 +39,14 @@ public class authentication_signup_identity extends AppCompatActivity {
             public void onClick(View v) {
                 //move to next frame
                 boolean next = add_userinfo();
-                //check_username(new_user.getUsername());
-                if (next == true) {
-
-                    try {
-                        Intent k = new Intent(authentication_signup_identity.this, authentication_signup_bankinfo.class);
-                        startActivity(k);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                if (next == true){
+                    check_username(new_user.getUsername().toLowerCase());
                 }
             }
+
         });
 
-        //call username function
-        check_username("axel");
+
     }
 
     boolean add_userinfo() {
@@ -66,29 +60,31 @@ public class authentication_signup_identity extends AppCompatActivity {
         TextInputLayout user_name = findViewById(R.id.txt_username);
         MaskEditText phone_number = findViewById(R.id.txt_phone_number);
 
+
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+
         if (user_name.getEditText().getText().toString().length() == 0 || f_name.getEditText().getText().toString().length() == 0 ||
                 l_name.getEditText().getText().toString().length() == 0 || phone_number.getRawText().length() == 0) {
             CharSequence fail = "No field can be left blank";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
-        } else if (user_name.getEditText().getText().toString().length() >= 20) {
+        }
+        else if (user_name.getEditText().getText().toString().length() >= 20) {
             CharSequence fail = "Username cant be over 20 characters";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
-        } else if (phone_number.getRawText().length() != 10) {
-            CharSequence fail = "Phone number must be 10 digits";
+        }
+        else if (phone_number.getText().toString().length() != 14) {
+            CharSequence fail = "Invalid Phone Number";
             Toast toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         } else {
-            CharSequence succ = "Success";
-            Toast toast = Toast.makeText(context, succ, dShort);
-            toast.show();
 
-            new_user.setUsername(user_name.getEditText().getText().toString().trim());
+
+            new_user.setUsername(user_name.getEditText().getText().toString().trim().toLowerCase());
             new_user.setFirstName(f_name.getEditText().getText().toString().trim());
             new_user.setLastName(l_name.getEditText().getText().toString().trim());
             new_user.setPhoneNumber(phone_number.getRawText().trim());
@@ -96,7 +92,9 @@ public class authentication_signup_identity extends AppCompatActivity {
         }
     }
 
-    void check_username(final String username){
+
+    void check_username(final String username ){
+
         new Thread(new Runnable() {
             @Override
             public int hashCode() {
@@ -115,20 +113,34 @@ public class authentication_signup_identity extends AppCompatActivity {
 
                 PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
 
-
                 if(result.isEmpty()) {
-                    System.out.println("username does not exist");
+                    try {
+                        Intent k = new Intent(authentication_signup_identity.this, authentication_signup_bankinfo.class);
+                        startActivity(k);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                else{
-                    System.out.println("username exists");
-                    //turn username field red
-                    //do not allow to proceed
+                else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Context context = getApplicationContext();
+                            int dShort = Toast.LENGTH_SHORT;
+                            CharSequence fail = "Username Already Exists";
+                            Toast toast = Toast.makeText(context, fail, dShort);
+                            toast.show();
+                        }
+                    });
                 }
+
             }
         }).start();
     }
+
+
     @Override
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
+        }
     }
-}
+

@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class settings_bankinfo extends AppCompatActivity {
     userDataObject current_user;
+    private Toast toast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,10 @@ public class settings_bankinfo extends AppCompatActivity {
         if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() == 0 ||
                 CVC.getEditText().getText().toString().length() == 0 || exp_date.getRawText().length() == 0){
             CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
@@ -93,7 +97,10 @@ public class settings_bankinfo extends AppCompatActivity {
         //handle bad expiration date format
         if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
             CharSequence fail = "Expiration date must be mm/yy format";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
@@ -104,31 +111,46 @@ public class settings_bankinfo extends AppCompatActivity {
 
         if(name_on_card.getEditText().getText().toString().length() >= 50){
             CharSequence fail = "Name on card must be less than 50 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if (card_number.getRawText().length() != 16){
             CharSequence fail = "Card number must be 16 digits";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(CVC.getEditText().getText().toString().length() != 3){
             CharSequence fail = "CVC must be 3 digits";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(month > 12 || month < 1){
             CharSequence fail = "Month must be between 1 and 12";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }
         else if(year < 18 ){
             CharSequence fail = "Year must be 18 or later ";
-            Toast toast = Toast.makeText(context, fail, dLong);
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(context, fail, dLong);
             toast.show();
             return false;
         }

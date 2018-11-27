@@ -273,7 +273,6 @@ public class home extends AppCompatActivity{
                             transBuyer.add(transaction.getBuyerUsername());
                             transAmounts.add("$"+transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
-                            map.put(transaction.getTransactionId().substring(0,4),transaction.getTransactionId());
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -379,6 +378,9 @@ public class home extends AppCompatActivity{
                 transAmounts.clear();
                 transIDs.clear();
                 pendingTransaction.clear();
+                transStatus.clear();
+                transSeller.clear();
+                transBuyer.clear();
                 completedTransaction.clear();
             }
         });

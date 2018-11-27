@@ -3,6 +3,7 @@ package com.paytel;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.auth.google.GoogleButton;
 import com.amazonaws.mobile.auth.ui.AuthUIConfiguration;
 import com.amazonaws.mobile.auth.ui.SignInUI;
@@ -53,6 +54,8 @@ public class sign_in extends AppCompatActivity {
                         .build());
             }
         }).execute();
+        IdentityManager.getDefaultIdentityManager().signOut();
+
     }
     @Override
     public void onBackPressed() {

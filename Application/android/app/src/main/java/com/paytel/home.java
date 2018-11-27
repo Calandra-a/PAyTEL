@@ -326,19 +326,27 @@ public class home extends AppCompatActivity{
                     //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
                     if(nav_bool == true) {
+                        pendinglistView.setVisibility(View.INVISIBLE);
+                        completedlistView.setVisibility(View.VISIBLE);
                         completedlistView.setAdapter(tCompleteAdapter);
                         //completedlistView.setAdapter(adapterCompleted);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
                     else{
+                        completedlistView.setVisibility(View.INVISIBLE);
+                        pendinglistView.setVisibility(View.VISIBLE);
                         pendinglistView.setAdapter(tPendingAdapter);
                         //pendinglistView.setAdapter(adapterPending);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                                R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
 

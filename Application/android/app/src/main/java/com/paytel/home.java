@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +53,9 @@ public class home extends AppCompatActivity{
     private CardView mCardview;
     private static PinpointManager pinpointManager;
 
+    private ConstraintLayout mConstraintLayout;
+    private ConstraintSet mConstraintSet = new ConstraintSet();
+
     userDataObject user;
     boolean nav_bool;
     ArrayList<String> transAmounts = new ArrayList<>();
@@ -91,6 +96,7 @@ public class home extends AppCompatActivity{
         setContentView(R.layout.activity_home);
         ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
         ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+        mConstraintLayout = findViewById(R.id.container);
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
@@ -319,12 +325,21 @@ public class home extends AppCompatActivity{
                     //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
                     //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
-                    if(nav_bool == true)
+                    if(nav_bool == true) {
                         completedlistView.setAdapter(tCompleteAdapter);
                         //completedlistView.setAdapter(adapterCompleted);
+                        mConstraintSet.clone(mConstraintLayout);
+                        mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.applyTo(mConstraintLayout);
+                    }
                     else{
                         pendinglistView.setAdapter(tPendingAdapter);
                         //pendinglistView.setAdapter(adapterPending);
+                        mConstraintSet.clone(mConstraintLayout);
+                        mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                                R.id.cardView, ConstraintSet.BOTTOM);
+                        mConstraintSet.applyTo(mConstraintLayout);
                     }
 
                     TextView mCardview = (TextView) findViewById(R.id.info_text);

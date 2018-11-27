@@ -240,7 +240,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, classes, state } = props;
 
   return (
     <Toolbar
@@ -255,16 +255,16 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="title" id="tableTitle">
-            Database
+            {state == table_user ? "Users" : state == table_flagged ? "Flagged Transactions" : "Transactions"}
           </Typography>
         )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <Tooltip title="Manage Transaction">
+        <Tooltip title={"Manage " + (state == table_user ? "User" : "Transaction")}>
           <Grow in={numSelected === 1}>
             <IconButton
-              aria-label="Manage Transaction"
+              aria-label={"Manage " + (state == table_user ? "User" : "Transaction")}
               onClick={props.handleManage}
               disabled={numSelected !== 1}
             >
@@ -274,19 +274,13 @@ let EnhancedTableToolbar = props => {
         </Tooltip>
         {props.isFlagging ? (
           <CircularProgress className={classes.progress} color="primary" />
-        ) : numSelected > 0 ? (
+        ) : numSelected > 0 && state != table_user ? (
           <Tooltip title="Flag Transaction">
             <IconButton aria-label="Flag Transaction" onClick={props.flag}>
               <FlagIcon />
             </IconButton>
           </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+        ) : <Fragment/>}
       </div>
     </Toolbar>
   );
@@ -503,6 +497,7 @@ class EnhancedTable extends React.Component {
             handleManage={this.handleManage}
             flag={this.flag}
             isFlagging={this.state.isFlagging}
+            state={this.props.state}
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -638,6 +633,7 @@ class EnhancedTable extends React.Component {
             component="div"
             count={data.length}
             rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[5, 10, 25, 50]}
             page={page}
             backIconButtonProps={{
               "aria-label": "Previous Page"

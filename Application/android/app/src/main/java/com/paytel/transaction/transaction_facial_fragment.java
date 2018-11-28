@@ -882,7 +882,7 @@ public class transaction_facial_fragment extends Fragment
                     String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 
-                    S3Key = "uploads/transactions/"+transactionID+"/"+timeStamp+".jpg";
+                    S3Key = "public/transactions/"+transactionID+"/verified.jpg";
 
                     TransferUtility transferUtility =
                             TransferUtility.builder()

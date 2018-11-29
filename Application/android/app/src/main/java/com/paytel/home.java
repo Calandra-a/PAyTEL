@@ -136,6 +136,7 @@ public class home extends AppCompatActivity{
                 mLastClickTime = SystemClock.elapsedRealtime();
                 TextView invis = arg1.findViewById(R.id.txt_invisID);
                 String viewString = invis.getText().toString();
+                background = false;
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
@@ -150,6 +151,7 @@ public class home extends AppCompatActivity{
                 mLastClickTime = SystemClock.elapsedRealtime();
                 TextView invis = arg1.findViewById(R.id.txt_invisID);
                 String viewString = invis.getText().toString();
+                background = false;
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
@@ -416,6 +418,7 @@ public class home extends AppCompatActivity{
                             Log.d("Query results: ", "none");
                             //go to sign up activity
                             try {
+                                background = false;
                                 Intent k = new Intent(home.this, authentication_signup_identity.class);
                                 startActivity(k);
                             } catch(Exception e) {

@@ -60,7 +60,7 @@ public class start_buyer_transaction extends AppCompatActivity {
         setContentView(R.layout.transaction_buyer);
         //LOAD DB HERE
         initialize();
-        downloadWithTransferUtility();
+        //downloadWithTransferUtility();
 
         //user actions
         Button btn_approve = findViewById(R.id.btn_approve);
@@ -157,28 +157,28 @@ public class start_buyer_transaction extends AppCompatActivity {
 //                            System.out.println(current_transaction.getTransactionStatus());
                             mImageView = (ImageView) findViewById(R.id.verified_image);
 
-                                if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
-                                    if(current_transaction.getTransactionStatus().equals("Pending")) {
-                                        mImageView.setVisibility(View.INVISIBLE);
-                                        approve.setVisibility(View.VISIBLE);
-                                        deny.setVisibility(View.VISIBLE);
-                                    }
-                                    buyerID.setText(current_transaction.getSellerUsername() + " requested:");
-                                    amount.setText("-$" + current_transaction.getAmount());
-                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
-                                }else{
-                                    if(current_transaction.getBuyerId() != IdentityManager.getDefaultIdentityManager().getCachedUserID()){
-                                        mImageView.setVisibility(View.INVISIBLE);
-                                    }
-                                    buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
-                                    amount.setText("+$" + current_transaction.getAmount());
-                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
-                                    //downloadWithTransferUtility();
+                            if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
+                                if(current_transaction.getTransactionStatus().equals("Pending")) {
+                                    //mImageView.setVisibility(View.INVISIBLE);
+                                    approve.setVisibility(View.VISIBLE);
+                                    deny.setVisibility(View.VISIBLE);
+                                }else if(current_transaction.getTransactionStatus().equals("Confirmed")){
+                                    downloadWithTransferUtility();
                                 }
 
+                                buyerID.setText(current_transaction.getSellerUsername() + " requested:");
+                                amount.setText("-$" + current_transaction.getAmount());
+                                amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
+                            }else{
+                                if(current_transaction.getBuyerId() != IdentityManager.getDefaultIdentityManager().getCachedUserID()){
+                                    //mImageView.setVisibility(View.INVISIBLE);
+                                }
+                                buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
+                                amount.setText("+$" + current_transaction.getAmount());
+                                amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
+                            }
 
-                            //int eggplant = 0x1F346;//eggplant emoji
-                            //icon.setText(new String(Character.toChars(eggplant)));
+                            
                             note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
 
@@ -241,7 +241,7 @@ public class start_buyer_transaction extends AppCompatActivity {
                 if (TransferState.COMPLETED == state) {
                     // Handle a completed upload
                     System.out.println("download complete");
-                    mImageView = (ImageView) findViewById(R.id.verified_image);
+                    //mImageView = (ImageView) findViewById(R.id.verified_image);
 
                     System.out.println(dir);
                     mImageView.setImageBitmap(BitmapFactory.decodeFile(dir));

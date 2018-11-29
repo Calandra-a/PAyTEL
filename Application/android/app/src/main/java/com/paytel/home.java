@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
@@ -59,6 +61,7 @@ public class home extends AppCompatActivity{
 
     userDataObject user;
     boolean nav_bool;
+    boolean checkRun = false;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
     private ArrayList<String> transSeller = new ArrayList<>();
@@ -81,8 +84,8 @@ public class home extends AppCompatActivity{
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     background = false;
-                    queryUser();
                     nav_bool = false;
+                    showTransaction();
                     background = true;
                     return true;
                 case R.id.navigation_dashboard:
@@ -91,8 +94,8 @@ public class home extends AppCompatActivity{
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     background = false;
-                    queryUser();
                     nav_bool = true;
+                    showTransaction();
                     background = true;
                     return true;
             }
@@ -452,6 +455,48 @@ public class home extends AppCompatActivity{
         }
     }
 
+    void showTransaction(){
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+
+                        if(nav_bool == true) {
+            pendinglistView.setVisibility(View.INVISIBLE);
+            completedlistView.setVisibility(View.VISIBLE);
+            completedlistView.setAdapter(tCompleteAdapter);
+            mConstraintSet.clone(mConstraintLayout);
+            mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                    R.id.cardView, ConstraintSet.BOTTOM);
+            mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                    R.id.navigation, ConstraintSet.TOP);
+            mConstraintSet.applyTo(mConstraintLayout);
+        }
+        else{
+            completedlistView.setVisibility(View.INVISIBLE);
+            pendinglistView.setVisibility(View.VISIBLE);
+            pendinglistView.setAdapter(tPendingAdapter);
+            mConstraintSet.clone(mConstraintLayout);
+            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                    R.id.cardView, ConstraintSet.BOTTOM);
+            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                    R.id.navigation, ConstraintSet.TOP);
+            mConstraintSet.applyTo(mConstraintLayout);
+                        }
+                    }
+                catch(Exception e){
+                            e.printStackTrace();
+                        } }
+                });
+            }
+        catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
     void refreshTransactions(){
         runOnUiThread(new Runnable() {
             @Override
@@ -514,4 +559,5 @@ public class home extends AppCompatActivity{
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
+
 }

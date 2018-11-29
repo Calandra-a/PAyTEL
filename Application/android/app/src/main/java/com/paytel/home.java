@@ -328,6 +328,7 @@ public class home extends AppCompatActivity{
                         Log.d("Query results: ", "none");
                         //go to sign up activity
                         try {
+                            background = false;
                             Intent k = new Intent(home.this, authentication_signup_identity.class);
                             startActivity(k);
                         } catch(Exception e) {

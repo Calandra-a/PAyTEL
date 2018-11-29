@@ -95,8 +95,14 @@ public class transaction_facial extends AppCompatActivity {
                 }
             };
         }
+        else{
+            fingerprintTest=true;
+        }
         if (Build.VERSION.SDK_INT >= 28) {
             prompt.authenticate(new CancellationSignal(), getMainExecutor(), callback);
+        }
+        else{
+            fingerprintTest=true;
         }
     }
 }

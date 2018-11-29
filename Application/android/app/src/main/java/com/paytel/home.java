@@ -3,6 +3,7 @@ package com.paytel;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -68,6 +69,7 @@ public class home extends AppCompatActivity{
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
     Map<String, String> map = new HashMap<String, String>();
     private TransactionAdapter tPendingAdapter, tCompleteAdapter;
+    private long mLastClickTime = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,16 +78,24 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                        return true;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     refreshTransactions();
                     nav_bool = false;
                     queryUser();
                     return true;
                 case R.id.navigation_dashboard:
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                        return true;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     refreshTransactions();
                     nav_bool = true;
                     queryUser();
                     return true;
-                }
+            }
             return false;
         }
     };
@@ -117,40 +127,29 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                /*TextView label = arg1.findViewById(R.id.label);
-                String viewString = label.getText().toString();
-                String transactionNumber = viewString.substring(4,8);
-                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);;*/
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 TextView invis = arg1.findViewById(R.id.txt_invisID);
                 String viewString = invis.getText().toString();
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
-                /*if(map.get(transactionNumber) != null){
-                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
-                    intent.putExtra("name", map.get(transactionNumber));
-                    startActivity(intent);
-                }*/
             }
         });
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 TextView invis = arg1.findViewById(R.id.txt_invisID);
                 String viewString = invis.getText().toString();
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
-                /*TextView label = arg1.findViewById(R.id.label);
-                String viewString = label.getText().toString();
-                String transactionNumber = viewString.substring(4,8);
-                String amount = viewString.substring(viewString.lastIndexOf("$") + 1);;
-
-                if(map.get(transactionNumber) != null){
-                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
-                    intent.putExtra("name", map.get(transactionNumber));
-                    startActivity(intent);
-                }*/
             }
         });
 

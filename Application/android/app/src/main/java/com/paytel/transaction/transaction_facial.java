@@ -25,6 +25,7 @@ public class transaction_facial extends AppCompatActivity {
                     .replace(R.id.container, transaction_facial_fragment.newInstance())
                     .commit();
         }
+        fingerprintTest = false;
 
     }
     public void pictureComplete() {
@@ -58,10 +59,17 @@ public class transaction_facial extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 28) {
             prompt = new BiometricPrompt.Builder(this)
                     .setTitle("Verify Biometrics")
-                    .setSubtitle("...")
+                    .setSubtitle("")
                     .setNegativeButton("Cancel", getMainExecutor(), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            try{
+                                Toast.makeText(transaction_facial.this, "Fingerprint failed! Transaction Cancelled", Toast.LENGTH_SHORT).show();
+                                Intent k = new Intent(transaction_facial.this, home.class);
+                                startActivity(k);
+                            }catch (Exception e){
+
+                            }
                         }
                     })
                     .build();
@@ -87,7 +95,7 @@ public class transaction_facial extends AppCompatActivity {
                     counter++;
                     Toast.makeText(transaction_facial.this, "Fingerprint not recognized", Toast.LENGTH_SHORT).show();
 
-                    if(counter == 2){
+                    if(counter == 6){
                         Toast.makeText(transaction_facial.this, "Fingerprint failed! Transaction Cancelled", Toast.LENGTH_SHORT).show();
                         onAuthenticationError(1, "Failed");
                         pictureComplete();

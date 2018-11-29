@@ -79,7 +79,7 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1500){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -89,7 +89,7 @@ public class home extends AppCompatActivity{
                     background = true;
                     return true;
                 case R.id.navigation_dashboard:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1500){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -113,7 +113,7 @@ public class home extends AppCompatActivity{
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
-
+        background = true;
         mTextMessage = (TextView) findViewById(R.id.message);
         mCardview = findViewById(R.id.cardView);
 
@@ -130,7 +130,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -144,7 +144,7 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -161,6 +161,7 @@ public class home extends AppCompatActivity{
             public void onClick(View v) {
                 //move to next frame
                 try {
+                    background = false;
                     Intent k = new Intent(home.this, create_new_transaction.class);
                     startActivity(k);
 
@@ -246,6 +247,7 @@ public class home extends AppCompatActivity{
                     Log.d("Query results: ", "none");
                     //go to sign up activity
                     try {
+                        background = false;
                         Intent k = new Intent(home.this, authentication_signup_identity.class);
                         startActivity(k);
                     } catch(Exception e) {
@@ -378,6 +380,86 @@ public class home extends AppCompatActivity{
         }).start();
 
     }
+
+    void queryNow(){
+            new Thread(new Runnable() {
+                @Override
+                public int hashCode() {
+                    return super.hashCode();
+                }
+
+                @Override
+                public void run() {
+                        refreshTransactions();
+                        userDataObject user = new userDataObject();
+                        user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
+
+                        DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                                .withHashKeyValues(user)
+                                .withConsistentRead(false);
+
+                        PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                        Gson gson = new Gson();
+                        JsonParser parser = new JsonParser();
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // Loop through query results
+                        for (int i = 0; i < result.size(); i++) {
+                            String jsonFormOfItem = gson.toJson(result.get(i));
+                            stringBuilder.append(jsonFormOfItem + "\n\n");
+                        }
+
+                        if (result.isEmpty()) {
+                            // There were no items matching your query.
+                            Log.d("Query results: ", "none");
+                            //go to sign up activity
+                            try {
+                                Intent k = new Intent(home.this, authentication_signup_identity.class);
+                                startActivity(k);
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            //add current device token to db
+                            userDataObject uu = new userDataObject();
+                            uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
+                            uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                            ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+
+                            userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                            ((global_objects) getApplication()).setCurrent_user(current_user);
+
+                            //here
+                            try {
+
+                                Set<String> transactionSet = current_user.getTransactions();
+                                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                                for (int i = 0; i < dataSet.size(); i++) {
+                                    TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                                    transIDs.add(transaction.getTransactionId());
+                                    transSeller.add(transaction.getSellerUsername());
+                                    transBuyer.add(transaction.getBuyerUsername());
+                                    transAmounts.add("$"+transaction.getAmount());
+                                    transStatus.add(transaction.getTransactionStatus());
+                                }
+                                initializingTranasactions();
+                                if (result.isEmpty()) {
+                                    // There were no items matching your query.
+                                    initialSignup();
+                                    Log.d("Query results: ", "none");
+                                }
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                                Log.d("Error", "No transactions being pulled?");
+                                initialSignup();
+                            }
+                    }
+                }
+            }).start();
+        }
 
     void initializingTranasactions(){
         try {

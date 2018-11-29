@@ -166,10 +166,6 @@ public class create_new_transaction extends AppCompatActivity {
         TextInputLayout amount = findViewById(R.id.txt_amount);
         TextInputLayout note = findViewById(R.id.txt_note);
 
-        //if(buyerID != null)new_transaction.setSellerId();
-        //if(amount != null)new_transaction.setAmount();
-        //if(note != null)new_transaction.setNote();
-
         //do this call if everything checks out
         doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
     }

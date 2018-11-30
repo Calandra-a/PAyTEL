@@ -3,6 +3,7 @@ package com.paytel.transaction;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
+import com.paytel.util.ExifUtil;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
@@ -45,6 +47,7 @@ public class start_buyer_transaction extends AppCompatActivity {
     private Toast toast = null;
     private ImageView mImageView;
     private String dir;
+    private Bitmap image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +181,7 @@ public class start_buyer_transaction extends AppCompatActivity {
                                 amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
                             }
 
-                            
+
                             note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
 
@@ -242,9 +245,11 @@ public class start_buyer_transaction extends AppCompatActivity {
                     // Handle a completed upload
                     System.out.println("download complete");
                     //mImageView = (ImageView) findViewById(R.id.verified_image);
+                    image  = BitmapFactory.decodeFile(dir);
+                    Bitmap orientedBitmap = ExifUtil.rotateBitmap(dir, image);//rotate image
 
                     System.out.println(dir);
-                    mImageView.setImageBitmap(BitmapFactory.decodeFile(dir));
+                    mImageView.setImageBitmap(orientedBitmap);
                     mImageView.setVisibility(View.VISIBLE);
                 }
             }

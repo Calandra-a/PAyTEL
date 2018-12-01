@@ -1,10 +1,12 @@
 package com.paytel.transaction;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -80,16 +82,11 @@ public class create_new_transaction extends AppCompatActivity {
                  }
                 if(lock == false) {
                      add_transactioninfo();
+                    transactionCompleted();
 
-                     try {
-                         Intent k = new Intent(create_new_transaction.this, home.class);
-                         startActivity(k);
-
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
+                    }
                  }
-            }
+
         });
         //load api gateway
         apiClient =new ApiClientFactory()
@@ -111,7 +108,31 @@ public class create_new_transaction extends AppCompatActivity {
             }
         });
     }
-    void setTimer(){
+
+    public void transactionCompleted() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Transaction Completed");
+        alert.setMessage("");
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Do something here where "ok" clicked and then perform intent from activity context
+                try {
+                    Intent k = new Intent(create_new_transaction.this, home.class);
+                    startActivity(k);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        alert.show();
+
+
+    }
+        void setTimer(){
         new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -161,6 +182,9 @@ public class create_new_transaction extends AppCompatActivity {
             }
         }.start();
     }
+
+
+
     void add_transactioninfo(){
         TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
         TextInputLayout amount = findViewById(R.id.txt_amount);

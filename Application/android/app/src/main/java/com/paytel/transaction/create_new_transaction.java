@@ -323,12 +323,16 @@ public class create_new_transaction extends AppCompatActivity {
 
                 }
                 else {
-
+                    runOnUiThread(new Runnable() {
+                        public void run() {
                     TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
                     TextInputLayout amount = findViewById(R.id.txt_amount);
                     TextInputLayout note = findViewById(R.id.txt_note);
                     //do this call if everything checks out
                     doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
+
+                        }
+                    });
                     runOnUiThread(new Runnable() {
                         public void run() {
                             transactionCompleted();

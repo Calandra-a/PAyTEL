@@ -368,7 +368,6 @@ public class home extends AppCompatActivity{
                             }
                         }
                         catch(Exception e){
-                            e.printStackTrace();
                             Log.d("Error", "No transactions being pulled?");
                             initialSignup();
                         }
@@ -598,22 +597,21 @@ public class home extends AppCompatActivity{
         });
     }
     void initialSignup(){
-        try{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextView mCardview = (TextView) findViewById(R.id.info_text);
-                TextView mUsername = (TextView) findViewById(R.id.info_username);
+                try{
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    TextView mUsername = (TextView) findViewById(R.id.info_username);
 
-                Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                mCardview.setText("Wallet: $"+Double.toString(wallet));
-                mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
+                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                }
+                catch(Exception E){
+                }
             }
         });
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
 

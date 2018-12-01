@@ -84,6 +84,19 @@
             android:layout_alignTop="@+id/txt_status" />
 
         <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/status_div"
+            android:layout_centerHorizontal="true"
+            android:ems="8"
+            android:hint="Time"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/txt_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

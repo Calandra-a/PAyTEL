@@ -79,7 +79,7 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -89,7 +89,7 @@ public class home extends AppCompatActivity{
                     background = true;
                     return true;
                 case R.id.navigation_dashboard:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -130,7 +130,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -145,7 +145,7 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -492,8 +492,11 @@ public class home extends AppCompatActivity{
                         }catch(Exception e){}
 
                     }
+
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
+                        tCompleteAdapter.notifyDataSetChanged();
                         tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
+                        tPendingAdapter.notifyDataSetChanged();
                     //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
                     //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
@@ -521,7 +524,8 @@ public class home extends AppCompatActivity{
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
-
+                    tPendingAdapter.notifyDataSetChanged();
+                    tCompleteAdapter.notifyDataSetChanged();
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
                     TextView mUsername = (TextView) findViewById(R.id.info_username);
 
@@ -559,6 +563,8 @@ public class home extends AppCompatActivity{
             mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
                     R.id.navigation, ConstraintSet.TOP);
             mConstraintSet.applyTo(mConstraintLayout);
+            tPendingAdapter.notifyDataSetChanged();
+            tCompleteAdapter.notifyDataSetChanged();
         }
         else{
             completedlistView.setVisibility(View.INVISIBLE);
@@ -570,6 +576,8 @@ public class home extends AppCompatActivity{
             mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
                     R.id.navigation, ConstraintSet.TOP);
             mConstraintSet.applyTo(mConstraintLayout);
+            tPendingAdapter.notifyDataSetChanged();
+            tCompleteAdapter.notifyDataSetChanged();
                         }
                     }
                 catch(Exception e){

@@ -19,11 +19,16 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.amazonaws.mobileconnectors.apigateway.ApiRequest;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.util.IOUtils;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
+import com.paytel.sign_up.authentication_signup_bankinfo;
+import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
+import com.paytel.util.userDataObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,7 +87,7 @@ public class create_new_transaction extends AppCompatActivity {
                  }
                 if(lock == false) {
                      add_transactioninfo();
-                    transactionCompleted();
+                    //transactionCompleted();
 
                     }
                  }
@@ -186,12 +191,30 @@ public class create_new_transaction extends AppCompatActivity {
 
 
     void add_transactioninfo(){
+        Context context = getApplicationContext();
+        int dShort = Toast.LENGTH_SHORT;
+
         TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
         TextInputLayout amount = findViewById(R.id.txt_amount);
         TextInputLayout note = findViewById(R.id.txt_note);
+        if(buyerID.getEditText().getText().toString().toLowerCase().isEmpty() || amount.getEditText().getText().toString().toLowerCase().isEmpty() || note.getEditText().getText().toString().toLowerCase().isEmpty()){
+            CharSequence fail = "No field can be left blank";
+            Toast toast = Toast.makeText(context, fail, dShort);
+            toast.show();
+        }
+        else if( Integer.parseInt(amount.getEditText().getText().toString().trim()) < 1){
 
-        //do this call if everything checks out
-        doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
+            CharSequence fail = "Amount must be $1 or more";
+            Toast toast = Toast.makeText(context, fail, dShort);
+            toast.show();
+        }
+        else {
+            //CharSequence fail = buyerID.getEditText().getText().toString().toLowerCase();
+            //Toast toast = Toast.makeText(context, fail, dShort);
+            //toast.show();
+            check_username(buyerID.getEditText().getText().toString().toLowerCase());
+        }
+
     }
 
     void doApiCall(String buyerID, String amount, String note){
@@ -266,4 +289,56 @@ public class create_new_transaction extends AppCompatActivity {
             }
         }).start();
     }
+
+    void check_username(final String username ){
+
+        new Thread(new Runnable() {
+            @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+
+            @Override
+            public void run() {
+                userDataObject user = new userDataObject();
+                user.setUsername(username);//partition key
+
+                DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                        .withIndexName("username1")
+                        .withHashKeyValues(user)
+                        .withConsistentRead(false);
+
+                PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                if(result.isEmpty()) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Context context = getApplicationContext();
+                            int dShort = Toast.LENGTH_SHORT;
+                            CharSequence fail = "Invalid Username";
+                            Toast toast = Toast.makeText(context, fail, dShort);
+                            toast.show();
+                        }
+                    });
+
+                }
+                else {
+
+                    TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
+                    TextInputLayout amount = findViewById(R.id.txt_amount);
+                    TextInputLayout note = findViewById(R.id.txt_note);
+                    //do this call if everything checks out
+                    doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            transactionCompleted();
+                        }
+                    });
+
+                }
+
+            }
+        }).start();
+    }
+
 }

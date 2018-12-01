@@ -202,7 +202,7 @@ public class create_new_transaction extends AppCompatActivity {
             Toast toast = Toast.makeText(context, fail, dShort);
             toast.show();
         }
-        else if( Integer.parseInt(amount.getEditText().getText().toString().trim()) < 1){
+        else if( Double.parseDouble(amount.getEditText().getText().toString().trim()) < 1){
 
             CharSequence fail = "Amount must be $1 or more";
             Toast toast = Toast.makeText(context, fail, dShort);

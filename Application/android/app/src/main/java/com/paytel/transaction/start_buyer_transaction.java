@@ -154,6 +154,7 @@ public class start_buyer_transaction extends AppCompatActivity {
                             TextView buyerID = findViewById(R.id.txt_buyerID);
                             TextView user = findViewById(R.id.txt_username);
                             TextView status = findViewById(R.id.txt_status);
+                            TextView time = findViewById(R.id.txt_username);
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
@@ -181,10 +182,14 @@ public class start_buyer_transaction extends AppCompatActivity {
                                 amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
                             }
 
-
+                        try {
                             note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
-
+                            time.setText("Time: " + current_transaction.getTime());
+                        }
+                        catch(Exception e){
+                            Log.d("R","Status, time, or Note issue");
+                            }
                         }
                     });
                 }

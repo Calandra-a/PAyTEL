@@ -79,7 +79,7 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -89,7 +89,7 @@ public class home extends AppCompatActivity{
                     background = true;
                     return true;
                 case R.id.navigation_dashboard:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -130,7 +130,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -145,7 +145,7 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -368,13 +368,12 @@ public class home extends AppCompatActivity{
                             }
                         }
                         catch(Exception e){
-                            e.printStackTrace();
                             Log.d("Error", "No transactions being pulled?");
                             initialSignup();
                         }
                     }
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -493,8 +492,11 @@ public class home extends AppCompatActivity{
                         }catch(Exception e){}
 
                     }
+
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
+                        tCompleteAdapter.notifyDataSetChanged();
                         tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
+                        tPendingAdapter.notifyDataSetChanged();
                     //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
                     //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
@@ -522,7 +524,8 @@ public class home extends AppCompatActivity{
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
-
+                    tPendingAdapter.notifyDataSetChanged();
+                    tCompleteAdapter.notifyDataSetChanged();
                     TextView mCardview = (TextView) findViewById(R.id.info_text);
                     TextView mUsername = (TextView) findViewById(R.id.info_username);
 
@@ -560,6 +563,8 @@ public class home extends AppCompatActivity{
             mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
                     R.id.navigation, ConstraintSet.TOP);
             mConstraintSet.applyTo(mConstraintLayout);
+            tPendingAdapter.notifyDataSetChanged();
+            tCompleteAdapter.notifyDataSetChanged();
         }
         else{
             completedlistView.setVisibility(View.INVISIBLE);
@@ -571,6 +576,8 @@ public class home extends AppCompatActivity{
             mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
                     R.id.navigation, ConstraintSet.TOP);
             mConstraintSet.applyTo(mConstraintLayout);
+            tPendingAdapter.notifyDataSetChanged();
+            tCompleteAdapter.notifyDataSetChanged();
                         }
                     }
                 catch(Exception e){
@@ -598,22 +605,21 @@ public class home extends AppCompatActivity{
         });
     }
     void initialSignup(){
-        try{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextView mCardview = (TextView) findViewById(R.id.info_text);
-                TextView mUsername = (TextView) findViewById(R.id.info_username);
+                try{
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    TextView mUsername = (TextView) findViewById(R.id.info_username);
 
-                Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                mCardview.setText("Wallet: $"+Double.toString(wallet));
-                mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
+                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                }
+                catch(Exception E){
+                }
             }
         });
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
 

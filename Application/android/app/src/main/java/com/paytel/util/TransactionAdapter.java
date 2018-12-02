@@ -13,7 +13,9 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,6 +54,10 @@ public class TransactionAdapter extends ArrayAdapter<TransactionCard> {
             TextView transactionID = (TextView) listItem.findViewById(R.id.txt_invisID);
             transactionID.setText(currentTrans.getmTransactionID());
             transactionID.setVisibility(View.INVISIBLE);
+            TextView date = (TextView) listItem.findViewById(R.id.txt_time_card);
+            SimpleDateFormat ff = new SimpleDateFormat("MM/dd/yyyy");
+            Date dd= new Date(currentTrans.getmTime());
+            date.setText(ff.format(dd));
 
             TextView emoji = (TextView) listItem.findViewById(R.id.txt_emoji);
             switch (currentTrans.getmStatus()) {

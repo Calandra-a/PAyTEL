@@ -67,6 +67,7 @@ public class home extends AppCompatActivity{
     private ArrayList<String> transSeller = new ArrayList<>();
     private ArrayList<String> transBuyer = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
+    ArrayList<String> transTime = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
     private TransactionAdapter tPendingAdapter, tCompleteAdapter;
@@ -286,6 +287,7 @@ public class home extends AppCompatActivity{
                             transBuyer.add(transaction.getBuyerUsername());
                             transAmounts.add("$" + transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
+                            transTime.add(transaction.getTimeCreated());
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -367,6 +369,7 @@ public class home extends AppCompatActivity{
                                 transBuyer.add(transaction.getBuyerUsername());
                                 transAmounts.add("$"+transaction.getAmount());
                                 transStatus.add(transaction.getTransactionStatus());
+                                transTime.add(transaction.getTimeCreated());
                             }
                             initializingTranasactions();
                             if (result.isEmpty()) {
@@ -454,6 +457,7 @@ public class home extends AppCompatActivity{
                                     transBuyer.add(transaction.getBuyerUsername());
                                     transAmounts.add("$"+transaction.getAmount());
                                     transStatus.add(transaction.getTransactionStatus());
+                                    transTime.add(transaction.getTimeCreated());
                                 }
                                 initializingTranasactions();
                                 if (result.isEmpty()) {
@@ -490,11 +494,11 @@ public class home extends AppCompatActivity{
                             switch (transStatus.get(i)) {
                                 case "Confirmed":
                                 case "Cancelled":
-                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                                 case "Pending":
                                 case "flagged":
-                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                             }
                         }catch(Exception e){}
@@ -628,6 +632,7 @@ public class home extends AppCompatActivity{
                 transSeller.clear();
                 transBuyer.clear();
                 completedTransaction.clear();
+                transTime.clear();
             }
         });
     }

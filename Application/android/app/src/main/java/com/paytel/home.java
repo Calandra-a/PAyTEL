@@ -130,7 +130,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -145,7 +145,7 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -373,7 +373,7 @@ public class home extends AppCompatActivity{
                         }
                     }
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(4000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -497,14 +497,11 @@ public class home extends AppCompatActivity{
                         tCompleteAdapter.notifyDataSetChanged();
                         tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
                         tPendingAdapter.notifyDataSetChanged();
-                    //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
-                    //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
 
                     if(nav_bool == true) {
                         pendinglistView.setVisibility(View.INVISIBLE);
                         completedlistView.setVisibility(View.VISIBLE);
                         completedlistView.setAdapter(tCompleteAdapter);
-                        //completedlistView.setAdapter(adapterCompleted);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
@@ -516,7 +513,6 @@ public class home extends AppCompatActivity{
                         completedlistView.setVisibility(View.INVISIBLE);
                         pendinglistView.setVisibility(View.VISIBLE);
                         pendinglistView.setAdapter(tPendingAdapter);
-                        //pendinglistView.setAdapter(adapterPending);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
@@ -554,35 +550,36 @@ public class home extends AppCompatActivity{
                         ListView completedlistView = (ListView) findViewById(R.id.completed_list);
 
                         if(nav_bool == true) {
-            pendinglistView.setVisibility(View.INVISIBLE);
-            completedlistView.setVisibility(View.VISIBLE);
-            completedlistView.setAdapter(tCompleteAdapter);
-            mConstraintSet.clone(mConstraintLayout);
-            mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
-                    R.id.cardView, ConstraintSet.BOTTOM);
-            mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
-                    R.id.navigation, ConstraintSet.TOP);
-            mConstraintSet.applyTo(mConstraintLayout);
-            tPendingAdapter.notifyDataSetChanged();
-            tCompleteAdapter.notifyDataSetChanged();
-        }
-        else{
-            completedlistView.setVisibility(View.INVISIBLE);
-            pendinglistView.setVisibility(View.VISIBLE);
-            pendinglistView.setAdapter(tPendingAdapter);
-            mConstraintSet.clone(mConstraintLayout);
-            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
-                    R.id.cardView, ConstraintSet.BOTTOM);
-            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
-                    R.id.navigation, ConstraintSet.TOP);
-            mConstraintSet.applyTo(mConstraintLayout);
-            tPendingAdapter.notifyDataSetChanged();
-            tCompleteAdapter.notifyDataSetChanged();
+                            pendinglistView.setVisibility(View.INVISIBLE);
+                            completedlistView.setVisibility(View.VISIBLE);
+                            completedlistView.setAdapter(tCompleteAdapter);
+                            mConstraintSet.clone(mConstraintLayout);
+                            mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                            R.id.cardView, ConstraintSet.BOTTOM);
+                            mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                            R.id.navigation, ConstraintSet.TOP);
+                            mConstraintSet.applyTo(mConstraintLayout);
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                        }
+                        else {
+                            completedlistView.setVisibility(View.INVISIBLE);
+                            pendinglistView.setVisibility(View.VISIBLE);
+                            pendinglistView.setAdapter(tPendingAdapter);
+                            mConstraintSet.clone(mConstraintLayout);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                            R.id.cardView, ConstraintSet.BOTTOM);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                            R.id.navigation, ConstraintSet.TOP);
+                            mConstraintSet.applyTo(mConstraintLayout);
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
                         }
                     }
                 catch(Exception e){
                             e.printStackTrace();
-                        } }
+                        }
+                }
                 });
             }
         catch(Exception e){

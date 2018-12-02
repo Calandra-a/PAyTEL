@@ -92,11 +92,11 @@ public class TransactionDataObject {
         this._sellerUsername = _sellerUsername;
     }
     @DynamoDBAttribute(attributeName = "time_created")
-    public String getTime() {
+    public String getTimeCreated() {
         return _timeCreated;
     }
 
-    public void setTime(final String _timeCreated) {
+    public void setTimeCreated(final String _timeCreated) {
         this._timeCreated = _timeCreated;
     }
     @DynamoDBAttribute(attributeName = "time_last_edit")

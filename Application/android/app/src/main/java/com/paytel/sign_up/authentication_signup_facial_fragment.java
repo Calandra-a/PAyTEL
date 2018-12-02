@@ -877,7 +877,7 @@ public class authentication_signup_facial_fragment extends Fragment
                     progress.show();
 
                     String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
-                    String S3Key = "uploads/"+userID+"/auth.jpg";
+                    String S3Key = "public/userprofiles/"+userID+"/profilepic.jpg";
 
                     TransferUtility transferUtility =
                             TransferUtility.builder()

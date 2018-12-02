@@ -22,7 +22,7 @@ public class TransactionDataObject {
     private String _note;
     private String _sellerId;
     private String _sellerUsername;
-    private String _time;
+    private String _timeCreated;
     private String _timeLastEdit;
     private String _transactionStatus;
 
@@ -91,13 +91,13 @@ public class TransactionDataObject {
     public void setSellerUsername(final String _sellerUsername) {
         this._sellerUsername = _sellerUsername;
     }
-    @DynamoDBAttribute(attributeName = "time")
-    public String getTime() {
-        return _time;
+    @DynamoDBAttribute(attributeName = "time_created")
+    public String getTimeCreated() {
+        return _timeCreated;
     }
 
-    public void setTime(final String _time) {
-        this._time = _time;
+    public void setTimeCreated(final String _timeCreated) {
+        this._timeCreated = _timeCreated;
     }
     @DynamoDBAttribute(attributeName = "time_last_edit")
     public String getTimeLastEdit() {

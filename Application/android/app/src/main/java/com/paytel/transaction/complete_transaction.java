@@ -10,11 +10,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.apigateway.ApiResponse;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
+import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionDataObject;
+import com.paytel.util.userDataObject;
+
+import java.util.ArrayList;
+import java.util.Set;
+
+import static com.paytel.home.getPinpointManager;
+
 //screen that shows up after transaction facial
 public class complete_transaction extends AppCompatActivity{
 
@@ -75,6 +89,8 @@ public class complete_transaction extends AppCompatActivity{
             }else{
                 Title.setText("Failed");
             }
+            queryUser();
+
             /*if(response.getStatusCode() == 200){
                 try {
                     Intent k = new Intent(complete_transaction.this, home.class);
@@ -100,5 +116,47 @@ public class complete_transaction extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
+    }
+
+    public void queryUser(){
+        new Thread(new Runnable() {
+            @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+
+            @Override
+            public void run() {
+                    userDataObject user = new userDataObject();
+                    user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
+
+                    DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                            .withHashKeyValues(user)
+                            .withConsistentRead(false);
+
+                    PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                    Gson gson = new Gson();
+                    JsonParser parser = new JsonParser();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    // Loop through query results
+                    for (int i = 0; i < result.size(); i++) {
+                        String jsonFormOfItem = gson.toJson(result.get(i));
+                        stringBuilder.append(jsonFormOfItem + "\n\n");
+                    }
+                        //add current device token to db
+                        userDataObject uu = new userDataObject();
+                        uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
+                        uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+
+                        userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects) getApplication()).setCurrent_user(current_user);
+
+                        //here
+                    }
+        }).start();
+
     }
 }

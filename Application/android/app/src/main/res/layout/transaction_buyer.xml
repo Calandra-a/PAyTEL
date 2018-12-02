@@ -37,9 +37,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="-40dp"
-            app:srcCompat="@color/common_google_signin_btn_text_dark_disabled"
             android:paddingRight="2dp"
-            android:textSize="48sp" />
+            android:textSize="48sp"
+            android:visibility="invisible"
+            app:srcCompat="@color/common_google_signin_btn_text_dark_disabled" />
 
         <TextView
             android:id="@+id/txt_buyerID"
@@ -81,6 +82,19 @@
             android:id="@+id/status_div"
             style="@style/Divider"
             android:layout_alignTop="@+id/txt_status" />
+
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/status_div"
+            android:layout_centerHorizontal="true"
+            android:ems="8"
+            android:hint="Time"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txt_status"

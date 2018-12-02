@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
@@ -59,18 +61,22 @@ public class home extends AppCompatActivity{
 
     userDataObject user;
     boolean nav_bool;
+    boolean checkRun = false;
     ArrayList<String> transAmounts = new ArrayList<>();
     ArrayList<String> transIDs = new ArrayList<>();
-    private ArrayList<String> IDs = new ArrayList<>();
     private ArrayList<String> transSeller = new ArrayList<>();
     private ArrayList<String> transBuyer = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
+    ArrayList<String> transTime = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
-    Map<String, String> map = new HashMap<String, String>();
     private TransactionAdapter tPendingAdapter, tCompleteAdapter;
     private long mLastClickTime = 0;
+<<<<<<< HEAD
 
+=======
+    private boolean background = true;
+>>>>>>> master
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -78,24 +84,42 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+<<<<<<< HEAD
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     refreshTransactions();
+=======
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                        return true;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    background = false;
+>>>>>>> master
                     nav_bool = false;
-                    queryUser();
+                    showTransaction();
+                    background = true;
                     return true;
                 case R.id.navigation_dashboard:
+<<<<<<< HEAD
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     refreshTransactions();
+=======
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                        return true;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    background = false;
+>>>>>>> master
                     nav_bool = true;
-                    queryUser();
+                    showTransaction();
+                    background = true;
                     return true;
-                }
+            }
             return false;
         }
     };
@@ -110,7 +134,7 @@ public class home extends AppCompatActivity{
         //set top toolbar
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
-
+        background = true;
         mTextMessage = (TextView) findViewById(R.id.message);
         mCardview = findViewById(R.id.cardView);
 
@@ -119,7 +143,7 @@ public class home extends AppCompatActivity{
 
         String userID = IdentityManager.getDefaultIdentityManager().getCachedUserID();
 
-        queryUser();
+        queryInBackground();
 
         FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
         Button btn_funds = findViewById(R.id.btn_funds);
@@ -127,6 +151,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+<<<<<<< HEAD
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
                     return;
                 }
@@ -136,11 +161,28 @@ public class home extends AppCompatActivity{
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
+=======
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+            try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+            catch(Exception e){
+                }
+>>>>>>> master
             }
         });
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+<<<<<<< HEAD
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
                     return;
                 }
@@ -150,6 +192,22 @@ public class home extends AppCompatActivity{
                 Intent intent = new Intent(home.this, start_buyer_transaction.class);
                 intent.putExtra("name", viewString);
                 startActivity(intent);
+=======
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+                catch(Exception e){
+                }
+>>>>>>> master
             }
         });
 
@@ -158,6 +216,7 @@ public class home extends AppCompatActivity{
             public void onClick(View v) {
                 //move to next frame
                 try {
+                    background = false;
                     Intent k = new Intent(home.this, create_new_transaction.class);
                     startActivity(k);
 
@@ -210,7 +269,6 @@ public class home extends AppCompatActivity{
 
 
     public void queryUser(){
-
         new Thread(new Runnable() {
             @Override
             public int hashCode() {
@@ -219,6 +277,7 @@ public class home extends AppCompatActivity{
 
             @Override
             public void run() {
+                refreshTransactions();
                 userDataObject user = new userDataObject();
                 user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
 
@@ -240,24 +299,24 @@ public class home extends AppCompatActivity{
 
                 if (result.isEmpty()) {
                     // There were no items matching your query.
-
                     Log.d("Query results: ", "none");
                     //go to sign up activity
                     try {
+                        background = false;
                         Intent k = new Intent(home.this, authentication_signup_identity.class);
                         startActivity(k);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
-                else{
+                else {
                     //add current device token to db
                     userDataObject uu = new userDataObject();
                     uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
                     uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-                    ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+                    ((global_objects) getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
 
-                    userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                    userDataObject current_user = ((global_objects) getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
                     ((global_objects) getApplication()).setCurrent_user(current_user);
 
                     //here
@@ -270,8 +329,9 @@ public class home extends AppCompatActivity{
                             transIDs.add(transaction.getTransactionId());
                             transSeller.add(transaction.getSellerUsername());
                             transBuyer.add(transaction.getBuyerUsername());
-                            transAmounts.add("$"+transaction.getAmount());
+                            transAmounts.add("$" + transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
+                            transTime.add(transaction.getTimeCreated());
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -279,8 +339,7 @@ public class home extends AppCompatActivity{
                             initialSignup();
                             Log.d("Query results: ", "none");
                         }
-                    }
-                    catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         Log.d("Error", "No transactions being pulled?");
                         initialSignup();
@@ -289,6 +348,177 @@ public class home extends AppCompatActivity{
             }
         }).start();
     }
+
+    public void queryInBackground(){
+        new Thread(new Runnable() {
+            @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+
+            @Override
+            public void run() {
+                while(background){
+                    refreshTransactions();
+                    userDataObject user = new userDataObject();
+                    user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
+
+                    DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                            .withHashKeyValues(user)
+                            .withConsistentRead(false);
+
+                    PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                    Gson gson = new Gson();
+                    JsonParser parser = new JsonParser();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    // Loop through query results
+                    for (int i = 0; i < result.size(); i++) {
+                        String jsonFormOfItem = gson.toJson(result.get(i));
+                        stringBuilder.append(jsonFormOfItem + "\n\n");
+                    }
+
+                    if (result.isEmpty()) {
+                        // There were no items matching your query.
+                        Log.d("Query results: ", "none");
+                        //go to sign up activity
+                        try {
+                            background = false;
+                            Intent k = new Intent(home.this, authentication_signup_identity.class);
+                            startActivity(k);
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        //add current device token to db
+                        userDataObject uu = new userDataObject();
+                        uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
+                        uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+
+                        userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects) getApplication()).setCurrent_user(current_user);
+
+                        //here
+                        try {
+
+                            Set<String> transactionSet = current_user.getTransactions();
+                            ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                            for (int i = 0; i < dataSet.size(); i++) {
+                                TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                                transIDs.add(transaction.getTransactionId());
+                                transSeller.add(transaction.getSellerUsername());
+                                transBuyer.add(transaction.getBuyerUsername());
+                                transAmounts.add("$"+transaction.getAmount());
+                                transStatus.add(transaction.getTransactionStatus());
+                                transTime.add(transaction.getTimeCreated());
+                            }
+                            initializingTranasactions();
+                            if (result.isEmpty()) {
+                                // There were no items matching your query.
+                                initialSignup();
+                                Log.d("Query results: ", "none");
+                            }
+                        }
+                        catch(Exception e){
+                            Log.d("Error", "No transactions being pulled?");
+                            initialSignup();
+                        }
+                    }
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+    }
+
+    void queryNow(){
+            new Thread(new Runnable() {
+                @Override
+                public int hashCode() {
+                    return super.hashCode();
+                }
+
+                @Override
+                public void run() {
+                        refreshTransactions();
+                        userDataObject user = new userDataObject();
+                        user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
+
+                        DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                                .withHashKeyValues(user)
+                                .withConsistentRead(false);
+
+                        PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                        Gson gson = new Gson();
+                        JsonParser parser = new JsonParser();
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // Loop through query results
+                        for (int i = 0; i < result.size(); i++) {
+                            String jsonFormOfItem = gson.toJson(result.get(i));
+                            stringBuilder.append(jsonFormOfItem + "\n\n");
+                        }
+
+                        if (result.isEmpty()) {
+                            // There were no items matching your query.
+                            Log.d("Query results: ", "none");
+                            //go to sign up activity
+                            try {
+                                background = false;
+                                Intent k = new Intent(home.this, authentication_signup_identity.class);
+                                startActivity(k);
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            //add current device token to db
+                            userDataObject uu = new userDataObject();
+                            uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
+                            uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                            ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+
+                            userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                            ((global_objects) getApplication()).setCurrent_user(current_user);
+
+                            //here
+                            try {
+
+                                Set<String> transactionSet = current_user.getTransactions();
+                                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
+                                for (int i = 0; i < dataSet.size(); i++) {
+                                    TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                                    transIDs.add(transaction.getTransactionId());
+                                    transSeller.add(transaction.getSellerUsername());
+                                    transBuyer.add(transaction.getBuyerUsername());
+                                    transAmounts.add("$"+transaction.getAmount());
+                                    transStatus.add(transaction.getTransactionStatus());
+                                    transTime.add(transaction.getTimeCreated());
+                                }
+                                initializingTranasactions();
+                                if (result.isEmpty()) {
+                                    // There were no items matching your query.
+                                    initialSignup();
+                                    Log.d("Query results: ", "none");
+                                }
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                                Log.d("Error", "No transactions being pulled?");
+                                initialSignup();
+                            }
+                    }
+                }
+            }).start();
+        }
 
     void initializingTranasactions(){
         try {
@@ -308,37 +538,57 @@ public class home extends AppCompatActivity{
                             switch (transStatus.get(i)) {
                                 case "Confirmed":
                                 case "Cancelled":
-                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                                 case "Pending":
                                 case "flagged":
-                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                             }
                         }catch(Exception e){}
 
                     }
+                    try {
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
+                        tCompleteAdapter.notifyDataSetChanged();
                         tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
+<<<<<<< HEAD
 
 
+=======
+                        tPendingAdapter.notifyDataSetChanged();
+                    }
+                    catch(Exception e){
+                        }
+>>>>>>> master
                     if(nav_bool == true) {
+                        try{
                         pendinglistView.setVisibility(View.INVISIBLE);
                         completedlistView.setVisibility(View.VISIBLE);
                         completedlistView.setAdapter(tCompleteAdapter);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
+                        }
+                        catch(Exception e){
+                        }
                     }
                     else{
+                        try{
                         completedlistView.setVisibility(View.INVISIBLE);
                         pendinglistView.setVisibility(View.VISIBLE);
                         pendinglistView.setAdapter(tPendingAdapter);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
@@ -346,13 +596,21 @@ public class home extends AppCompatActivity{
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
+                        catch(Exception e){
+                        }
+                    }
+                        try {
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                            TextView mCardview = (TextView) findViewById(R.id.info_text);
+                            TextView mUsername = (TextView) findViewById(R.id.info_username);
 
-                    TextView mCardview = (TextView) findViewById(R.id.info_text);
-                    TextView mUsername = (TextView) findViewById(R.id.info_username);
-
-                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                    mCardview.setText("Wallet: $"+Double.toString(wallet));
-                    mUsername.setText(currentUserName);
+                            Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                            mCardview.setText("Wallet: $" + Double.toString(wallet));
+                            mUsername.setText(currentUserName);
+                        }
+                    catch(Exception e){
+                            }
                 }
                 catch(Exception e){
                         e.printStackTrace();
@@ -365,14 +623,65 @@ public class home extends AppCompatActivity{
         }
     }
 
+    void showTransaction(){
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+
+                        if(nav_bool == true) {
+                            try {
+                                pendinglistView.setVisibility(View.INVISIBLE);
+                                completedlistView.setVisibility(View.VISIBLE);
+                                completedlistView.setAdapter(tCompleteAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                                tPendingAdapter.notifyDataSetChanged();
+                                tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        else {
+                            try{
+                            completedlistView.setVisibility(View.INVISIBLE);
+                            pendinglistView.setVisibility(View.VISIBLE);
+                            pendinglistView.setAdapter(tPendingAdapter);
+                            mConstraintSet.clone(mConstraintLayout);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                            R.id.cardView, ConstraintSet.BOTTOM);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                            R.id.navigation, ConstraintSet.TOP);
+                            mConstraintSet.applyTo(mConstraintLayout);
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                    }
+                catch(Exception e){
+                            e.printStackTrace();
+                        }
+                }
+                });
+            }
+        catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
     void refreshTransactions(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
-                ListView completedlistView = (ListView) findViewById(R.id.completed_list);
-                pendinglistView.setAdapter(null);
-                completedlistView.setAdapter(null);
                 transAmounts.clear();
                 transIDs.clear();
                 pendingTransaction.clear();
@@ -380,26 +689,26 @@ public class home extends AppCompatActivity{
                 transSeller.clear();
                 transBuyer.clear();
                 completedTransaction.clear();
+                transTime.clear();
             }
         });
     }
     void initialSignup(){
-        try{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextView mCardview = (TextView) findViewById(R.id.info_text);
-                TextView mUsername = (TextView) findViewById(R.id.info_username);
+                try{
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    TextView mUsername = (TextView) findViewById(R.id.info_username);
 
-                Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                mCardview.setText("Wallet: $"+Double.toString(wallet));
-                mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
+                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                }
+                catch(Exception E){
+                }
             }
         });
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
 
@@ -431,4 +740,5 @@ public class home extends AppCompatActivity{
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
+
 }

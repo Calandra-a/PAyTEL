@@ -3,6 +3,7 @@ package com.paytel.transaction;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,12 +29,17 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
+import com.paytel.util.ExifUtil;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class start_buyer_transaction extends AppCompatActivity {
 
@@ -45,6 +51,7 @@ public class start_buyer_transaction extends AppCompatActivity {
     private Toast toast = null;
     private ImageView mImageView;
     private String dir;
+    private Bitmap image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class start_buyer_transaction extends AppCompatActivity {
         setContentView(R.layout.transaction_buyer);
         //LOAD DB HERE
         initialize();
-        downloadWithTransferUtility();
+        //downloadWithTransferUtility();
 
         //user actions
         Button btn_approve = findViewById(R.id.btn_approve);
@@ -151,37 +158,44 @@ public class start_buyer_transaction extends AppCompatActivity {
                             TextView buyerID = findViewById(R.id.txt_buyerID);
                             TextView user = findViewById(R.id.txt_username);
                             TextView status = findViewById(R.id.txt_status);
+                            TextView time = findViewById(R.id.txt_time);
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
 //                            System.out.println(current_transaction.getTransactionStatus());
                             mImageView = (ImageView) findViewById(R.id.verified_image);
 
-                                if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
-                                    if(current_transaction.getTransactionStatus().equals("Pending")) {
-                                        mImageView.setVisibility(View.INVISIBLE);
-                                        approve.setVisibility(View.VISIBLE);
-                                        deny.setVisibility(View.VISIBLE);
-                                    }
-                                    buyerID.setText(current_transaction.getSellerUsername() + " requested:");
-                                    amount.setText("-$" + current_transaction.getAmount());
-                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
-                                }else{
-                                    if(current_transaction.getBuyerId() != IdentityManager.getDefaultIdentityManager().getCachedUserID()){
-                                        mImageView.setVisibility(View.INVISIBLE);
-                                    }
-                                    buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
-                                    amount.setText("+$" + current_transaction.getAmount());
-                                    amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
-                                    //downloadWithTransferUtility();
+                            if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
+                                if(current_transaction.getTransactionStatus().equals("Pending")) {
+                                    //mImageView.setVisibility(View.INVISIBLE);
+                                    approve.setVisibility(View.VISIBLE);
+                                    deny.setVisibility(View.VISIBLE);
+                                }else if(current_transaction.getTransactionStatus().equals("Confirmed")){
+                                    downloadWithTransferUtility();
                                 }
 
-
-                            //int eggplant = 0x1F346;//eggplant emoji
-                            //icon.setText(new String(Character.toChars(eggplant)));
+                                buyerID.setText(current_transaction.getSellerUsername() + " requested:");
+                                amount.setText("-$" + current_transaction.getAmount());
+                                amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
+                            }else{
+                                if(current_transaction.getBuyerId() != IdentityManager.getDefaultIdentityManager().getCachedUserID()){
+                                    //mImageView.setVisibility(View.INVISIBLE);
+                                }
+                                buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
+                                amount.setText("+$" + current_transaction.getAmount());
+                                amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
+                            }
+                            Calendar cal = Calendar.getInstance();
+                        try {
                             note.setText("Note: " + current_transaction.getNote());
                             status.setText("Status: " + current_transaction.getTransactionStatus());
-
+                            cal.setTime(new Date(current_transaction.getTimeCreated()));
+                            cal.setTimeZone(TimeZone.getDefault());
+                            time.setText("Time: " +  cal.getTime().toString());
+                        }
+                        catch(Exception e){
+                            Log.d("R","Status, time, or Note issue");
+                            }
                         }
                     });
                 }
@@ -207,6 +221,7 @@ public class start_buyer_transaction extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
+
             try {
                 Intent k = new Intent(start_buyer_transaction.this, home.class);
                 startActivity(k);
@@ -241,10 +256,12 @@ public class start_buyer_transaction extends AppCompatActivity {
                 if (TransferState.COMPLETED == state) {
                     // Handle a completed upload
                     System.out.println("download complete");
-                    mImageView = (ImageView) findViewById(R.id.verified_image);
+                    //mImageView = (ImageView) findViewById(R.id.verified_image);
+                    image  = BitmapFactory.decodeFile(dir);
+                    Bitmap orientedBitmap = ExifUtil.rotateBitmap(dir, image);//rotate image
 
                     System.out.println(dir);
-                    mImageView.setImageBitmap(BitmapFactory.decodeFile(dir));
+                    mImageView.setImageBitmap(orientedBitmap);
                     mImageView.setVisibility(View.VISIBLE);
                 }
             }

@@ -74,7 +74,7 @@ class User extends React.Component {
               </Paper>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MediaCard view title={user.username} link="https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/us-east-1%3Ad5c1a7a3-45f7-4358-bbae-40c2449396fe/profilepic.jpg"></MediaCard>
+              <MediaCard title={user.username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + user.user_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
             </Grid>
           </Grid>
         </div>

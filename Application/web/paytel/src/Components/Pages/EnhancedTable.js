@@ -458,9 +458,6 @@ class EnhancedTable extends React.Component {
   };
 
   handleManage = () => {
-    console.log(
-      this.state.data.find(x => x.id === this.state.selected[0]).username
-    );
     if (this.state.selected[0] && this.state.selected.length === 1)
       this.props.history.push(
         this.props.state === table_user

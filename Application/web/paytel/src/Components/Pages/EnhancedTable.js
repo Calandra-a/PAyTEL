@@ -16,7 +16,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FlagIcon from "@material-ui/icons/Flag";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import Build from "@material-ui/icons/Build";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -255,16 +254,16 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="title" id="tableTitle">
-            {state == table_user ? "Users" : state == table_flagged ? "Flagged Transactions" : "Transactions"}
+            {state === table_user ? "Users" : state === table_flagged ? "Flagged Transactions" : "Transactions"}
           </Typography>
         )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <Tooltip title={"Manage " + (state == table_user ? "User" : "Transaction")}>
+        <Tooltip title={"Manage " + (state === table_user ? "User" : "Transaction")}>
           <Grow in={numSelected === 1}>
             <IconButton
-              aria-label={"Manage " + (state == table_user ? "User" : "Transaction")}
+              aria-label={"Manage " + (state === table_user ? "User" : "Transaction")}
               onClick={props.handleManage}
               disabled={numSelected !== 1}
             >
@@ -274,7 +273,7 @@ let EnhancedTableToolbar = props => {
         </Tooltip>
         {props.isFlagging ? (
           <CircularProgress className={classes.progress} color="primary" />
-        ) : numSelected > 0 && state != table_user ? (
+        ) : numSelected > 0 && state !== table_user ? (
           <Tooltip title="Flag Transaction">
             <IconButton aria-label="Flag Transaction" onClick={props.flag}>
               <FlagIcon />

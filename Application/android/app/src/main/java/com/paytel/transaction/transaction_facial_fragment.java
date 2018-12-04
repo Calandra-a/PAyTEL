@@ -1154,7 +1154,7 @@ public class transaction_facial_fragment extends Fragment
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                             if(globalResponse.getStatusCode() == 200){
-                                ((transaction_facial) getActivity()).pictureComplete();
+                                ((transaction_facial) getActivity()).biometricCheck();
 
                             }else{
                                 ((transaction_facial)getActivity()).pictureIncomplete();

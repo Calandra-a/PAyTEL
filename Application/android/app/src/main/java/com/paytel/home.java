@@ -80,24 +80,23 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     background = false;
                     nav_bool = false;
                     showTransaction();
-                    background = true;
                     return true;
                 case R.id.navigation_dashboard:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
                         return true;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     background = false;
                     nav_bool = true;
                     showTransaction();
-                    background = true;
+
                     return true;
             }
             return false;
@@ -131,7 +130,7 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
                     return;
                 }
                 try{
@@ -150,7 +149,7 @@ public class home extends AppCompatActivity{
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
                     return;
                 }
                 try{
@@ -324,16 +323,6 @@ public class home extends AppCompatActivity{
                             .withConsistentRead(false);
 
                     PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
-
-                    Gson gson = new Gson();
-                    JsonParser parser = new JsonParser();
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    // Loop through query results
-                    for (int i = 0; i < result.size(); i++) {
-                        String jsonFormOfItem = gson.toJson(result.get(i));
-                        stringBuilder.append(jsonFormOfItem + "\n\n");
-                    }
 
                     if (result.isEmpty()) {
                         // There were no items matching your query.
@@ -609,6 +598,7 @@ public class home extends AppCompatActivity{
                             catch(Exception e){
                             }
                         }
+                        background = true;
                     }
                     catch(Exception e){
                         e.printStackTrace();

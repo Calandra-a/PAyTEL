@@ -6,6 +6,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
+import java.util.Set;
+
 public class global_objects extends Application {
 
     DynamoDBMapper dynamoDBMapper;
@@ -14,6 +16,16 @@ public class global_objects extends Application {
 
     TransactionDataObject new_transaction;
     TransactionDataObject current_transaction;
+
+    public Set<String> getUserTransactions() {
+        return transactionSet;
+    }
+
+    public void setUserTransactions(Set<String> transactionSet) {
+        this.transactionSet = transactionSet;
+    }
+
+    Set<String> transactionSet;
 
     public userDataObject getNew_user() {
         return new_user;

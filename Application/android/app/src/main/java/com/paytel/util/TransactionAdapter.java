@@ -70,12 +70,12 @@ public class TransactionAdapter extends ArrayAdapter<TransactionCard> {
                 case "Pending":
                     emoji.setText("⚡");
                     break;
-                case "flagged":
-                    emoji.setText("\uD83D\uDEA9");
-                    break;
                 default:
                     emoji.setText("⚡");
                     break;
+            }
+            if(currentTrans.getmStatus().toLowerCase().contains("flagged")){
+                emoji.setText("\uD83D\uDEA9");
             }
         }
         catch(Exception e){

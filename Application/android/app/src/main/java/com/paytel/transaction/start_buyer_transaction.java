@@ -135,18 +135,8 @@ public class start_buyer_transaction extends AppCompatActivity {
 
             @Override
             public void run() {
-                final userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
-                ((global_objects) getApplication()).setCurrent_user(current_user);
-
-                Set<String> transactionSet = current_user.getTransactions();
-                ArrayList<String> dataSet = new ArrayList<>(transactionSet);
-                for (int i = 0; i < dataSet.size(); i++) {
-                    TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                    if(transaction.getTransactionId().equals(transactionID)) {
-                        current_transaction = transaction;
-                        ((global_objects) getApplication()).setCurrent_transaction(current_transaction);
-                    }
-                }
+                current_transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, transactionID);
+                ((global_objects) getApplication()).setCurrent_transaction(current_transaction);
                 try {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -165,7 +155,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 //                            System.out.println(current_transaction.getTransactionStatus());
                             mImageView = (ImageView) findViewById(R.id.verified_image);
 
-                            if(current_transaction.getBuyerUsername().equals(current_user.getUsername())) {
+                            if(current_transaction.getBuyerUsername().equals(((global_objects) getApplication()).getCurrent_user().getUsername())) {
                                 if(current_transaction.getTransactionStatus().equals("Pending")) {
                                     //mImageView.setVisibility(View.INVISIBLE);
                                     approve.setVisibility(View.VISIBLE);
@@ -174,14 +164,14 @@ public class start_buyer_transaction extends AppCompatActivity {
                                     downloadWithTransferUtility();
                                 }
 
-                                buyerID.setText(current_transaction.getSellerUsername() + " requested:");
+                                buyerID.setText(current_transaction.getSellerUsername());
                                 amount.setText("-$" + current_transaction.getAmount());
                                 amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_send));
                             }else{
                                 if(current_transaction.getBuyerId() != IdentityManager.getDefaultIdentityManager().getCachedUserID()){
                                     //mImageView.setVisibility(View.INVISIBLE);
                                 }
-                                buyerID.setText(current_transaction.getBuyerUsername() + " paid you:");
+                                buyerID.setText(current_transaction.getBuyerUsername());
                                 amount.setText("+$" + current_transaction.getAmount());
                                 amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
                             }

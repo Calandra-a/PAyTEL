@@ -27,8 +27,6 @@ import com.paytel.util.userDataObject;
 import java.util.ArrayList;
 import java.util.Set;
 
-import static com.paytel.home.getPinpointManager;
-
 //screen that shows up after transaction facial
 public class complete_transaction extends AppCompatActivity{
 
@@ -146,11 +144,6 @@ public class complete_transaction extends AppCompatActivity{
                         stringBuilder.append(jsonFormOfItem + "\n\n");
                     }
                         //add current device token to db
-                        userDataObject uu = new userDataObject();
-                        uu.setDevicePushId(getPinpointManager(getApplicationContext()).getNotificationClient().getDeviceToken());
-                        uu.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
-                        ((global_objects)getApplication()).getDynamoDBMapper().save(uu, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
-
                         userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
                         ((global_objects) getApplication()).setCurrent_user(current_user);
 

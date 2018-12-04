@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { API } from "aws-amplify";
+import Grid from "@material-ui/core/Grid"
+import MediaCard from "./Libs/MediaCard"
 
 const styles = theme => ({
   root: {
@@ -30,6 +32,7 @@ class Transaction extends React.Component {
   async componentDidMount() {
     try {
       const transaction = await this.transaction();
+      console.log(transaction);
       this.setState({ transaction });
     } catch (e) {
       alert(e);
@@ -59,39 +62,56 @@ class Transaction extends React.Component {
     return (
       !this.state.isLoading && (
         <div>
-          <Paper className={classes.root} elevation={1}>
-            <Typography variant="headline" component="h3">
-              Transaction # {transaction.transaction_id}
-            </Typography>
-            <Typography component="p">
-              Time of Creation: {transaction.time_created}
-            </Typography>
-            <Typography component="p">
-              Buyer: {transaction.buyer_username}
-            </Typography>
-            <Typography component="p">
-              Seller: {transaction.seller_username}
-            </Typography>
-            <Typography component="p">
-              Status: {transaction.transaction_status}
-            </Typography>
-            <Button
-              className={classes.button}
-              onClick={this.flag}
-              disabled={this.state.isFlagging}
-            >
-              {this.state.isFlagging ? (
-                <CircularProgress
-                  className={classes.progress}
-                  color="primary"
-                />
-              ) : transaction.transaction_status.startsWith("flagged_") ? (
-                "Unflag"
-              ) : (
-                "Flag"
-              )}
-            </Button>
-          </Paper>
+          <Grid container spacing={24}>
+            <Grid item xs={12} md={6}>
+              <Paper className={classes.root} elevation={1}>
+                <Typography variant="headline">
+                  Transaction Between
+                </Typography>
+                <br />
+                <Typography variant="h5">
+                  The Buyer: {transaction.buyer_username}
+                </Typography>
+                <br />
+                <Typography variant="h5">
+                  The Seller: {transaction.seller_username}
+                </Typography>
+                <br />
+                <Typography component="p">
+                  Started at the time of: {transaction.time_created}
+                </Typography>
+                <Typography component="p">
+                  Current Status: {transaction.transaction_status}
+                </Typography>
+                <br />
+                <Button
+                  className={classes.button}
+                  onClick={this.flag}
+                  disabled={this.state.isFlagging}
+                >
+                  {this.state.isFlagging ? (
+                    <CircularProgress
+                      className={classes.progress}
+                      color="primary"
+                    />
+                  ) : transaction.transaction_status.startsWith("flagged_") ? (
+                    "Unflag"
+                  ) : (
+                        "Flag"
+                      )}
+                </Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <MediaCard title="Confirmation" link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/transactions/" + transaction.transaction_id + "/verified.jpg"}></MediaCard>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <MediaCard view title={transaction.buyer_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.buyer_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <MediaCard view title={transaction.seller_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.seller_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
+            </Grid>
+          </Grid>
         </div>
       )
     );

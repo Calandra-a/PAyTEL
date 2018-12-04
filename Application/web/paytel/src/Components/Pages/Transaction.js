@@ -32,7 +32,6 @@ class Transaction extends React.Component {
   async componentDidMount() {
     try {
       const transaction = await this.transaction();
-      console.log(transaction);
       this.setState({ transaction });
     } catch (e) {
       alert(e);
@@ -46,6 +45,14 @@ class Transaction extends React.Component {
     await API.put("admin", "/transactions/".concat(this.props.match.params.id));
     const transaction = await this.transaction();
     this.setState({ transaction, isFlagging: false });
+  }
+
+  handleBuyer = () => {
+    this.props.history.push("/user/".concat(this.state.transaction.buyer_username));
+  }
+
+  handleSeller = () => {
+    this.props.history.push("/user/".concat(this.state.transaction.seller_username));
   }
 
   transaction() {
@@ -106,10 +113,10 @@ class Transaction extends React.Component {
               <MediaCard title="Confirmation" link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/transactions/" + transaction.transaction_id + "/verified.jpg"}></MediaCard>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MediaCard view title={transaction.buyer_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.buyer_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
+              <MediaCard view={this.handleBuyer} title={transaction.buyer_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.buyer_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MediaCard view title={transaction.seller_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.seller_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
+              <MediaCard view={this.handleSeller} title={transaction.seller_username} link={"https://s3.amazonaws.com/paytel-userfiles-mobilehub-2098009603/public/userprofiles/" + transaction.seller_id.replace(":","%3A") + "/profilepic.jpg"}></MediaCard>
             </Grid>
           </Grid>
         </div>

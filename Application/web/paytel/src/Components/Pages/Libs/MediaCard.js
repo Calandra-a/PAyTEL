@@ -10,9 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = {
     media: {
-        height: "400px",
-        transform: "rotate(-90deg)",
-        overflow: "hidden"
+        height: "400px"
     }
 };
 
@@ -24,10 +22,10 @@ function MediaCard(props) {
                 <Typography gutterBottom variant="h5">
                     {props.title}
                 </Typography>
-                <img class={classes.media} src={props.link} title={props.title}/>
+                <img className={classes.media} src={props.link} title={props.title}/>
             </CardContent>
             {props.view && <CardActions>
-                <Button size="small" color="primary">
+                <Button onClick={props.view} size="small" color="primary">
                     View User
                 </Button>
             </CardActions>}

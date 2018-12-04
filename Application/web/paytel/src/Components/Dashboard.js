@@ -32,6 +32,14 @@ import DialogSelect from "./Pages/DatabaseLookup";
 import Tooltip from "@material-ui/core/Tooltip";
 import AppliedRoute from "./AppliedRoute";
 
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -101,9 +109,14 @@ const styles = theme => ({
   }
 });
 
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
 class Dashboard extends React.Component {
   state = {
-    open: false
+    open: false,
+    logoutOpen: false
   };
 
   handleClickOpen = () => {
@@ -117,6 +130,14 @@ class Dashboard extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+
+  handleLogoutOpen = () => {
+    this.setState({ logoutOpen: true });
+  }
+
+  handleLogoutClose = () => {
+    this.setState({ logoutOpen: false });
+  }
 
   handleLogout = async event => {
     await Auth.signOut();
@@ -166,8 +187,8 @@ class Dashboard extends React.Component {
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon />
               ) : (
-                <ChevronLeftIcon />
-              )}
+                  <ChevronLeftIcon />
+                )}
             </IconButton>
           </div>
           <Divider />
@@ -292,7 +313,7 @@ class Dashboard extends React.Component {
               disableHoverListener={this.state.open}
               disableTouchListener={this.state.open}
             >
-              <ListItem button onClick={this.handleLogout}>
+              <ListItem button onClick={this.handleLogoutOpen}>
                 <ListItemIcon>
                   <ClearIcon />
                 </ListItemIcon>
@@ -303,6 +324,33 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          <div>
+            <Dialog
+              open={this.state.logoutOpen}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={this.handleClose}
+              aria-labelledby="alert-dialog-slide-title"
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle id="alert-dialog-slide-title">
+                {"Log Out"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  Are you sure?
+            </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleLogoutClose} color="primary">
+                  Cancel
+            </Button>
+                <Button onClick={this.handleLogout} color="primary">
+                  Log Out
+            </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
           <DialogSelect onRef={ref => (this.select = ref)} />
           <Switch>
             <Route exact path="/" component={Home} />

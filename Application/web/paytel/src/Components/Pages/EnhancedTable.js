@@ -274,8 +274,8 @@ let EnhancedTableToolbar = props => {
         {props.isFlagging ? (
           <CircularProgress className={classes.progress} color="primary" />
         ) : numSelected > 0 && state !== table_user ? (
-          <Tooltip title="Flag Transaction">
-            <IconButton aria-label="Flag Transaction" onClick={props.flag}>
+          <Tooltip title="Flag Transaction(s)">
+            <IconButton aria-label="Flag Transaction(s)" onClick={props.flag}>
               <FlagIcon />
             </IconButton>
           </Tooltip>

@@ -878,42 +878,49 @@ public class authentication_signup_facial_fragment extends Fragment
 
                     String userID =IdentityManager.getDefaultIdentityManager().getCachedUserID();
                     String S3Key = "public/userprofiles/"+userID+"/profilepic.jpg";
+                    try{
+                        Thread.sleep(1000);
+                        TransferUtility transferUtility =
+                                TransferUtility.builder()
+                                        .context(getActivity().getApplicationContext())
+                                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                                        .build();
 
-                    TransferUtility transferUtility =
-                            TransferUtility.builder()
-                                    .context(getActivity().getApplicationContext())
-                                    .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                                    .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                                    .build();
+                        TransferObserver uploadObserver =
+                                transferUtility.upload(S3Key,
+                                        new File(getActivity().getExternalFilesDir(null), "pic.jpg"));
 
-                    TransferObserver uploadObserver =
-                            transferUtility.upload(S3Key,
-                                    new File(getActivity().getExternalFilesDir(null), "pic.jpg"));
+                        uploadObserver.setTransferListener(new TransferListener() {
 
-                    uploadObserver.setTransferListener(new TransferListener() {
-
-                        @Override
-                        public void onStateChanged(int id, TransferState state) {
-                            if (TransferState.COMPLETED == state) {
-                                System.out.println("transfer complete");
-                                myTask.execute();
+                            @Override
+                            public void onStateChanged(int id, TransferState state) {
+                                if (TransferState.COMPLETED == state) {
+                                    System.out.println("transfer complete");
+                                    myTask.execute();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                            int percentDone = (int)percentDonef;
+                            @Override
+                            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                                float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                                int percentDone = (int)percentDonef;
 
-                            Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
-                                    + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
-                        }
+                                Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                        + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                            }
 
-                        @Override
-                        public void onError(int id, Exception ex) {
-                            // Handle errors
-                        }
-                    });
+                            @Override
+                            public void onError(int id, Exception ex) {
+                                // Handle errors
+                            }
+                        });
+
+                        // Then do something meaningful...
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
+
                 }
             };
 

@@ -67,6 +67,7 @@ public class home extends AppCompatActivity{
     private ArrayList<String> transSeller = new ArrayList<>();
     private ArrayList<String> transBuyer = new ArrayList<>();
     ArrayList<String> transStatus = new ArrayList<>();
+    ArrayList<String> transTime = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
     private TransactionAdapter tPendingAdapter, tCompleteAdapter;
@@ -130,31 +131,39 @@ public class home extends AppCompatActivity{
         pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                TextView invis = arg1.findViewById(R.id.txt_invisID);
-                String viewString = invis.getText().toString();
-                background = false;
-                Intent intent = new Intent(home.this, start_buyer_transaction.class);
-                intent.putExtra("name", viewString);
-                startActivity(intent);
+            try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+            catch(Exception e){
+                }
             }
         });
         completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 700){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                TextView invis = arg1.findViewById(R.id.txt_invisID);
-                String viewString = invis.getText().toString();
-                background = false;
-                Intent intent = new Intent(home.this, start_buyer_transaction.class);
-                intent.putExtra("name", viewString);
-                startActivity(intent);
+                try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+                catch(Exception e){
+                }
             }
         });
 
@@ -278,6 +287,7 @@ public class home extends AppCompatActivity{
                             transBuyer.add(transaction.getBuyerUsername());
                             transAmounts.add("$" + transaction.getAmount());
                             transStatus.add(transaction.getTransactionStatus());
+                            transTime.add(transaction.getTimeCreated());
                         }
                         initializingTranasactions();
                         if (result.isEmpty()) {
@@ -359,6 +369,7 @@ public class home extends AppCompatActivity{
                                 transBuyer.add(transaction.getBuyerUsername());
                                 transAmounts.add("$"+transaction.getAmount());
                                 transStatus.add(transaction.getTransactionStatus());
+                                transTime.add(transaction.getTimeCreated());
                             }
                             initializingTranasactions();
                             if (result.isEmpty()) {
@@ -373,7 +384,7 @@ public class home extends AppCompatActivity{
                         }
                     }
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(4000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -446,6 +457,7 @@ public class home extends AppCompatActivity{
                                     transBuyer.add(transaction.getBuyerUsername());
                                     transAmounts.add("$"+transaction.getAmount());
                                     transStatus.add(transaction.getTransactionStatus());
+                                    transTime.add(transaction.getTimeCreated());
                                 }
                                 initializingTranasactions();
                                 if (result.isEmpty()) {
@@ -482,41 +494,44 @@ public class home extends AppCompatActivity{
                             switch (transStatus.get(i)) {
                                 case "Confirmed":
                                 case "Cancelled":
-                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    completedTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                                 case "Pending":
                                 case "flagged":
-                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i)));
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transBuyer.get(i), transSeller.get(i), transIDs.get(i), transAmounts.get(i), transStatus.get(i), transTime.get(i)));
                                     break;
                             }
                         }catch(Exception e){}
 
                     }
-
+                    try {
                         tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
                         tCompleteAdapter.notifyDataSetChanged();
                         tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
                         tPendingAdapter.notifyDataSetChanged();
-                    //ArrayAdapter adapterCompleted = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, completedTransaction);
-                    //ArrayAdapter adapterPending = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_listview, R.id.label, pendingTransaction);
-
+                    }
+                    catch(Exception e){
+                        }
                     if(nav_bool == true) {
+                        try{
                         pendinglistView.setVisibility(View.INVISIBLE);
                         completedlistView.setVisibility(View.VISIBLE);
                         completedlistView.setAdapter(tCompleteAdapter);
-                        //completedlistView.setAdapter(adapterCompleted);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
                         mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
+                        }
+                        catch(Exception e){
+                        }
                     }
                     else{
+                        try{
                         completedlistView.setVisibility(View.INVISIBLE);
                         pendinglistView.setVisibility(View.VISIBLE);
                         pendinglistView.setAdapter(tPendingAdapter);
-                        //pendinglistView.setAdapter(adapterPending);
                         mConstraintSet.clone(mConstraintLayout);
                         mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
                                 R.id.cardView, ConstraintSet.BOTTOM);
@@ -524,14 +539,21 @@ public class home extends AppCompatActivity{
                                 R.id.navigation, ConstraintSet.TOP);
                         mConstraintSet.applyTo(mConstraintLayout);
                     }
-                    tPendingAdapter.notifyDataSetChanged();
-                    tCompleteAdapter.notifyDataSetChanged();
-                    TextView mCardview = (TextView) findViewById(R.id.info_text);
-                    TextView mUsername = (TextView) findViewById(R.id.info_username);
+                        catch(Exception e){
+                        }
+                    }
+                        try {
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                            TextView mCardview = (TextView) findViewById(R.id.info_text);
+                            TextView mUsername = (TextView) findViewById(R.id.info_username);
 
-                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
-                    mCardview.setText("Wallet: $"+Double.toString(wallet));
-                    mUsername.setText(currentUserName);
+                            Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                            mCardview.setText("Wallet: $" + Double.toString(wallet));
+                            mUsername.setText(currentUserName);
+                        }
+                    catch(Exception e){
+                            }
                 }
                 catch(Exception e){
                         e.printStackTrace();
@@ -554,35 +576,44 @@ public class home extends AppCompatActivity{
                         ListView completedlistView = (ListView) findViewById(R.id.completed_list);
 
                         if(nav_bool == true) {
-            pendinglistView.setVisibility(View.INVISIBLE);
-            completedlistView.setVisibility(View.VISIBLE);
-            completedlistView.setAdapter(tCompleteAdapter);
-            mConstraintSet.clone(mConstraintLayout);
-            mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
-                    R.id.cardView, ConstraintSet.BOTTOM);
-            mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
-                    R.id.navigation, ConstraintSet.TOP);
-            mConstraintSet.applyTo(mConstraintLayout);
-            tPendingAdapter.notifyDataSetChanged();
-            tCompleteAdapter.notifyDataSetChanged();
-        }
-        else{
-            completedlistView.setVisibility(View.INVISIBLE);
-            pendinglistView.setVisibility(View.VISIBLE);
-            pendinglistView.setAdapter(tPendingAdapter);
-            mConstraintSet.clone(mConstraintLayout);
-            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
-                    R.id.cardView, ConstraintSet.BOTTOM);
-            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
-                    R.id.navigation, ConstraintSet.TOP);
-            mConstraintSet.applyTo(mConstraintLayout);
-            tPendingAdapter.notifyDataSetChanged();
-            tCompleteAdapter.notifyDataSetChanged();
+                            try {
+                                pendinglistView.setVisibility(View.INVISIBLE);
+                                completedlistView.setVisibility(View.VISIBLE);
+                                completedlistView.setAdapter(tCompleteAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                                tPendingAdapter.notifyDataSetChanged();
+                                tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        else {
+                            try{
+                            completedlistView.setVisibility(View.INVISIBLE);
+                            pendinglistView.setVisibility(View.VISIBLE);
+                            pendinglistView.setAdapter(tPendingAdapter);
+                            mConstraintSet.clone(mConstraintLayout);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                            R.id.cardView, ConstraintSet.BOTTOM);
+                            mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                            R.id.navigation, ConstraintSet.TOP);
+                            mConstraintSet.applyTo(mConstraintLayout);
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
                         }
                     }
                 catch(Exception e){
                             e.printStackTrace();
-                        } }
+                        }
+                }
                 });
             }
         catch(Exception e){
@@ -601,6 +632,7 @@ public class home extends AppCompatActivity{
                 transSeller.clear();
                 transBuyer.clear();
                 completedTransaction.clear();
+                transTime.clear();
             }
         });
     }

@@ -13,7 +13,9 @@ import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,11 +42,11 @@ public class TransactionAdapter extends ArrayAdapter<TransactionCard> {
             TextView username = (TextView) listItem.findViewById(R.id.txt_user);
             TextView amount = (TextView) listItem.findViewById(R.id.label);
             if (currentTrans.getmSeller().equals(currentTrans.getmUsername())) {
-                username.setText(currentTrans.getmBuyer() + " paid you: ");
+                username.setText(currentTrans.getmBuyer());
                 amount.setText("+" + currentTrans.getmAmount());
                 amount.setTextColor(ContextCompat.getColor(mContext, R.color.text_money_receive));
             } else {
-                username.setText(currentTrans.getmSeller() + " requested: ");
+                username.setText(currentTrans.getmSeller());
                 amount.setText("-" + currentTrans.getmAmount());
                 amount.setTextColor(ContextCompat.getColor(mContext, R.color.text_money_send));
             }
@@ -52,6 +54,10 @@ public class TransactionAdapter extends ArrayAdapter<TransactionCard> {
             TextView transactionID = (TextView) listItem.findViewById(R.id.txt_invisID);
             transactionID.setText(currentTrans.getmTransactionID());
             transactionID.setVisibility(View.INVISIBLE);
+            TextView date = (TextView) listItem.findViewById(R.id.txt_time_card);
+            SimpleDateFormat ff = new SimpleDateFormat("MM/dd/yyyy");
+            Date dd= new Date(currentTrans.getmTime());
+            date.setText(ff.format(dd));
 
             TextView emoji = (TextView) listItem.findViewById(R.id.txt_emoji);
             switch (currentTrans.getmStatus()) {
@@ -66,6 +72,9 @@ public class TransactionAdapter extends ArrayAdapter<TransactionCard> {
                     break;
                 case "flagged":
                     emoji.setText("\uD83D\uDEA9");
+                    break;
+                default:
+                    emoji.setText("⚡");
                     break;
             }
         }

@@ -1,8 +1,0 @@
-{
-  "body": "{\"buyer\":\"0001\",\"seller\":\"0002\",\"amount\":\"300\"}",
-  "requestContext": {
-    "identity": {
-      "cognitoIdentityId": "TEST_IDENTITY"
-    }
-  }
-}

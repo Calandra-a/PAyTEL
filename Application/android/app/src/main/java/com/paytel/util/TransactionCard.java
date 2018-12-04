@@ -8,14 +8,16 @@ public class TransactionCard {
     private String mAmount;
     private String mTransactionID;
     private String mStatus;
+    private String mTime;
 
-    public TransactionCard(String mUsername, String mBuyer, String mSeller, String mTransactionID, String mAmount, String mStatus){
+    public TransactionCard(String mUsername, String mBuyer, String mSeller, String mTransactionID, String mAmount, String mStatus,String mTime){
         this.mUsername = mUsername;
         this.mBuyer = mBuyer;
         this.mSeller = mSeller;
         this.mAmount = mAmount;
         this.mTransactionID = mTransactionID;
         this.mStatus = mStatus;
+        this.mTime = mTime;
     }
     public String getmUsername() {
         return mUsername;
@@ -40,5 +42,7 @@ public class TransactionCard {
     public String getmStatus() {
         return mStatus;
     }
+
+    public String getmTime(){return mTime;}
 }
 

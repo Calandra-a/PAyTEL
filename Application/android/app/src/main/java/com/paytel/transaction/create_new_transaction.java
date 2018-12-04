@@ -116,7 +116,7 @@ public class create_new_transaction extends AppCompatActivity {
 
     public void transactionCompleted() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Transaction Completed");
+        alert.setTitle("Transaction created");
         alert.setMessage("");
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

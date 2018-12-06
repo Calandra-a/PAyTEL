@@ -1,15 +1,13 @@
 package com.paytel.sign_up;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.content.Context;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
@@ -63,33 +61,65 @@ public class authentication_signup_identity extends AppCompatActivity {
 
         new_user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());
 
-        if (user_name.getEditText().getText().toString().length() == 0 || f_name.getEditText().getText().toString().length() == 0 ||
+
+
+       /* if (user_name.getEditText().getText().toString().length() == 0 || f_name.getEditText().getText().toString().length() == 0 ||
                 l_name.getEditText().getText().toString().length() == 0 || phone_number.getRawText().length() == 0) {
             CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+
+        }*/
+       boolean fail = false;
+       if(user_name.getEditText().getText().toString().length() == 0 ) {
+           user_name.setError("No field can be left blank");
+           fail = true;
+       }
+        else if (user_name.getEditText().getText().toString().length() > 20) {
+            user_name.setError("Username cant be over 20 characters");
+            fail = true;
         }
-        else if (user_name.getEditText().getText().toString().length() >= 20) {
-            CharSequence fail = "Username cant be over 20 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        else {user_name.setErrorEnabled(false);}
+
+
+
+        if(f_name.getEditText().getText().toString().length() == 0 ) {
+           f_name.setError("No field can be left blank");
+           fail = true;
+       }
+        else {f_name.setErrorEnabled(false);}
+
+
+
+
+        if(l_name.getEditText().getText().toString().length() == 0 ) {
+           l_name.setError("No field can be left blank");
+           fail = true;
+       }
+        else {l_name.setErrorEnabled(false);}
+
+        if (phone_number.getText().toString().length() == 0) {
+            phone_number.setError("No field can be left blank");
+            fail = true;
         }
         else if (phone_number.getText().toString().length() != 14) {
-            CharSequence fail = "Invalid Phone Number";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        } else {
+            phone_number.setError("Invalid Phone Number");
+            fail = true;
+        }
 
 
+
+
+
+
+
+        if(fail == false) {
             new_user.setUsername(user_name.getEditText().getText().toString().trim().toLowerCase());
             new_user.setFirstName(f_name.getEditText().getText().toString().trim());
             new_user.setLastName(l_name.getEditText().getText().toString().trim());
             new_user.setPhoneNumber(phone_number.getRawText().trim());
             return true;
         }
+        else {return false;}
+
     }
 
 
@@ -114,7 +144,13 @@ public class authentication_signup_identity extends AppCompatActivity {
                 PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
 
                 if(result.isEmpty()) {
-                    try {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            TextInputLayout user_name = findViewById(R.id.txt_username);
+                            user_name.setErrorEnabled(false);
+
+                        }
+                    });                    try {
                         Intent k = new Intent(authentication_signup_identity.this, authentication_signup_bankinfo.class);
                         startActivity(k);
                     } catch (Exception e) {
@@ -124,11 +160,9 @@ public class authentication_signup_identity extends AppCompatActivity {
                 else {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Context context = getApplicationContext();
-                            int dShort = Toast.LENGTH_SHORT;
-                            CharSequence fail = "Username Already Exists";
-                            Toast toast = Toast.makeText(context, fail, dShort);
-                            toast.show();
+                            TextInputLayout user_name = findViewById(R.id.txt_username);
+                            user_name.setError("Username already exists");
+
                         }
                     });
                 }

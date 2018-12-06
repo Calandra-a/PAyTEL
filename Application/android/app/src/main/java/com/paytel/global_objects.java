@@ -6,6 +6,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.paytel.util.TransactionDataObject;
 import com.paytel.util.userDataObject;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Set;
 
 public class global_objects extends Application {
@@ -16,6 +18,11 @@ public class global_objects extends Application {
 
     TransactionDataObject new_transaction;
     TransactionDataObject current_transaction;
+
+    Deque<String> poseDeque = new ArrayDeque<String>();
+
+    public Deque<String> getPoseDeque() {return poseDeque;}
+    public void setPoseDeque(Deque<String> poseDeque) {this.poseDeque = poseDeque;}
 
     public Set<String> getUserTransactions() {
         return transactionSet;

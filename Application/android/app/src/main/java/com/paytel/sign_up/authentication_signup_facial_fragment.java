@@ -54,6 +54,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.paytel.R;
+import com.paytel.global_objects;
 import com.paytel.util.autofit_textureview;
 
 import java.io.File;
@@ -64,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -1102,11 +1104,21 @@ public class authentication_signup_facial_fragment extends Fragment
     }
 
     public String getPose() {
+        Deque<String> myPoses = ((global_objects) getActivity().getApplication()).getPoseDeque();
         String[] poses = getResources().getStringArray(R.array.poses);
-        int randomIndex = new Random().nextInt(poses.length);
-        String randomPose = poses[randomIndex];
+        if (myPoses.size() < 1) {
+            for (int i = 0; i < poses.length; i++) {
+                myPoses.add(poses[i]);
+            }
+        }
+        //int randomIndex = new Random().nextInt(poses.length);
+        //String randomPose = poses[randomIndex];
+        String roundPose = myPoses.pop();
+        myPoses.add(roundPose);
 
-        return randomPose;
+        System.out.println (myPoses);
+
+        return roundPose;
     }
 
    // private static Handler handler = new Handler();

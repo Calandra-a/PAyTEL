@@ -273,7 +273,7 @@ public class home extends AppCompatActivity{
                             ArrayList<String> dataSet = new ArrayList<>(current_user.getTransactions());
                             pendingTransaction.clear();
                             completedTransaction.clear();
-                            for (int i = dataSet.size()-1; i >0; i--) {
+                            for (int i = dataSet.size()-1; i  >= 0; i--) {
                                 TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                                 if(transaction.getTransactionStatus().toLowerCase().equals("pending")){
                                     pendingTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));

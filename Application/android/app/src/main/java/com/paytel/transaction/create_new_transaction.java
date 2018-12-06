@@ -332,7 +332,7 @@ public class create_new_transaction extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
-                            buyerID.setError("No field can be left blank");
+                            buyerID.setError("Username doesn't exist ");
                         }
                     });
 

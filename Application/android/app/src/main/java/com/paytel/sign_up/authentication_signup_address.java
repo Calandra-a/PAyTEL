@@ -87,49 +87,60 @@ public class authentication_signup_address extends AppCompatActivity implements 
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
         TextInputLayout city = findViewById(R.id.txt_city);
         Spinner spinner = findViewById(R.id.states_spinner);
+        boolean fail = false;
 
-        if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() ==0 ||
-                city.getEditText().getText().toString().length() == 0 || String.valueOf(spinner.getSelectedItem()).length() == 0){
-
-            CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        if(street.getEditText().getText().toString().length() == 0){
+            street.setError("No field can be left blank");
+            fail = true;
         }
         else if(street.getEditText().getText().toString().length() >=50){
-            CharSequence fail = "Street address must be under 50 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+            street.setError("Street must be under 50 characters");
+            fail = true;
         }
+        else{
+            street.setErrorEnabled(false);
 
-        else if(city.getEditText().getText().toString().length() >=50){
-            CharSequence fail = "City must be under 50 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        }
+        if( zip.getEditText().getText().toString().length() ==0){
+            zip.setError("No field can be left blank");
+            fail = true;
         }
         else if(zip.getEditText().getText().toString().length() != 5){
-            CharSequence fail = "Zip code must be 5 digits";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+            zip.setError("ZIP must be 5 digits");
+            fail = true;
         }
-        else if(String.valueOf(spinner.getSelectedItem()).length() != 2){
-            CharSequence fail = "State must be 2 characters";
-            Toast toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        else{
+            zip.setErrorEnabled(false);
+
         }
-        else {
-            CharSequence succ = "Success";
-            Toast toast = Toast.makeText(context, succ, dShort);
-            toast.show();
+         if(city.getEditText().getText().toString().length() == 0){
+             city.setError("No field can be left blank");
+             fail = true;
+         }
+         else if(city.getEditText().getText().toString().length() >=50){
+             city.setError("City must be under 50 characters");
+             fail = true;
+         }
+         else{
+             city.setErrorEnabled(false);
+
+         }
+
+         if(String.valueOf(spinner.getSelectedItem()).length() == 0){
+
+            //street.setError("No field can be left blank");
+            //fail = true;
+        }
+
+        if(fail == false) {
             new_user.setStreet(street.getEditText().getText().toString());
             new_user.setCity(city.getEditText().getText().toString());
             new_user.setZipCode(zip.getEditText().getText().toString());
             new_user.setState(String.valueOf(spinner.getSelectedItem()));
             return true;
+        }
+        else{
+            return false;
         }
     }
 }

@@ -26,7 +26,7 @@ public class add_funds extends AppCompatActivity {
         current_user = ((global_objects) getApplication()).getCurrent_user();
         display_wallet();
 
-        Button btn_add_funds= findViewById(R.id.btn_save_funds);
+        Button btn_add_funds = findViewById(R.id.btn_save_funds);
 
         btn_add_funds.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,72 +46,58 @@ public class add_funds extends AppCompatActivity {
                     try {
                         Intent k = new Intent(add_funds.this, home.class);
                         startActivity(k);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
     }
-    void display_wallet(){
+
+    void display_wallet() {
         TextView current_funds = findViewById(R.id.txt_current_funds);
         current_funds.setText("Wallet: " + Double.toString(current_user.getWallet()));
     }
 
-    boolean add_funds(){
+    boolean add_funds() {
 
         Context context = getApplicationContext();
         int dLong = Toast.LENGTH_LONG;
 
         TextInputLayout wallet = findViewById(R.id.txt_wallet);
+        boolean fail = false;
+        if (wallet.getEditText().getText().toString().length() == 0) {
 
-        if(wallet.getEditText().getText().toString().length() == 0){
+            wallet.setError("No field can be left blank");
+            fail = true;
+        } else if (!wallet.getEditText().getText().toString().matches("\\d+([.]\\d{2})?")) {
+            if (wallet.getEditText().getText().toString().matches("([.]\\d{2})?")) {
+                wallet.setError("Dollar amount should be in 0.00 format");
+                fail = true;
+            } else {
+                wallet.setError("Please revise input try using 0.00 format");
+                fail = true;
+            }
+        } else if ((!wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >= 5) ||
+                (wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >= 8)) {
 
-            CharSequence fail = "No field can be left blank";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+            wallet.setError("Funds added must be under $10000 per addition");
+            fail = true;
+        } else {
+            wallet.setErrorEnabled(false);
         }
-        else if(!wallet.getEditText().getText().toString().matches( "\\d+([.]\\d{2})?")){
-            if(wallet.getEditText().getText().toString().matches( "([.]\\d{2})?")){
-            CharSequence fail = "Additions below a dollar must be in 0.00 format";
-                if (toast != null) {
-                    toast.cancel();
-                }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-            }
-            else{
-                CharSequence fail = "Please revise input try using 0.00 format";
-                if (toast != null) {
-                    toast.cancel();
-                }
-                toast = Toast.makeText(context, fail, dLong);
-                toast.show();
-                return false;
-            }
-        }
-        else if((!wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >=5) ||
-                (wallet.getEditText().getText().toString().contains(".") && wallet.getEditText().getText().toString().length() >= 8)){
-            CharSequence fail = "Funds added must be under $10000 per addition";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else{
-            if(wallet != null){
-            Double currentFunds = current_user.getWallet();
-            Double funds = Double.parseDouble(wallet.getEditText().getText().toString().trim());
-            current_user.setWallet(funds+currentFunds);
+        if (fail == false) {
+            if (wallet != null) {
+                Double currentFunds = current_user.getWallet();
+                Double funds = Double.parseDouble(wallet.getEditText().getText().toString().trim());
+                current_user.setWallet(funds + currentFunds);
             }
             return true;
+
+        }else {
+                return false;
+            }
+
         }
     }
-}
+

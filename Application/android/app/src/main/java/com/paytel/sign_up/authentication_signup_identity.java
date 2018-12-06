@@ -106,11 +106,6 @@ public class authentication_signup_identity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
         if(fail == false) {
             new_user.setUsername(user_name.getEditText().getText().toString().trim().toLowerCase());
             new_user.setFirstName(f_name.getEditText().getText().toString().trim());

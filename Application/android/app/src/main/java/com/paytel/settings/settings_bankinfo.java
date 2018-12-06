@@ -83,78 +83,75 @@ public class settings_bankinfo extends AppCompatActivity {
         TextInputLayout CVC = findViewById(R.id.txt_cvc);
         MaskEditText exp_date = findViewById(R.id.txt_exp_date);
 
-        if(name_on_card.getEditText().getText().toString().length() == 0 || card_number.getRawText().length() == 0 ||
-                CVC.getEditText().getText().toString().length() == 0 || exp_date.getRawText().length() == 0){
-            CharSequence fail = "No field can be left blank";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
+        boolean fail = false;
 
-        //handle bad expiration date format
-        if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
-            CharSequence fail = "Expiration date must be mm/yy format";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        //parses month and year for date check
-        String date[]= exp_date.getText().toString().split("/");
-        int month = Integer.parseInt(date[0]);
-        int year = Integer.parseInt(date[1]);
 
-        if(name_on_card.getEditText().getText().toString().length() >= 50){
-            CharSequence fail = "Name on card must be less than 50 characters";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        //Handle empty field
+        if(name_on_card.getEditText().getText().toString().length() == 0){
+            name_on_card.setError("No field can be left blank");
+            fail = true;
         }
-        else if (card_number.getRawText().length() != 16){
-            CharSequence fail = "Card number must be 16 digits";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else if(CVC.getEditText().getText().toString().length() != 3){
-            CharSequence fail = "CVC must be 3 digits";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else if(month > 12 || month < 1){
-            CharSequence fail = "Month must be between 1 and 12";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else if(year < 18 ){
-            CharSequence fail = "Year must be 18 or later ";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        else if(name_on_card.getEditText().getText().toString().length() >= 50){
+            name_on_card.setError("Name on card cant be longer than 50 characters");
+            fail = true;
         }
         else{
+            name_on_card.setErrorEnabled(false);
+        }
+
+        if(card_number.getText().toString().length() ==0 ){
+            card_number.setError("No field can be left blank");
+            fail = true;
+        }
+        else if (card_number.getRawText().length() != 16){
+            card_number.setError("Card number must be 16 digits");
+            fail = true;
+        }
+
+
+
+        if( CVC.getEditText().getText().toString().length() == 0 ){
+            CVC.setError("No field can be left blank");
+            fail = true;
+        }
+        else if(CVC.getEditText().getText().toString().length() != 3){
+            CVC.setError("CVC must be 3 digits");
+            fail = true;
+        }
+        else{
+            CVC.setErrorEnabled(false);
+
+        }
+        int month =0;
+        int year=0;
+
+        if (exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
+            String date[]= exp_date.getText().toString().split("/");
+            month = Integer.parseInt(date[0]);
+            year = Integer.parseInt(date[1]);
+        }
+
+        if( exp_date.getText().toString().length() == 0){
+            exp_date.setError("No field can be left blank");
+            fail = true;
+        }
+
+        else if (!exp_date.getText().toString().matches("\\d{2}/\\d{2}")){
+            exp_date.setError("Expiration data must be in mm/yy format");
+            fail = true;
+        }
+
+        else if(month > 12 || month < 1){
+            exp_date.setError("Invalid month");
+            fail = true;
+        }
+        else if(year < 18 ){
+            exp_date.setError("Year must be greater than 18");
+            fail = true;
+        }
+
+        if (fail == false) {
+
             Map<String, String> cc = new HashMap<String, String>();
             cc.put("name_on_card", name_on_card.getEditText().getText().toString().trim());
             cc.put("card_number", card_number.getRawText().trim());
@@ -163,6 +160,8 @@ public class settings_bankinfo extends AppCompatActivity {
             if(cc != null)current_user.setCreditCard(cc);
             return true;
         }
+        else{return false;}
+
     }
 
     void display_userinfo(){

@@ -126,11 +126,6 @@ public class authentication_signup_address extends AppCompatActivity implements 
 
          }
 
-         if(String.valueOf(spinner.getSelectedItem()).length() == 0){
-
-            //street.setError("No field can be left blank");
-            //fail = true;
-        }
 
         if(fail == false) {
             new_user.setStreet(street.getEditText().getText().toString());

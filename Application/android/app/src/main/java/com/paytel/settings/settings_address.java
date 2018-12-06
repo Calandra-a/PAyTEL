@@ -1,6 +1,5 @@
 package com.paytel.settings;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.util.userDataObject;
-import com.santalu.widget.MaskEditText;
 
 
 public class settings_address extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -97,59 +95,62 @@ public class settings_address extends AppCompatActivity implements AdapterView.O
 
     boolean edit_userinfo(){
 
-        Context context = getApplicationContext();
-        int dShort = Toast.LENGTH_SHORT;
-        int dLong = Toast.LENGTH_LONG;
 
         TextInputLayout street = findViewById(R.id.txt_street);
         TextInputLayout zip = findViewById(R.id.txt_zipcode);
         TextInputLayout city = findViewById(R.id.txt_city);
         Spinner spinner = findViewById(R.id.states_spinner);
 
-        if(street.getEditText().getText().toString().length() == 0 || zip.getEditText().getText().toString().length() == 0 ||
-                city.getEditText().getText().toString().length() == 0){
-            CharSequence fail = "No field can be left blank";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        boolean fail = false;
+
+        if(street.getEditText().getText().toString().length() == 0){
+            street.setError("No field can be left blank");
+            fail = true;
         }
-        if(street.getEditText().getText().toString().length() >=50){
-            CharSequence fail = "Street address must be under 50 characters";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else if(zip.getEditText().getText().toString().length() != 5){
-            CharSequence fail = "Zip code must be 5 digits";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else if(city.getEditText().getText().toString().length() >=50){
-            CharSequence fail = "City must be under 50 characters";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        else if(street.getEditText().getText().toString().length() >=50){
+            street.setError("Street must be under 50 characters");
+            fail = true;
         }
         else{
-            if(street != null)current_user.setStreet(street.getEditText().getText().toString().trim());
-            if(city != null)current_user.setCity(city.getEditText().getText().toString().trim());
-            if(zip != null)current_user.setZipCode(zip.getEditText().getText().toString().trim());
-            if(spinner != null)current_user.setState(String.valueOf(spinner.getSelectedItem()));
+            street.setErrorEnabled(false);
+
+        }
+        if( zip.getEditText().getText().toString().length() ==0){
+            zip.setError("No field can be left blank");
+            fail = true;
+        }
+        else if(zip.getEditText().getText().toString().length() != 5){
+            zip.setError("ZIP must be 5 digits");
+            fail = true;
+        }
+        else{
+            zip.setErrorEnabled(false);
+
+        }
+        if(city.getEditText().getText().toString().length() == 0){
+            city.setError("No field can be left blank");
+            fail = true;
+        }
+        else if(city.getEditText().getText().toString().length() >=50){
+            city.setError("City must be under 50 characters");
+            fail = true;
+        }
+        else{
+            city.setErrorEnabled(false);
+
+        }
+
+        if(fail == false) {
+            current_user.setStreet(street.getEditText().getText().toString().trim());
+            current_user.setCity(city.getEditText().getText().toString().trim());
+            current_user.setZipCode(zip.getEditText().getText().toString().trim());
+            current_user.setState(String.valueOf(spinner.getSelectedItem()));
             return true;
         }
+        else{
+            return false;
+        }
+
     }
 
     void display_userinfo(){

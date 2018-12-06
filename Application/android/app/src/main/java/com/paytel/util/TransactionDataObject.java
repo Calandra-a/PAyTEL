@@ -1,5 +1,7 @@
 package com.paytel.util;
 
+import android.support.annotation.NonNull;
+
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
@@ -7,13 +9,14 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRan
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @DynamoDBTable(tableName = "paytel-mobilehub-2098009603-transactions")
 
-public class TransactionDataObject {
+public class TransactionDataObject implements Comparable{
     private String _transactionId;
     private String _amount;
     private String _biometricUsed;
@@ -116,4 +119,11 @@ public class TransactionDataObject {
         this._transactionStatus = _transactionStatus;
     }
 
+    @Override
+    public int compareTo(@NonNull Object o) {
+        String compareage=((TransactionDataObject)o).getTimeCreated();
+        Date d_object = new Date(compareage);
+        Date d_this = new Date(this.getTimeCreated());
+        return d_object.compareTo(d_this);
+    }
 }

@@ -25,8 +25,6 @@ import com.amazonaws.util.IOUtils;
 import com.paytel.R;
 import com.paytel.global_objects;
 import com.paytel.home;
-import com.paytel.sign_up.authentication_signup_bankinfo;
-import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.api.idyonkpcbig0.UsertransactionMobileHubClient;
 import com.paytel.util.userDataObject;
 
@@ -197,23 +195,43 @@ public class create_new_transaction extends AppCompatActivity {
         TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
         TextInputLayout amount = findViewById(R.id.txt_amount);
         TextInputLayout note = findViewById(R.id.txt_note);
-        if(buyerID.getEditText().getText().toString().toLowerCase().isEmpty() || amount.getEditText().getText().toString().toLowerCase().isEmpty() || note.getEditText().getText().toString().toLowerCase().isEmpty()){
-            CharSequence fail = "No field can be left blank";
-            Toast toast = Toast.makeText(context, fail, dShort);
-            toast.show();
+
+        boolean fail = false;
+        if(buyerID.getEditText().getText().toString().toLowerCase().isEmpty()) {
+            buyerID.setError("No field can be left blank");
+            fail = true;
+        }
+        else{
+            buyerID.setErrorEnabled(false);
+        }
+        if( amount.getEditText().getText().toString().toLowerCase().isEmpty()){
+            amount.setError("No field can be left blank");
+            fail = true;
+
         }
         else if( Double.parseDouble(amount.getEditText().getText().toString().trim()) < 1){
 
-            CharSequence fail = "Amount must be $1 or more";
-            Toast toast = Toast.makeText(context, fail, dShort);
-            toast.show();
+            amount.setError("Amount must $1 or more");
+            fail = true;
         }
-        else {
+        else{
+            amount.setErrorEnabled(false);
+        }
+        if(note.getEditText().getText().toString().toLowerCase().isEmpty()){
+            note.setError("No field can be left blank");
+            fail = true;
+        }
+        else{
+            note.setErrorEnabled(false);
+        }
+
+        if(fail == false) {
             //CharSequence fail = buyerID.getEditText().getText().toString().toLowerCase();
             //Toast toast = Toast.makeText(context, fail, dShort);
             //toast.show();
             check_username(buyerID.getEditText().getText().toString().toLowerCase());
         }
+
 
     }
 
@@ -313,11 +331,8 @@ public class create_new_transaction extends AppCompatActivity {
                 if(result.isEmpty()) {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Context context = getApplicationContext();
-                            int dShort = Toast.LENGTH_SHORT;
-                            CharSequence fail = "Invalid Username";
-                            Toast toast = Toast.makeText(context, fail, dShort);
-                            toast.show();
+                            TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
+                            buyerID.setError("Username doesn't exist ");
                         }
                     });
 
@@ -328,6 +343,7 @@ public class create_new_transaction extends AppCompatActivity {
                     TextInputLayout buyerID = findViewById(R.id.txt_buyerID);
                     TextInputLayout amount = findViewById(R.id.txt_amount);
                     TextInputLayout note = findViewById(R.id.txt_note);
+                    buyerID.setErrorEnabled(false);
                     //do this call if everything checks out
                     doApiCall(buyerID.getEditText().getText().toString().trim(), amount.getEditText().getText().toString().trim(), note.getEditText().getText().toString().trim());
 

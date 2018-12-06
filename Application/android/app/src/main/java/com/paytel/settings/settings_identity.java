@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 import com.paytel.R;
 import com.paytel.global_objects;
-import com.paytel.home;
-import com.paytel.util.accountsettings;
 import com.paytel.util.userDataObject;
 import com.santalu.widget.MaskEditText;
 
@@ -80,33 +78,40 @@ public class settings_identity extends AppCompatActivity {
         TextInputLayout l_name = findViewById(R.id.txt_last_name);
         MaskEditText phone_number = findViewById(R.id.txt_phone_number);
 
+        boolean fail = false;
 
-        if(f_name.getEditText().getText().toString().length() == 0 || l_name.getEditText().getText().toString().length() == 0 ||
-                phone_number.getRawText().length() == 0 ){
-            CharSequence fail = "No field can be left blank";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
+        if(f_name.getEditText().getText().toString().length() == 0 ) {
+            f_name.setError("No field can be left blank");
+            fail = true;
+        }
+        else {f_name.setErrorEnabled(false);}
+
+
+        if(l_name.getEditText().getText().toString().length() == 0 ) {
+            l_name.setError("No field can be left blank");
+            fail = true;
+        }
+        else {l_name.setErrorEnabled(false);}
+
+        if (phone_number.getText().toString().length() == 0) {
+            phone_number.setError("No field can be left blank");
+            fail = true;
+        }
+        else if (phone_number.getText().toString().length() != 14) {
+            phone_number.setError("Invalid Phone Number");
+            fail = true;
         }
 
-        if (phone_number.getRawText().length() != 10) {
-            CharSequence fail = "Phone number must be 10 digits";
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(context, fail, dLong);
-            toast.show();
-            return false;
-        }
-        else{
-            if(f_name != null)current_user.setFirstName(f_name.getEditText().getText().toString().trim());
-            if(l_name != null)current_user.setLastName(l_name.getEditText().getText().toString().trim());
-            if(phone_number != null)current_user.setPhoneNumber(phone_number.getRawText().trim());
+
+        if(fail == false) {
+            current_user.setFirstName(f_name.getEditText().getText().toString().trim());
+            current_user.setLastName(l_name.getEditText().getText().toString().trim());
+            current_user.setPhoneNumber(phone_number.getRawText().trim());
             return true;
+
         }
+        else {return false;}
+
     }
 
     void display_userinfo(){

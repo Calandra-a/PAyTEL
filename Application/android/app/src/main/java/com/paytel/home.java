@@ -47,6 +47,7 @@ import com.paytel.util.add_funds;
 import com.paytel.util.userDataObject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -61,19 +62,10 @@ public class home extends AppCompatActivity{
 
     private ConstraintLayout mConstraintLayout;
     private ConstraintSet mConstraintSet = new ConstraintSet();
-//axel
 
     List<TransactionDataObject> my_pending_transactions = new ArrayList<TransactionDataObject>();
     List<TransactionDataObject> my_completed_transactions = new ArrayList<TransactionDataObject>();
-    boolean first_run = true;
-    //marsol
     boolean nav_bool;
-    ArrayList<String> transAmounts = new ArrayList<>();
-    ArrayList<String> transIDs = new ArrayList<>();
-    private ArrayList<String> transSeller = new ArrayList<>();
-    private ArrayList<String> transBuyer = new ArrayList<>();
-    ArrayList<String> transStatus = new ArrayList<>();
-    ArrayList<String> transTime = new ArrayList<>();
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
     private TransactionAdapter tPendingAdapter, tCompleteAdapter;
@@ -276,25 +268,20 @@ public class home extends AppCompatActivity{
                             }
                             first_run = false;*/
                             //set only contains changed items
+                            String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
 
                             ArrayList<String> dataSet = new ArrayList<>(current_user.getTransactions());
-                            System.out.println("hello axel " + dataSet.size());
-                            my_pending_transactions.clear();
-                            my_completed_transactions.clear();
-                            for (int i = 0; i < dataSet.size(); i++) {
+                            pendingTransaction.clear();
+                            completedTransaction.clear();
+                            for (int i = dataSet.size()-1; i >0; i--) {
                                 TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
                                 if(transaction.getTransactionStatus().toLowerCase().equals("pending")){
-                                    my_pending_transactions.add(transaction);
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));
                                 }else{
-                                    my_completed_transactions.add(transaction);
+                                    completedTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));
                                 }
                             }
-
-                            if(dataSet.size() > 0){
-                                System.out.println("cool trans"+ dataSet.size());
                                 initializingTranasactions();
-
-                            }
 
                             if (result.isEmpty()) {
                                 // There were no items matching your query.
@@ -329,27 +316,12 @@ public class home extends AppCompatActivity{
 
                         String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
 
-                        pendingTransaction.clear();
-                        completedTransaction.clear();
-                        for (TransactionDataObject item : my_pending_transactions) {
-                            try {
-                                pendingTransaction.add(new TransactionCard(currentUserName, item.getBuyerUsername(), item.getSellerUsername(), item.getTransactionId(), '$' + item.getAmount(), item.getTransactionStatus(), item.getTimeCreated()));
-                            }catch(Exception e){
-                                }
-                            }
-                        for (TransactionDataObject item : my_completed_transactions) {
-                            try {
-                                completedTransaction.add(new TransactionCard(currentUserName, item.getBuyerUsername(), item.getSellerUsername(), item.getTransactionId(), '$' + item.getAmount(), item.getTransactionStatus(), item.getTimeCreated()));
-                            }catch(Exception e){
-                            }
-                        }
                         try {
                             tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
                             tCompleteAdapter.notifyDataSetChanged();
                             tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
                             tPendingAdapter.notifyDataSetChanged();
-                        }
-                        catch(Exception e){
+                        }catch(Exception e){
                         }
                         if(nav_bool == true) {
                             try{

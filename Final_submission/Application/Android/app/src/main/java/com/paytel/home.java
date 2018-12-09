@@ -1,0 +1,411 @@
+package com.paytel;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
+import com.paytel.sign_up.authentication_signup_identity;
+import com.paytel.util.TransactionAdapter;
+import com.paytel.util.TransactionCard;
+import com.paytel.util.TransactionDataObject;
+import com.paytel.settings.settings_main;
+import com.paytel.transaction.create_new_transaction;
+import com.paytel.transaction.start_buyer_transaction;
+import com.paytel.util.add_funds;
+import com.paytel.util.userDataObject;
+import java.util.ArrayList;
+
+
+public class home extends AppCompatActivity{
+
+    private ConstraintLayout mConstraintLayout;
+    private ConstraintSet mConstraintSet = new ConstraintSet();
+
+    boolean nav_bool;
+    ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
+    ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
+    private TransactionAdapter tPendingAdapter, tCompleteAdapter;
+    private long mLastClickTime = 0;
+    private boolean background = true;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    nav_bool = false;
+                    showTransaction();
+                    return true;
+                case R.id.navigation_dashboard:
+                    nav_bool = true;
+                    showTransaction();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+        mConstraintLayout = findViewById(R.id.container);
+        //set top toolbar
+        Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
+        background = true;
+        TextView mTextMessage = (TextView) findViewById(R.id.message);
+        CardView mCardview = findViewById(R.id.cardView);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //queryInBackground();
+
+        FloatingActionButton btn_fab = findViewById(R.id.fab_transaction);
+        Button btn_funds = findViewById(R.id.btn_funds);
+
+        pendinglistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                    return;
+                }
+                try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+                catch(Exception e){
+                }
+            }
+        });
+        completedlistView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                    return;
+                }
+                try{
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    TextView invis = arg1.findViewById(R.id.txt_invisID);
+                    String viewString = invis.getText().toString();
+                    background = false;
+                    Intent intent = new Intent(home.this, start_buyer_transaction.class);
+                    intent.putExtra("name", viewString);
+                    startActivity(intent);
+                }
+                catch(Exception e){
+                }
+            }
+        });
+
+        btn_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                try {
+                    background = false;
+                    Intent k = new Intent(home.this, create_new_transaction.class);
+                    startActivity(k);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btn_funds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to next frame
+                try {
+                    Intent k = new Intent(home.this, add_funds.class);
+                    startActivity(k);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        background = true;
+        queryInBackground();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.topbar_home, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.btn_settingspage) {
+            try {
+                //Intent k = new Intent(home.this, accountsettings.class);
+                Intent k = new Intent(home.this, settings_main.class);
+                startActivity(k);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void queryInBackground(){
+        new Thread(new Runnable() {
+            @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+
+            @Override
+            public void run() {
+                while(background){
+                    userDataObject user = new userDataObject();
+                    user.setUserId(IdentityManager.getDefaultIdentityManager().getCachedUserID());//partition key
+
+                    DynamoDBQueryExpression queryExpression = new DynamoDBQueryExpression()
+                            .withHashKeyValues(user)
+                            .withConsistentRead(false);
+
+                    PaginatedList<userDataObject> result = ((global_objects)getApplication()).getDynamoDBMapper().query(userDataObject.class, queryExpression);
+
+                    if (result.isEmpty()) {
+                        // There were no items matching your query.
+                        Log.d("Query results: ", "none");
+                        //go to sign up activity
+                        try {
+                            background = false;
+                            Intent k = new Intent(home.this, authentication_signup_identity.class);
+                            startActivity(k);
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        userDataObject current_user = ((global_objects)getApplication()).getDynamoDBMapper().load(userDataObject.class, IdentityManager.getDefaultIdentityManager().getCachedUserID());
+                        ((global_objects) getApplication()).setCurrent_user(current_user);
+
+                        try {
+                            String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
+
+                            ArrayList<String> dataSet = new ArrayList<>(current_user.getTransactions());
+                            pendingTransaction.clear();
+                            completedTransaction.clear();
+                            for (int i = dataSet.size()-1; i  >= 0; i--) {
+                                TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
+                                if(transaction.getTransactionStatus().toLowerCase().contains("pending") || transaction.getTransactionStatus().toLowerCase().contains("flagged")){
+                                    pendingTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));
+                                }else{
+                                    completedTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));
+                                }
+                            }
+                                initializingTranasactions();
+
+                            if (result.isEmpty()) {
+                                // There were no items matching your query.
+                                initialSignup();
+                                Log.d("Query results: ", "none");
+                            }
+                        }
+                        catch(Exception e){
+                            Log.d("Error", "No transactions being pulled?" + e);
+                            initialSignup();
+                        }
+                    }
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+    }
+
+    void initializingTranasactions(){
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+
+                        String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
+
+                        try {
+                            tCompleteAdapter = new TransactionAdapter(getApplicationContext(), completedTransaction);
+                            tCompleteAdapter.notifyDataSetChanged();
+                            tPendingAdapter = new TransactionAdapter(getApplicationContext(), pendingTransaction);
+                            tPendingAdapter.notifyDataSetChanged();
+                        }catch(Exception e){
+                        }
+                        if(nav_bool == true) {
+                            try{
+                                pendinglistView.setVisibility(View.INVISIBLE);
+                                completedlistView.setVisibility(View.VISIBLE);
+                                completedlistView.setAdapter(tCompleteAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        else{
+                            try{
+                                completedlistView.setVisibility(View.INVISIBLE);
+                                pendinglistView.setVisibility(View.VISIBLE);
+                                pendinglistView.setAdapter(tPendingAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        try {
+                            tPendingAdapter.notifyDataSetChanged();
+                            tCompleteAdapter.notifyDataSetChanged();
+                            TextView mCardview = (TextView) findViewById(R.id.info_text);
+                            TextView mUsername = (TextView) findViewById(R.id.info_username);
+
+                            Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                            mCardview.setText("Wallet: $" + Double.toString(wallet));
+                            mUsername.setText(currentUserName);
+                        }
+                        catch(Exception e){
+                        }
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    } }
+
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void showTransaction(){
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        ListView pendinglistView = (ListView) findViewById(R.id.pending_list);
+                        ListView completedlistView = (ListView) findViewById(R.id.completed_list);
+
+                        if(nav_bool == true) {
+                            try {
+                                pendinglistView.setVisibility(View.INVISIBLE);
+                                completedlistView.setVisibility(View.VISIBLE);
+                                completedlistView.setAdapter(tCompleteAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.completed_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                                tPendingAdapter.notifyDataSetChanged();
+                                tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        else {
+                            try{
+                                completedlistView.setVisibility(View.INVISIBLE);
+                                pendinglistView.setVisibility(View.VISIBLE);
+                                pendinglistView.setAdapter(tPendingAdapter);
+                                mConstraintSet.clone(mConstraintLayout);
+                                mConstraintSet.connect(R.id.pending_list, ConstraintSet.TOP,
+                                        R.id.cardView, ConstraintSet.BOTTOM);
+                                mConstraintSet.connect(R.id.pending_list, ConstraintSet.BOTTOM,
+                                        R.id.navigation, ConstraintSet.TOP);
+                                mConstraintSet.applyTo(mConstraintLayout);
+                                tPendingAdapter.notifyDataSetChanged();
+                                tCompleteAdapter.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+                            }
+                        }
+                        background = true;
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    void initialSignup(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    TextView mCardview = (TextView) findViewById(R.id.info_text);
+                    TextView mUsername = (TextView) findViewById(R.id.info_username);
+
+                    Double wallet = ((global_objects) getApplication()).getCurrent_user().getWallet();
+                    mCardview.setText("Wallet: $"+Double.toString(wallet));
+                    mUsername.setText(((global_objects) getApplication()).getCurrent_user().getUsername());
+                }
+                catch(Exception E){
+                }
+            }
+        });
+    }
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
+
+}

@@ -1,0 +1,54 @@
+{
+  "UserAgent": "MobileHub/1.0",
+  "Version": "1.0",
+  "CredentialsProvider": {
+    "CognitoIdentity": {
+      "Default": {
+        "PoolId": "us-east-1:0e84ac82-c7a7-4f12-9a2a-ec0c8538e76a",
+        "Region": "us-east-1"
+      }
+    }
+  },
+  "IdentityManager": {
+    "Default": {}
+  },
+  "S3TransferUtility": {
+    "Default": {
+      "Bucket": "paytel-userfiles-mobilehub-2098009603",
+      "Region": "us-east-1"
+    }
+  },
+  "DynamoDBObjectMapper": {
+    "Default": {
+      "Region": "us-east-1"
+    }
+  },
+  "ContentManager": {
+    "Default": {
+      "Bucket": "paytel-hosting-mobilehub-2098009603",
+      "Region": "us-east-1",
+      "CloudFrontURL": "https://d2665enwocpvz3.cloudfront.net"
+    }
+  },
+  "PinpointAnalytics": {
+    "Default": {
+      "AppId": "bc4b629c84a64aeaa8af9ab1f294942c",
+      "Region": "us-east-1"
+    }
+  },
+  "PinpointTargeting": {
+    "Default": {
+      "Region": "us-east-1"
+    }
+  },
+  "UserFileManager": {
+    "Default": {
+      "Bucket": "paytel-userfiles-mobilehub-2098009603",
+      "Region": "us-east-1"
+    }
+  },
+  "GoogleSignIn": {
+    "ClientId-WebApp": "366399277580-dq9q4qmr5or0mi4oqt3f7e4q4gil9av8.apps.googleusercontent.com",
+    "Permissions": "email,profile,openid"
+  }
+}

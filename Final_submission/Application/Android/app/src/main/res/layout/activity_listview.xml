@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Single List Item Design -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_ll"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="0dp">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/list_card"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="8dp"
+        android:layout_margin="8dp"
+        card_view:cardBackgroundColor="#4d4d4d">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/txt_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="62dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="-4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:paddingRight="0dp"
+                android:text="⚡"
+                android:textSize="34sp" />
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/txt_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:layout_toRightOf="@+id/txt_emoji"
+                android:text="User requested:"
+                android:textColor="@color/text_color_primary"
+                android:textSize="20dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_time_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_user"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@+id/txt_emoji"
+                android:text="User requested:"
+                android:textColor="@color/text_color_primary"
+                android:textSize="14dip"
+                android:textStyle="bold" />
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/txt_invisID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/txt_user"
+                android:visibility="gone"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_alignParentRight="true"
+                android:padding="0dip"
+                android:textColor="@color/text_color_primary"
+                android:textSize="28dip"
+                android:textAlignment="textEnd"
+                android:hint="Transaction"
+                android:layout_centerVertical="true"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

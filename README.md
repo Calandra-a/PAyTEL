@@ -15,3 +15,33 @@ Upload the zip file located under application/backend/ to the coresponding lambd
 #### Step 3: 
 Download the awsconfiguration file for Android from the mobile hub project.
 Replace the aws configuration file in the Android project located under res/raw/awsconfiguration.json
+
+# Web portal setup
+
+#### Step 1:
+Open command prompt and go to the application/paytel_web_portal folder;
+
+#### Step 2:
+On the command prompt execute 
+npm install
+After this all the required dependencies will be installed.
+
+#### Step 3:
+On the command prompt execute 
+npm start
+This command will start the web portal on localhost:3000
+
+#### Step 4: 
+Login using the credentials;
+
+# Android Application
+
+#### Step 1:
+Download and open Android studio
+
+#### Step 2:
+Open the Android project located in Application/Android
+Android studio will prompt you to install all the dependencies.
+
+#### Step 3:
+Launch the application on a connected device or on a virtual device.

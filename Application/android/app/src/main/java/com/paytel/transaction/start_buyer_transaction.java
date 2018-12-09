@@ -109,7 +109,6 @@ public class start_buyer_transaction extends AppCompatActivity {
 
             }
         });
-
         //toolbar stuff
         Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
         setSupportActionBar(toolbar);
@@ -152,7 +151,7 @@ public class start_buyer_transaction extends AppCompatActivity {
 
                             Button approve = (Button) findViewById(R.id.btn_approve);
                             Button deny = (Button) findViewById(R.id.btn_deny);
-//                            System.out.println(current_transaction.getTransactionStatus());
+
                             mImageView = (ImageView) findViewById(R.id.verified_image);
 
                             if(current_transaction.getBuyerUsername().equals(((global_objects) getApplication()).getCurrent_user().getUsername())) {
@@ -175,6 +174,7 @@ public class start_buyer_transaction extends AppCompatActivity {
                                 amount.setText("+$" + current_transaction.getAmount());
                                 amount.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_money_receive));
                             }
+
                             Calendar cal = Calendar.getInstance();
                         try {
                             note.setText("Note: " + current_transaction.getNote());

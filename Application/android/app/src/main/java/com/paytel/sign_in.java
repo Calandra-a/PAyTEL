@@ -54,8 +54,6 @@ public class sign_in extends AppCompatActivity {
                         .build());
             }
         }).execute();
-        IdentityManager.getDefaultIdentityManager().signOut();
-
     }
     @Override
     public void onBackPressed() {

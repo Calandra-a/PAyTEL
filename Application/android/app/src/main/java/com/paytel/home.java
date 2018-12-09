@@ -1,6 +1,5 @@
 package com.paytel;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,25 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.amazonaws.mobile.auth.core.IdentityManager;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
-import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
-import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.paytel.sign_up.authentication_signup_identity;
 import com.paytel.util.TransactionAdapter;
 import com.paytel.util.TransactionCard;
@@ -46,25 +32,13 @@ import com.paytel.transaction.start_buyer_transaction;
 import com.paytel.util.add_funds;
 import com.paytel.util.userDataObject;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class home extends AppCompatActivity{
-    private TextView mTextMessage;
-    private CardView mCardview;
 
     private ConstraintLayout mConstraintLayout;
     private ConstraintSet mConstraintSet = new ConstraintSet();
 
-    List<TransactionDataObject> my_pending_transactions = new ArrayList<TransactionDataObject>();
-    List<TransactionDataObject> my_completed_transactions = new ArrayList<TransactionDataObject>();
     boolean nav_bool;
     ArrayList<TransactionCard> completedTransaction = new ArrayList<>();
     ArrayList<TransactionCard> pendingTransaction = new ArrayList<>();
@@ -78,23 +52,12 @@ public class home extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
-                        return true;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    background = false;
                     nav_bool = false;
                     showTransaction();
                     return true;
                 case R.id.navigation_dashboard:
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
-                        return true;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    background = false;
                     nav_bool = true;
                     showTransaction();
-
                     return true;
             }
             return false;
@@ -112,8 +75,8 @@ public class home extends AppCompatActivity{
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
         background = true;
-        mTextMessage = (TextView) findViewById(R.id.message);
-        mCardview = findViewById(R.id.cardView);
+        TextView mTextMessage = (TextView) findViewById(R.id.message);
+        CardView mCardview = findViewById(R.id.cardView);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -194,6 +157,7 @@ public class home extends AppCompatActivity{
     @Override
     public void onResume(){
         super.onResume();
+        background = true;
         queryInBackground();
     }
     @Override
@@ -258,16 +222,6 @@ public class home extends AppCompatActivity{
                         ((global_objects) getApplication()).setCurrent_user(current_user);
 
                         try {
-
-                            /*if(!first_run){
-                                Set<String> old_transaction_set = ((global_objects) getApplication()).getUserTransactions();
-                                ((global_objects) getApplication()).setUserTransactions(current_user.getTransactions());
-                                copy.removeAll(old_transaction_set);
-                            }else{
-                                ((global_objects) getApplication()).setUserTransactions(current_user.getTransactions());
-                            }
-                            first_run = false;*/
-                            //set only contains changed items
                             String currentUserName = ((global_objects) getApplication()).getCurrent_user().getUsername();
 
                             ArrayList<String> dataSet = new ArrayList<>(current_user.getTransactions());
@@ -275,7 +229,7 @@ public class home extends AppCompatActivity{
                             completedTransaction.clear();
                             for (int i = dataSet.size()-1; i  >= 0; i--) {
                                 TransactionDataObject transaction = ((global_objects) getApplication()).getDynamoDBMapper().load(TransactionDataObject.class, dataSet.get(i));
-                                if(transaction.getTransactionStatus().toLowerCase().equals("pending")){
+                                if(transaction.getTransactionStatus().toLowerCase().contains("pending") || transaction.getTransactionStatus().toLowerCase().contains("flagged")){
                                     pendingTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));
                                 }else{
                                     completedTransaction.add(new TransactionCard(currentUserName, transaction.getBuyerUsername(), transaction.getSellerUsername(), transaction.getTransactionId(), '$' + transaction.getAmount(), transaction.getTransactionStatus(), transaction.getTimeCreated()));

@@ -1,0 +1,176 @@
+--- !com.amazonaws.mobilehub.v0.Project
+apps: 
+  android: !com.amazonaws.mobilehub.v0.AppDO {}
+  web: !com.amazonaws.mobilehub.v0.AppDO {}
+features: 
+  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic
+    components: 
+      admin-panel: !com.amazonaws.mobilehub.v0.API
+        attributes: 
+          disable-aws-auth: false
+          name: admin-panel
+          requires-signin: false
+        paths: 
+          /flag-transaction: !com.amazonaws.mobilehub.v0.Function
+            name: flagtransaction
+          "/flag-transaction/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: flagtransaction
+          /get-all-Transactions: !com.amazonaws.mobilehub.v0.Function
+            name: getTransaction
+          "/get-all-Transactions/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: getTransaction
+          /get-transaction: !com.amazonaws.mobilehub.v0.Function
+            name: get-transaction
+          "/get-transaction/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: get-transaction
+          /user-info: !com.amazonaws.mobilehub.v0.Function
+            name: GetUserInfo
+          "/user-info/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: GetUserInfo
+      signup-facial-initialize: !com.amazonaws.mobilehub.v0.API
+        attributes: 
+          disable-aws-auth: false
+          name: signup-facial-initialize
+          requires-signin: false
+          sdk-generation-stage-name: Development
+        paths: 
+          /face: !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /face/{proxy+}"
+            environment:  {}
+            handler: index.handler
+            hashcode: +jUVFCnFqcGkDvE/n8wjt3LysorI3rW1oZ7x27tMn3w=
+            memorySize: "128"
+            modified: "2018-10-21T21:20:48.763+0000"
+            name: signupfacialcheck
+            runtime: nodejs6.10
+            timeout: "3"
+            version: MAzd0Ruyl_qdEYoPeW_xyRw6.ITQ0s0e
+          "/face/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /face/{proxy+}"
+            environment:  {}
+            handler: index.handler
+            hashcode: +jUVFCnFqcGkDvE/n8wjt3LysorI3rW1oZ7x27tMn3w=
+            memorySize: "128"
+            modified: "2018-10-21T21:20:48.763+0000"
+            name: signupfacialcheck
+            runtime: nodejs6.10
+            timeout: "3"
+            version: MAzd0Ruyl_qdEYoPeW_xyRw6.ITQ0s0e
+      user-transaction: !com.amazonaws.mobilehub.v0.API
+        attributes: 
+          disable-aws-auth: false
+          name: user-transaction
+          requires-signin: false
+        paths: 
+          /complete-transaction: !com.amazonaws.mobilehub.v0.Function
+            name: completetransaction
+          "/complete-transaction/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: completetransaction
+          /create-transaction: !com.amazonaws.mobilehub.v0.Function
+            name: createtransaction
+          "/create-transaction/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: createtransaction
+          /transaction-facial: !com.amazonaws.mobilehub.v0.Function
+            name: transaction-facial
+          "/transaction-facial/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            name: transaction-facial
+  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery
+    attributes: 
+      enabled: true
+      visibility: public-global
+    components: 
+      release: !com.amazonaws.mobilehub.v0.Bucket {}
+  database: !com.amazonaws.mobilehub.v0.Database
+    components: 
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase
+        tables: 
+          - !com.amazonaws.mobilehub.v0.NoSQLTable
+            attributes: 
+              city: S
+              country: S
+              credit_card: M
+              device_push_id: S
+              e_mail: S
+              first_name: S
+              last_name: S
+              phone_number: S
+              rekognition_ids: SS
+              state: S
+              street: S
+              transactions: SS
+              userId: S
+              username: S
+              wallet: N
+              zip_code: S
+            hashKeyName: userId
+            hashKeyType: S
+            indexes: 
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex
+                hashKeyName: username
+                hashKeyType: S
+                indexName: username1
+                rangeKeyName: phone_number
+                rangeKeyType: S
+            rangeKeyName: ""
+            rangeKeyType: ""
+            tableName: ___DYNAMIC_PREFIX___-user-data
+            tablePrivacy: protected
+          - !com.amazonaws.mobilehub.v0.NoSQLTable
+            attributes: 
+              amount: S
+              biometric_used: S
+              buyer_id: S
+              buyer_username: S
+              note: S
+              seller_id: S
+              seller_username: S
+              time: S
+              time_last_edit: S
+              transaction_id: S
+              transaction_status: S
+            hashKeyName: transaction_id
+            hashKeyType: S
+            rangeKeyName: ""
+            rangeKeyType: ""
+            tableName: ___DYNAMIC_PREFIX___-transactions
+            tablePrivacy: public
+  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint
+    components: 
+      messaging-push: !com.amazonaws.mobilehub.v0.PinpointMessaging
+        attributes: 
+          deliveryType: push
+  sign-in: !com.amazonaws.mobilehub.v0.SignIn
+    attributes: 
+      enabled: true
+      optional-sign-in: false
+    components: 
+      sign-in-google: !com.amazonaws.mobilehub.v0.OpenIDConnectIdentityProvider
+        attributes: 
+          open-id-connect-audience-android: 366399277580-tq5m8batgueguo8j1vvi2as320cro6ro.apps.googleusercontent.comv
+          open-id-connect-audience-ios: ""
+          open-id-connect-audience-webapp: 366399277580-dq9q4qmr5or0mi4oqt3f7e4q4gil9av8.apps.googleusercontent.com
+          open-id-provider-url: "https://accounts.google.com"
+      sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider
+        attributes: 
+          alias-attributes: 
+            - preferred_username
+          mfa-configuration: OPTIONAL
+          name: userpool
+          password-policy: !com.amazonaws.mobilehub.ConvertibleMap
+            min-length: "8"
+            require-lower-case: true
+            require-numbers: true
+            require-symbols: true
+            require-upper-case: true
+          standard-attributes: "[]"
+  user-files: !com.amazonaws.mobilehub.v0.UserFiles
+    attributes: 
+      enabled: true
+name: PayTel
+region: us-east-1
+sharedComponents: 
+  push-gcm: !com.amazonaws.mobilehub.v0.PushPlatform
+    attributes: 
+      consumingFeatures: mobile-analytics
+      credential: 41594144654770764d742b474a2f43724163414f30305839596f6741655141434141706859324e76645735304c576c6b414177354e6a59794d5463324f5463354d445541465746336379316a636e6c77644738746348566962476c6a4c57746c6551424551576468536d77314e4756794e6b687157556c56596c4d774e4646304b303954643270684d3078455757786f617a6453535667314d47467553306474627a4a34536e4a6d5a325a714c314a616457566d4f455a5263575a5250543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d4277616b7133574d35433832793572454167455167447334794d4d72504f58564b722b4a4769704273595a6e696237564739714d6f653470303841527a4d696d727157752b6b3870326c4f58666c6b566a6374396d4f52584f54755969457459376b5255445149414141414144414141454144422b646d4e696d726f536e6e70766f616c6d5647535233485859583566716e655735305a592f2f2f2f2f77414141414543387a4f374a64633149367055733334414141416e676f53504138314c41366b5a70454469485669492b5879545a6c7752563135332f6f50335534474b6a2f74475a6976397246796b57362f33655a4f626c38597a724964742f6874646177426e4d4755434d43616a6f4f417769455265326843304961684445586f34596d6c6f43754f386761326343396151593851434c757845636170587a5334564862774b6b59346c73414978414b427a4d61542b4b6b762f703449646341636c7547386f6d456b7554552f484a444637657a4d33374c637731326278596f675241622f6c7a45452f6d4c384344773d3d
+      gcm-sender-id: 41594144654639414b6b53774f344b78673559706a6e304255424541655141434141706859324e76645735304c576c6b414177354e6a59794d5463324f5463354d445541465746336379316a636e6c77644738746348566962476c6a4c57746c6551424551586f32576e4273596c5a4a5956646d614738784e5574574e444e366244643053544a345a6a6c4d4e444278556b684951314d7262316c7a4e33424a5957313061544632636e70585169737652334d344e47564b4e54464250543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d64326f525574355874756c6572354f38416745516744757172453546327657707775726a6a376e644b52672b556b534a3943337670676e36706942494d5747456d30497335477456635a2b4c6d35315252756b626c785a316b773051386654496d31707137514941414141414441414145414133324957456f31614d36576b4a61595961717a736f6d63376145316a4d4449374c5256416a2f2f2f2f2f7741414141464130672b7174446d4f5644584e424441414141414d59347779794d556779335170785269484e517554482f44415a396d496d717746306a646c5541426e4d4755434d43795a7935306f7774362f587751674b71385433466f797a74777775744a6b346d4859733158715035655a56535548386531477049736e6c5166753242336875674978414f48542b4d34386138384d633254416e7445673669524e2b59716f674e5739646173317658375a4971596a7a5a6a4950734e4a6d415447624f4a61525656526a413d3d

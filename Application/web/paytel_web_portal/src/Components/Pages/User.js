@@ -30,6 +30,7 @@ class User extends React.Component {
       console.log(user.user_info)
       this.setState({ user: user.user_info });
     } catch (e) {
+      this.props.history.push("/404");
       alert(e);
     }
 

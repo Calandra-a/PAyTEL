@@ -217,13 +217,13 @@ const toolbarStyles = theme => ({
   highlight:
     theme.palette.type === "light"
       ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+      }
       : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark
+      },
   spacer: {
     flex: "1 1 auto"
   },
@@ -253,10 +253,10 @@ let EnhancedTableToolbar = props => {
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography variant="title" id="tableTitle">
-            {state === table_user ? "Users" : state === table_flagged ? "Flagged Transactions" : "Transactions"}
-          </Typography>
-        )}
+            <Typography variant="title" id="tableTitle">
+              {state === table_user ? "Users" : state === table_flagged ? "Flagged Transactions" : "Transactions"}
+            </Typography>
+          )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
@@ -279,7 +279,7 @@ let EnhancedTableToolbar = props => {
               <FlagIcon />
             </IconButton>
           </Tooltip>
-        ) : <Fragment/>}
+        ) : <Fragment />}
       </div>
     </Toolbar>
   );
@@ -296,6 +296,9 @@ const styles = theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing.unit * 3
+  },
+  nonefound: {
+    padding: theme.spacing.unit * 3
   },
   table: {
     minWidth: 1020
@@ -323,6 +326,8 @@ class EnhancedTable extends React.Component {
   };
 
   async componentDidMount() {
+    this.resetState();
+
     await this.scans();
     this.setState({ isLoading: false });
     this.setState({ isLoadingRows: false });
@@ -335,6 +340,7 @@ class EnhancedTable extends React.Component {
     ) {
       this.setState({ isLoadingRows: true });
       this.setState({ isLoading: true });
+      this.resetState();
       await this.scans(nextProps.location.search, nextProps.state);
       this.setState({ isLoading: false });
       this.setState({ isLoadingRows: false });
@@ -376,8 +382,8 @@ class EnhancedTable extends React.Component {
         state === table_user || this.props.state === table_user
           ? "/users".concat(search || this.props.location.search || "")
           : state === table_flagged || this.props.state === table_flagged
-          ? "/transactions/flagged"
-          : "/transactions".concat(search || this.props.location.search || "")
+            ? "/transactions/flagged"
+            : "/transactions".concat(search || this.props.location.search || "")
       );
       counter = 0;
       await this.setState({ data: [], selected: [] });
@@ -403,8 +409,24 @@ class EnhancedTable extends React.Component {
       }
       this.handleChangePage(null, 0);
     } catch (e) {
+      this.props.history.push("/404");
       alert(e);
     }
+  }
+
+  resetState() {
+    this.setState({
+      order: "asc",
+      orderBy: "date",
+      selected: [],
+      data: [],
+      page: 0,
+      rowsPerPage: 5,
+      isLoading: true,
+      isLoadingRows: true,
+      isFlagging: false,
+      rows: []
+    });
   }
 
   handleRequestSort = (event, property) => {
@@ -454,6 +476,7 @@ class EnhancedTable extends React.Component {
   };
 
   handleChangeRowsPerPage = event => {
+    if (event.target.value <= this.data.length)
     this.setState({ rowsPerPage: event.target.value });
   };
 
@@ -462,13 +485,13 @@ class EnhancedTable extends React.Component {
       this.props.history.push(
         this.props.state === table_user
           ? "/user/".concat(
-              this.state.data.find(x => x.id === this.state.selected[0])
-                .username
-            )
+            this.state.data.find(x => x.id === this.state.selected[0])
+              .username
+          )
           : "/transaction/".concat(
-              this.state.data.find(x => x.id === this.state.selected[0])
-                .transaction_id
-            )
+            this.state.data.find(x => x.id === this.state.selected[0])
+              .transaction_id
+          )
       );
   };
 
@@ -487,7 +510,7 @@ class EnhancedTable extends React.Component {
           transitionDelay: this.state.isLoading ? 0 : 75
         }}
       >
-        <Paper className={classes.root}>
+        {data.length > 0 ? <Paper className={classes.root}>
           <EnhancedTableToolbar
             numSelected={selected.length}
             handleManage={this.handleManage}
@@ -552,70 +575,70 @@ class EnhancedTable extends React.Component {
                         </Zoom>
                       </TableRow>
                     ) : (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n.id}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isSelected}
-                            onClick={event => this.handleClick(event, n.id)}
-                          />
-                        </TableCell>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 75
-                          }}
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          aria-checked={isSelected}
+                          tabIndex={-1}
+                          key={n.id}
+                          selected={isSelected}
                         >
-                          <TableCell>{n.date}</TableCell>
-                        </Zoom>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 175
-                          }}
-                        >
-                          <TableCell>{n.transaction_id}</TableCell>
-                        </Zoom>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 275
-                          }}
-                        >
-                          <TableCell>{n.buyer}</TableCell>
-                        </Zoom>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 375
-                          }}
-                        >
-                          <TableCell>{n.seller}</TableCell>
-                        </Zoom>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 475
-                          }}
-                        >
-                          <TableCell>{n.transaction_status}</TableCell>
-                        </Zoom>
-                        <Zoom
-                          in={!this.state.isLoadingRows}
-                          style={{
-                            transitionDelay: this.state.isLoadingRows ? 0 : 575
-                          }}
-                        >
-                          <TableCell>{n.note}</TableCell>
-                        </Zoom>
-                      </TableRow>
-                    );
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isSelected}
+                              onClick={event => this.handleClick(event, n.id)}
+                            />
+                          </TableCell>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 75
+                            }}
+                          >
+                            <TableCell>{n.date}</TableCell>
+                          </Zoom>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 175
+                            }}
+                          >
+                            <TableCell>{n.transaction_id}</TableCell>
+                          </Zoom>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 275
+                            }}
+                          >
+                            <TableCell>{n.buyer}</TableCell>
+                          </Zoom>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 375
+                            }}
+                          >
+                            <TableCell>{n.seller}</TableCell>
+                          </Zoom>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 475
+                            }}
+                          >
+                            <TableCell>{n.transaction_status}</TableCell>
+                          </Zoom>
+                          <Zoom
+                            in={!this.state.isLoadingRows}
+                            style={{
+                              transitionDelay: this.state.isLoadingRows ? 0 : 575
+                            }}
+                          >
+                            <TableCell>{n.note}</TableCell>
+                          </Zoom>
+                        </TableRow>
+                      );
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
@@ -640,31 +663,35 @@ class EnhancedTable extends React.Component {
             onChangePage={this.handleChangePage}
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
-        </Paper>
+        </Paper> : <Paper className={classes.nonefound}>
+            <Typography component="p">
+              No {this.props.state === table_user ? "users" : "transactions"} found.
+            </Typography>
+          </Paper>}
       </Grow>
     ) : (
-      <Fragment>
-        <LinearProgress color="secondary" className={classes.loader} />
-        <LinearProgress
-          color="secondary"
-          variant="query"
-          className={classes.loader}
-        />
-        <LinearProgress color="secondary" className={classes.loader} />
-        <LinearProgress
-          color="secondary"
-          variant="query"
-          className={classes.loader}
-        />
-        <LinearProgress color="secondary" className={classes.loader} />
-        <LinearProgress
-          color="secondary"
-          variant="query"
-          className={classes.loader}
-        />
-        <LinearProgress color="secondary" className={classes.loader} />
-      </Fragment>
-    );
+        <Fragment>
+          <LinearProgress color="secondary" className={classes.loader} />
+          <LinearProgress
+            color="secondary"
+            variant="query"
+            className={classes.loader}
+          />
+          <LinearProgress color="secondary" className={classes.loader} />
+          <LinearProgress
+            color="secondary"
+            variant="query"
+            className={classes.loader}
+          />
+          <LinearProgress color="secondary" className={classes.loader} />
+          <LinearProgress
+            color="secondary"
+            variant="query"
+            className={classes.loader}
+          />
+          <LinearProgress color="secondary" className={classes.loader} />
+        </Fragment>
+      );
   }
 }
 

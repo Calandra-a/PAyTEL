@@ -77,6 +77,11 @@ class Login extends Component {
       this.props.userHasAuthenticated(true);
       this.props.history.push("/");
     } catch (e) {
+      if (e.message === "User does not exist.") {
+        e.message = "Incorrect Username."
+      } else if (e.message === "Incorrect username or password.") {
+        e.message = "Incorrect Password."
+      }
       this.setState({ loading: false });
       this.setState({ message: e.message });
       this.setState({ open: true });

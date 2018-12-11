@@ -28,10 +28,9 @@ import Transaction from "./Pages/Transaction";
 import User from "./Pages/User";
 import Home from "./Pages/Home";
 import EnhancedTable from "./Pages/EnhancedTable";
-import DialogSelect from "./Pages/DatabaseLookup";
+import DatabaseLookup from "./Pages/DatabaseLookup";
 import Tooltip from "@material-ui/core/Tooltip";
 import AppliedRoute from "./AppliedRoute";
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -75,6 +74,7 @@ const styles = theme => ({
     display: "none"
   },
   drawerPaper: {
+    overflowX: "hidden",
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
@@ -324,34 +324,31 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <div>
-            <Dialog
-              open={this.state.logoutOpen}
-              TransitionComponent={Transition}
-              keepMounted
-              onClose={this.handleClose}
-              aria-labelledby="alert-dialog-slide-title"
-              aria-describedby="alert-dialog-slide-description"
-            >
-              <DialogTitle id="alert-dialog-slide-title">
-                {"Log Out"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-                  Are you sure?
+          <Dialog
+            open={this.state.logoutOpen}
+            TransitionComponent={Transition}
+            keepMounted
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">
+              {"Log Out"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                Are you sure?
             </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleLogoutClose} color="primary">
-                  Cancel
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleLogoutClose} color="primary">
+                Cancel
             </Button>
-                <Button onClick={this.handleLogout} color="primary">
-                  Log Out
+              <Button onClick={this.handleLogout} color="primary">
+                Log Out
             </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-          <DialogSelect onRef={ref => (this.select = ref)} />
+            </DialogActions>
+          </Dialog>
+          <DatabaseLookup onRef={ref => (this.select = ref)} />
           <Switch>
             <Route exact path="/" component={Home} />
             <AppliedRoute

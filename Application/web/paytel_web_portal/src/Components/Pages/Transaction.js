@@ -34,6 +34,7 @@ class Transaction extends React.Component {
       const transaction = await this.transaction();
       this.setState({ transaction });
     } catch (e) {
+      this.props.history.push("/404");
       alert(e);
     }
 
